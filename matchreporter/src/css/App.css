@@ -1,13 +1,114 @@
 .App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 320px;
+  height: 1000px;
+  background-color: rgb(0, 0, 0);
+}
+div.navigator {
+  display: flex;
+  flex-direction: row;
+  height: 57px;
+}
+div.navbutton {
+  margin-top: 7px;
+}
+
+*:focus {
+  outline:none;
+}
+
+div.mainChooser {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+  margin-top: 12px;
+}
+.reportCreator {
+  margin-top: 12px;
+  background: #000;
+  height: 440px;
+  width: 100%;
+}
+.reportList {
+  padding-left: 0px;
+  border: 0px;
+  margin-top: 12px;
+  margin-left: 0px;
+  margin-right: 0px;
+  width: 100%;
+}
+.reportRow {
+  border: none;
+  text-align: left;
+  margin-top: 3px;
+  margin-left: 0px;
+  padding-left: 12px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  width: 100%;
+  background: #000;
+  color: #FF55F8;
+  font-family: 'AlteDIN_G', sans-serif;
+  font-size: 18px;
+}
+.circlebutton89 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-Index: 0;
+}
+.circlebutton89_button {
+  font-family: 'AlteDIN_G', sans-serif;
+  align-content: center;
+  font-weight: 600;
+  font-size: 18px;
+  background: rgba(0, 0, 0, 0);
+  border: 0px;
+  height: 89px;
+  width: 89px;
+}
+.circlebutton89_arrow {
+  margin-top: -3px;
+  height: 20px;
+  width: 20px;
+}
+div.propcircle {
+  font-family: 'AlteDIN_G', sans-serif;
+  font-size: 19px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+.lineThrough {
+  background: 'black';
+  height: 3px;
+  width: 100%;
+}
+
+.frontpage {
+  width: 320px;
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.Report {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.list {
+  width: 320px;
+  background-color: #F4F4F4;
+  margin: 0px;
+  border: 0px;
+  padding-left: 20px;
+  text-align: left;
+}
+
+@font-face {
+  font-family: 'AlteDIN_G';
+  src: local('AlteDIN_G'), url(../fonts/din1451alt_G.ttf) format('ttf');
 }
