@@ -26,33 +26,43 @@ div.mainChooser {
   width: 100%;
   margin-top: 12px;
 }
-.reportCreator {
+.reportChooser {
   margin-top: 12px;
   background: #000;
   height: 440px;
   width: 100%;
 }
 .reportList {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0px;
   padding-left: 0px;
   border: 0px;
-  margin-top: 12px;
-  margin-left: 0px;
-  margin-right: 0px;
-  width: 100%;
 }
 .reportRow {
-  border: none;
-  text-align: left;
-  margin-top: 3px;
-  margin-left: 0px;
-  padding-left: 12px;
-  padding-top: 3px;
-  padding-bottom: 3px;
+  display: flex;
+  user-select: none;
+  margin-top: 0px;
+  flex-direction: row;
+  align-content: center;
+}
+.teamTitle {
+  text-align: center;
+  height: 52px;
   width: 100%;
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+  margin-top: 3px;
   background: #000;
-  color: #FF55F8;
+  color: #FFFFFF;
   font-family: 'AlteDIN_G', sans-serif;
+  font-weight: 500;
   font-size: 18px;
+}
+.newTeamTitle {
+  color: #000;
+  height: 62px;
 }
 .circlebutton89 {
   display: flex;

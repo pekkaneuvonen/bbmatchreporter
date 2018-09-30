@@ -4,6 +4,7 @@ import { IAppProps } from "../App";
 import '../css/Reports.css';
 // import Report from '../model/Report';
 import bgActive from '../img/backgrounds/ActiveAreaBgBox.png';
+// import teamsInputField from '../img/reportList/teamtitles_input.png';
 
 @observer
 class ReportCreator extends React.Component<IAppProps, {}> {
