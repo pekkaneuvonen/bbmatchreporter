@@ -10,6 +10,7 @@ export class AppState {
   @observable public prevTab: string;
   @observable public showTabNavigator: boolean;
   @observable public showTab: boolean;
+  @observable public reportType: string;
   @observable public reportsList: Report[] = [];
   
   @observable public report: Report;

@@ -20,49 +20,72 @@ div.navbutton {
 }
 
 div.mainChooser {
+  width: 100%;
+  margin-top: 12px;
+}
+.parallelChooserCircles {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  width: 100%;
-  margin-top: 12px;
 }
 .reportChooser {
   margin-top: 12px;
-  background: #000;
-  height: 440px;
+  height: 500px;
   width: 100%;
+  background: #000;
+  overflow: scroll;
 }
-.reportList {
-  display: flex;
-  flex-direction: column;
-  margin-top: 0px;
-  padding-left: 0px;
-  border: 0px;
-}
-.reportRow {
-  display: flex;
-  user-select: none;
-  margin-top: 0px;
-  flex-direction: row;
-  align-content: center;
-}
-.teamTitle {
+
+.no_reportList {
   text-align: center;
-  height: 52px;
+  height: 100%;
   width: 100%;
   border: 0px;
   padding: 0px;
   margin: 0px;
-  margin-top: 3px;
-  background: #000;
   color: #FFFFFF;
+  background: #000;
+  font-family: 'AlteDIN_G', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+}
+.reportList {
+  padding-left: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.reportRow {
+  display: flex;
+  user-select: none;
+  height: 52px;
+  margin-top: 3px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.newReportRow {
+  height: 62px;
+}
+.reportRowSlot {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.teamTitle {
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+  color: #FFFFFF;
+  background: rgba(0, 0, 0, 0);
   font-family: 'AlteDIN_G', sans-serif;
   font-weight: 500;
   font-size: 18px;
 }
 .newTeamTitle {
   color: #000;
-  height: 62px;
 }
 .circlebutton89 {
   display: flex;

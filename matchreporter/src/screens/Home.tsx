@@ -15,45 +15,36 @@ import title from '../img/MATCHREPORTER.png';
 const bgStyle = {
   backgroundImage: `url(${bgHome})`
 };
-interface IHomeScreenState {
-    chosenType: string;
-}
 @observer
-class Home extends React.Component<IAppProps, IHomeScreenState> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            chosenType: ""
-        }
-        console.log('constructor');
-    }
+class Home extends React.Component<IAppProps, {}> {
 
     public componentWillMount() {
         this.props.appState.screen = Screens.Home;
     }
     public render() {
-
-        console.log("this.state.chosenType : " + this.state.chosenType);
+        console.log("this.props.appState.reportType : ", this.props.appState.reportType);
         return <div className="App" style={bgStyle}>
             <Navigator appState={this.props.appState}/>
             <Screentitle src={title}/>
             <div className="mainChooser">
                 <LineThrough colour="black" thickness="3px" parentHeight="89px"/>
-                <CircleButton89 chosen={this.state.chosenType === "new"} arrow={true} label={"NEW MATCH"} toggleReportType={this.toggleReportType("new")}/>
-                <CircleButton89 chosen={this.state.chosenType === "load"} arrow={true} label={"LOAD MATCH"} toggleReportType={this.toggleReportType("load")}/>
+                <div className="parallelChooserCircles">
+                    <CircleButton89 chosen={this.props.appState.reportType === "new"} label={"NEW MATCH"} toggleReportType={this.toggleReportType("new")}/>
+                    <CircleButton89 chosen={this.props.appState.reportType === "load"} label={"LOAD MATCH"} toggleReportType={this.toggleReportType("load")}/>
+                </div>
             </div>
-            <ReportsList appState={this.props.appState} details={this.state.chosenType}/>
+            <ReportsList appState={this.props.appState}/>
         </div>;
     };
 
     private toggleReportType = (type: string) => {
         if (type === "new") {
             return () => {
-                this.setState({chosenType: "new"})
+                this.props.appState.reportType = "new";
             }
         } else {
             return () => {
-                this.setState({chosenType: "load"})
+                this.props.appState.reportType = "load";
             }
         }
     }
