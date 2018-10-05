@@ -1,32 +1,26 @@
 import { observer } from "mobx-react";
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import '../css/Reports.css';
 import { AppState, Screens } from "../model/AppState";
 import Report from '../model/Report';
 import { Reports } from '../services/Reports';
+import TeamTitleInput from './TeamTitleInput';
 
 import bgActive from '../img/backgrounds/ActiveAreaBgBox.png';
+import readyBtn from '../img/buttons/ready.png';
 import teamsField from '../img/reportList/teamtitles.png';
 import activeTeamsField from '../img/reportList/teamtitles_active.png';
-import teamsInputField from '../img/reportList/teamtitles_input.png';
+import { Team } from "../model/Team";
 
 // tslint:disable:no-console
 interface IReportListState {
-    title1: string;
-    title2: string;
+    inputTitle1: string;
+    inputTitle2: string;
 }
-
 
 @observer
 class ReportsList extends React.Component<{appState: AppState}, IReportListState> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            title1: "team 1",
-            title2: "team 2"
-        }
-        console.log('constructor');
-    }
 
     public componentWillMount() {
         /*
@@ -44,22 +38,7 @@ class ReportsList extends React.Component<{appState: AppState}, IReportListState
                 console.log(error);
         });
     }
-    public openReport = (report: Report) => {
-        console.log("opening report ", report);
 
-        this.props.appState.report = report;
-        this.props.appState.homeTeam = report.home;
-        this.props.appState.awayTeam = report.away;
-
-        console.log("NEEDS TO GO ", Screens.Prematch);
-    }
-    public buildReportList = (reportsData: object[]) => {
-        // console.log("complete reports data : ", reportsData);
-        this.props.appState.reportsList = reportsData.map(data => {
-            return new Report(data);
-        })
-        console.log("parsed reportList ", this.props.appState.reportsList)
-    }
     public render() {
         const bgStyle = {
             backgroundImage: `url(${bgActive})`,
@@ -74,69 +53,78 @@ class ReportsList extends React.Component<{appState: AppState}, IReportListState
     private toggleReportDetails = (listType: string) => {
         console.log("listType " + listType);
         if (listType === "new") {
-            const inputBgStyle = {
-                backgroundImage: `url(${teamsInputField})`,
-                backgroundPosition: 'center',
-                backgroundRepeat  : 'no-repeat'
-            };
-            return <div style={inputBgStyle} className={["reportRow", "newReportRow"].join(' ')}>
-                    <form onSubmit={this.addTeamName1}>
-                        <input className={["teamTitle", "newTeamTitle"].join(' ')} value={this.state.title1} onChange={this.handleTeamName1Change}/>
-                    </form>
-                    <form onSubmit={this.addTeamName2}>
-                        <input className={["teamTitle", "newTeamTitle"].join(' ')} value={this.state.title2} onChange={this.handleTeamName2Change}/>
-                    </form>
-                </div>
+            const defaultTitle1: string = this.props.appState.homeTeam ? this.props.appState.homeTeam.name : "team 1";
+            const defaultTitle2: string = this.props.appState.awayTeam ? this.props.appState.awayTeam.name : "team 2";
 
+            return <div>
+                <TeamTitleInput titleChangeHandler={this.handleTeamNameChange} title1Default={defaultTitle1} title2Default={defaultTitle2} activityOverride={true}/>
+                <Link to={Screens.Prematch}>
+                    <div onClick={this.reportCreated("go")}>
+                        <img className={"bottomButton"} src={readyBtn}/>
+                    </div>
+                </Link>
+            </div>
         } else if (listType === "load") {
             if (!this.props.appState.reportsList || this.props.appState.reportsList.length < 1) {
                 return <div className="no_reportList">No reports in database.</div>
             } else {
-            return <ul className="reportList">
-                        {this.props.appState.reportsList.map(
-                            (report) => {
-                                console.log("report row " + report.title);
-                                const teamBgStyle = {
-                                    backgroundImage: `url(${report === this.props.appState.report ? activeTeamsField : teamsField})`,
-                                    backgroundPosition: 'center',
-                                    backgroundRepeat  : 'no-repeat',
-                                };
-                                const titleStyles: string[] = ["teamTitle", "reportRowSlot"];
-                                if (report === this.props.appState.report) {
-                                    titleStyles.push("newTeamTitle");
-                                }
-
-
-                                return <div key={report.id} style={teamBgStyle} className="reportRow" onClick={this.reportClicked(report.id)}>
-                                    <div className={titleStyles.join(' ')}>{report.home.name}</div>
-                                    <div className={titleStyles.join(' ')}>{report.away.name}</div>
-                                </div>
+                return <ul className="reportList">
+                    {this.props.appState.reportsList.map(
+                        (report) => {
+                            const teamBgStyle = {
+                                backgroundImage: `url(${(this.props.appState.report && report.id === this.props.appState.report.id) ? activeTeamsField : teamsField})`,
+                                backgroundPosition: 'center',
+                                backgroundRepeat  : 'no-repeat',
+                            };
+                            const titleStyles: string[] = ["teamTitle", "reportRowSlot"];
+                            if (this.props.appState.report && report.id === this.props.appState.report.id) {
+                                titleStyles.push("newTeamTitle");
                             }
-                        )}
-                    </ul>
+                            return <Link key={report.id} to={Screens.Prematch} style={{textDecoration: "none"}}><div style={teamBgStyle} className="reportRow" onClick={this.reportClicked(report.id)}>
+                                <div className={titleStyles.join(' ')}>
+                                    {report.home.name}
+                                </div>
+                                <div className={titleStyles.join(' ')}>
+                                    {report.away.name}
+                                </div>
+                            </div>
+                            </Link>
+                        }
+                    )}
+                </ul>
             }
         } else {
             return null;
         }
     }
-    private addTeamName1 = (event: any) => {
-        event.preventDefault();
-        console.log('submit team name 1 ', this.state.title1);
+    private openReport = (report: Report) => {
+        console.log("opening report ", report);
+        this.props.appState.report = report;
+        this.props.appState.homeTeam = report.home;
+        this.props.appState.awayTeam = report.away;
     }
-    private addTeamName2 = (event: any) => {
-        event.preventDefault();
-        console.log('submit team name 2 ', this.state.title2);
+    private buildReportList = (reportsData: object[]) => {
+        // console.log("complete reports data : ", reportsData);
+        this.props.appState.reportsList = reportsData.map(data => {
+            return new Report(data);
+        })
+        console.log("parsed reportList ", this.props.appState.reportsList)
     }
-    private handleTeamName1Change = (event: any) => {
-        this.setState({ title1: event.target.value });
+    private handleTeamNameChange = (titles: any) => {
+        this.setState({inputTitle1: titles.title1, inputTitle2: titles.title2})
     }
-    private handleTeamName2Change = (event: any) => {
-        this.setState({ title2: event.target.value });
+    private reportCreated = (message: string) => {
+        return () => {
+            const homeTeam: Team = new Team({name: this.state.inputTitle1});
+            const awayTeam: Team = new Team({name: this.state.inputTitle2});
+            const report: Report = new Report({id:"temp_created_report", title:"temp_created_report", home:homeTeam, away:awayTeam});
+            if (report) {
+                this.openReport(report);
+            }
+        };
     }
-
     private reportClicked = (reportId: number) => {
         return () => {
-            console.log("row reportId : reportId " + reportId);
             const report = this.props.appState.reportsList.find(r => r.id === reportId);
             if (report) {
                  this.openReport(report);
