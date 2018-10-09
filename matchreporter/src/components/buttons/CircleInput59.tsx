@@ -25,7 +25,7 @@ class CircleInput59 extends React.Component<ICircleValueProps, {}> {
         const rawValue: string = event.target.value;
         const splitValue: string[] = rawValue.split("k");
         let numericValue: number = parseInt(splitValue[0], 10);
-        if (numericValue > 0 && splitValue.length > 1) {
+        if (numericValue !== 0 && splitValue.length > 1) {
             numericValue *= 1000;
         }
         const kValue: Kvalue = new Kvalue(numericValue);

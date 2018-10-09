@@ -1,4 +1,5 @@
 import { observable } from "mobx";
+import { Kvalue } from "../types/Kvalue";
 import { Report } from "./Report";
 import { Team } from "./Team";
 
@@ -12,11 +13,14 @@ export class AppState {
   @observable public showTab: boolean;
   @observable public reportType: string;
   @observable public reportsList: Report[] = [];
+  @observable public weather: string;
   
   @observable public report: Report;
   @observable public homeTeam: Team;
   @observable public awayTeam: Team;
 
+  @observable public inducementValueOverride: Kvalue;
+  
   @observable public windowWidth: number = 640;
   
   constructor() {

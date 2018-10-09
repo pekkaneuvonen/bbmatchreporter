@@ -27,10 +27,19 @@ class Home extends React.Component<IAppProps, {}> {
             <Navigator appState={this.props.appState}/>
             <Screentitle src={title}/>
             <div className="mainChooser">
-                <LineThrough colour="black" thickness="3px" parentHeight="89px"/>
+                <LineThrough 
+                    colour="black"
+                    thickness="3px"
+                    parentHeight="89px"/>
                 <div className="parallelChooserCircles">
-                    <CircleButton89 chosen={this.props.appState.reportType === "new"} label={"NEW MATCH"} toggleReportType={this.toggleReportType("new")}/>
-                    <CircleButton89 chosen={this.props.appState.reportType === "load"} label={"LOAD MATCH"} toggleReportType={this.toggleReportType("load")}/>
+                    <CircleButton89 
+                        chosen={this.props.appState.reportType === "new"} 
+                        label={"NEW MATCH"} 
+                        toggleReportType={this.toggleReportType("new")}/>
+                    <CircleButton89 
+                        chosen={this.props.appState.reportType === "load"} 
+                        label={"LOAD MATCH"} 
+                        toggleReportType={this.toggleReportType("load")}/>
                 </div>
             </div>
             <ReportsList appState={this.props.appState}/>

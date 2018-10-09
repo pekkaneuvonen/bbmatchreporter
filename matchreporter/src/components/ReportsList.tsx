@@ -57,7 +57,11 @@ class ReportsList extends React.Component<{appState: AppState}, IReportListState
             const defaultTitle2: string = this.props.appState.awayTeam ? this.props.appState.awayTeam.name : "team 2";
 
             return <div>
-                <TeamTitleInput titleChangeHandler={this.handleTeamNameChange} title1Default={defaultTitle1} title2Default={defaultTitle2} activityOverride={true}/>
+                <TeamTitleInput 
+                    titleChangeHandler={this.handleTeamNameChange} 
+                    title1Default={defaultTitle1} 
+                    title2Default={defaultTitle2} 
+                    activityOverride={true}/>
                 <Link to={Screens.Prematch}>
                     <div onClick={this.reportCreated("go")}>
                         <img className={"bottomButton"} src={readyBtn}/>
@@ -80,7 +84,13 @@ class ReportsList extends React.Component<{appState: AppState}, IReportListState
                             if (this.props.appState.report && report.id === this.props.appState.report.id) {
                                 titleStyles.push("newTeamTitle");
                             }
-                            return <Link key={report.id} to={Screens.Prematch} style={{textDecoration: "none"}}><div style={teamBgStyle} className="reportRow" onClick={this.reportClicked(report.id)}>
+                            return <Link key={report.id} 
+                                to={Screens.Prematch} 
+                                style={{textDecoration: "none"}}>
+                                    <div 
+                                        style={teamBgStyle} 
+                                        className="reportRow" 
+                                        onClick={this.reportClicked(report.id)}>
                                 <div className={titleStyles.join(' ')}>
                                     {report.home.name}
                                 </div>
