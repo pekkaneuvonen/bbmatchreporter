@@ -11,8 +11,11 @@ export class Kvalue {
     public get value(): number {
         return this.prValue;
     }
+    public add(addedV: number) {
+        this.value += addedV;
+    }
 
     public get asString(): string {
-        return String(this.prValue/1000) + " k";
+        return String(Math.abs(this.prValue)/1000) + "k";
     }
 }

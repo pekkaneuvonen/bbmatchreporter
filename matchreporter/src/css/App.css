@@ -21,6 +21,7 @@ div.navbutton {
 
 div.mainChooser {
   width: 100%;
+  height: 124px;
   margin-top: 12px;
 }
 .parallelChooserCircles {
@@ -29,13 +30,36 @@ div.mainChooser {
   justify-content: space-evenly;
 }
 
-.circlebutton89 {
+.circlecontainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   z-Index: 0;
 }
-.circlebutton89_button {
+.circlecontainer59_input {
+  font-family: 'AlteDIN_G', sans-serif;
+  align-content: center;
+  text-align: center;
+  font-weight: 500;
+  font-size: 16px;
+  color: #FFFFFF;
+  background: rgba(0, 0, 0, 0);
+  border: 0px;
+  height: 59px;
+  width: 59px;
+}
+.circlecontainer79_input {
+  font-family: 'AlteDIN_G', sans-serif;
+  align-content: center;
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+  background: rgba(0, 0, 0, 0);
+  border: 0px;
+  height: 79px;
+  width: 79px;
+}
+.circlecontainer89_button {
   font-family: 'AlteDIN_G', sans-serif;
   align-content: center;
   font-weight: 600;
@@ -45,9 +69,9 @@ div.mainChooser {
   height: 89px;
   width: 89px;
 }
-.circlebutton89_arrow {
-  margin-top: -3px;
-  height: 20px;
+.circlecontainer_arrow {
+  margin-top: -6px;
+  height: 42px;
   width: 20px;
 }
 div.propcircle {

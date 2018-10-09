@@ -20,11 +20,10 @@ class CircleButton89 extends React.Component<ICircleButtonProps, {}> {
             backgroundImage: `url(${this.props.chosen ? chosenbg : activebg})`,
         };
         console.log("this.props.chosen : " + this.props.chosen);
-        return <div className="circlebutton89">
-            <button className="circlebutton89_button" style={circleStyle} onClick={this.props.toggleReportType}>{this.props.label}</button>
-            {this.props.arrowOverride || this.props.chosen ? <img className="circlebutton89_arrow" src={downarrow}/> : null}
+        return <div className="circlecontainer">
+            <button className="circlecontainer89_button" style={circleStyle} onClick={this.props.toggleReportType}>{this.props.label}</button>
+            {this.props.arrowOverride || this.props.chosen ? <img className="circlecontainer_arrow" src={downarrow}/> : null}
         </div>;
     };
-    // <button onClick={toggleImportance}>{label}</button>
 }
 export default CircleButton89;

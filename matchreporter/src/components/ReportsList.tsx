@@ -94,7 +94,9 @@ class ReportsList extends React.Component<{appState: AppState}, IReportListState
                 </ul>
             }
         } else {
-            return null;
+            return <div className="no_reportList">
+                        Create new report or load from archive. 
+                    </div>;
         }
     }
     private openReport = (report: Report) => {

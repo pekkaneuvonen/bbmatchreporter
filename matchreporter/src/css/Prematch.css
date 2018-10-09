@@ -6,3 +6,22 @@
 .teamtitles {
     margin-top: 85px;
 }
+.teamvalues {
+    margin-top: 75px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.inducements {
+    margin-top: 26px;
+}
+.homeinduced {
+    float: left;
+    margin-left: 50px;
+    margin-top: -6px;
+}
+.awayinduced {
+    float: right;
+    margin-right: 50px;
+    margin-top: -6px;
+}
