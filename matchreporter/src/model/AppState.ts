@@ -13,6 +13,7 @@ export class AppState {
   @observable public showTab: boolean;
   @observable public reportType: string;
   @observable public reportsList: Report[] = [];
+  public createdReportsCount: number;
   @observable public weather: string;
   
   @observable public report: Report;

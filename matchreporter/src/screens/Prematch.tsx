@@ -82,12 +82,12 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
             <div className="teamvalues">
                 <CircleInput79 
                     activityOverride={true} 
-                    value={this.props.appState.homeTeam.tv} 
+                    value={this.props.appState.homeTeam.tv.asString} 
                     valueChangeHandler={this.handleTeamValueChange("home")}
                     arrowOverride={induced === this.props.appState.homeTeam}/>
                 <CircleInput79 
                     activityOverride={true} 
-                    value={this.props.appState.awayTeam.tv} 
+                    value={this.props.appState.awayTeam.tv.asString} 
                     valueChangeHandler={this.handleTeamValueChange("away")} 
                     arrowOverride={induced === this.props.appState.awayTeam}/>
             </div>
@@ -111,12 +111,12 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
             <div className="gate">
                 <CircleInput79 
                     activityOverride={true} 
-                    value={this.props.appState.homeTeam.gate} 
+                    value={this.props.appState.homeTeam.gate.asString} 
                     valueChangeHandler={this.handleTeamGateChange("home")}
                     arrowOverride={this.fame < 0}/>
                 <CircleInput79 
                     activityOverride={true} 
-                    value={this.props.appState.awayTeam.gate} 
+                    value={this.props.appState.awayTeam.gate.asString} 
                     valueChangeHandler={this.handleTeamGateChange("away")} 
                     arrowOverride={this.fame > 0}/>
             </div>
@@ -172,14 +172,16 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
     }
     private get fame(): number {
         let gateDifference: number = 0;
-        if (this.props.appState.awayTeam.gate.value >= this.props.appState.homeTeam.gate.value * 2) {
-            gateDifference = 2;
-        } else if (this.props.appState.awayTeam.gate.value > this.props.appState.homeTeam.gate.value) {
-            gateDifference = 1;
-        } else if (this.props.appState.homeTeam.gate.value >= this.props.appState.awayTeam.gate.value * 2) {
-            gateDifference = -2;
-        } else if (this.props.appState.homeTeam.gate.value > this.props.appState.awayTeam.gate.value) {
-            gateDifference = -1;
+        if (this.props.appState.homeTeam.gate.value > 0 && this.props.appState.awayTeam.gate.value > 0) {
+            if (this.props.appState.awayTeam.gate.value >= this.props.appState.homeTeam.gate.value * 2) {
+                gateDifference = 2;
+            } else if (this.props.appState.awayTeam.gate.value > this.props.appState.homeTeam.gate.value) {
+                gateDifference = 1;
+            } else if (this.props.appState.homeTeam.gate.value >= this.props.appState.awayTeam.gate.value * 2) {
+                gateDifference = -2;
+            } else if (this.props.appState.homeTeam.gate.value > this.props.appState.awayTeam.gate.value) {
+                gateDifference = -1;
+            }
         }
         return gateDifference;
     }
@@ -190,28 +192,29 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
         this.props.appState.homeTeam.name = titles.title1;
         this.props.appState.awayTeam.name = titles.title2;
     }
-    private handleInducementValueChange = (value: Kvalue) => {
+    private handleInducementValueChange = (value: string) => {
         console.log("Trying to override calculated inducement value !");
         // this.props.appState.inducementValueOverride = value;
     }
-    private handleFameValueChange = (value: Kvalue) => {
+    private handleFameValueChange = (value: string) => {
         console.log("Trying to override calculated fame value !");
         // this.props.appState.inducementValueOverride = value;
     }
     private handleTeamValueChange = (team: string) => {
         if (team === "home") {
-            return (value: number) => {
-
-                const numericValue: number = value * 1000;
+            return (value: string) => {
+                const splitValue: string[] = value.split("k");
+                let numericValue: number = parseInt(splitValue.join(""), 10);
+                numericValue *= 1000;
                 const kValue: Kvalue = new Kvalue(numericValue);
-
                 this.props.appState.homeTeam.tv = kValue;
             }
         } else {
-            return (value: number) => {
-                const numericValue: number = value * 1000;
+            return (value: string) => {
+                const splitValue: string[] = value.split("k");
+                let numericValue: number = parseInt(splitValue.join(""), 10);
+                numericValue *= 1000;
                 const kValue: Kvalue = new Kvalue(numericValue);
-
                 this.props.appState.awayTeam.tv = kValue;
             }
         }
@@ -229,17 +232,19 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
     }
     private handleTeamGateChange = (team: string) => {
         if (team === "home") {
-            return (value: number) => {
-                const numericValue: number = value * 1000;
+            return (value: string) => {
+                const splitValue: string[] = value.split("k");
+                let numericValue: number = parseInt(splitValue.join(""), 10);
+                numericValue *= 1000;
                 const kValue: Kvalue = new Kvalue(numericValue);
-
                 this.props.appState.homeTeam.gate = kValue;
             }
         } else {
-            return (value: number) => {
-                const numericValue: number = value * 1000;
+            return (value: string) => {
+                const splitValue: string[] = value.split("k");
+                let numericValue: number = parseInt(splitValue.join(""), 10);
+                numericValue *= 1000;
                 const kValue: Kvalue = new Kvalue(numericValue);
-
                 this.props.appState.awayTeam.gate = kValue;
             }
         }

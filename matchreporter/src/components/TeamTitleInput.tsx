@@ -23,7 +23,7 @@ class TeamTitleInput extends React.Component<ITeamTitleInput, IReportListState> 
     private bgStyle = {
         backgroundImage: `url(${bg})`,
         backgroundPosition: 'center',
-        backgroundRepeat  : 'no-repeat'
+        backgroundRepeat  : 'no-repeat',
     };
     private inputStyle = {
         backgroundImage: `url(${inputField})`,
@@ -47,13 +47,13 @@ class TeamTitleInput extends React.Component<ITeamTitleInput, IReportListState> 
         const inactiveStyles:string = "teamTitle reportRowSlot inputRowSlot";
         const input1Active: boolean = this.props.activityOverride ? this.props.activityOverride : this.state.title1active;
         const input2Active: boolean = this.props.activityOverride ? this.props.activityOverride : this.state.title2active;
-        return <div style={this.bgStyle} className={"reportRow inputRow"}>
+        return <div style={this.bgStyle} className={"reportRow teamsRow inputRow"}>
             <form onSubmit={this.addTeamName}>
                 <input style={input1Active ? this.inputStyle : undefined} className={input1Active ? activeStyles : inactiveStyles} value={this.state.title1} onChange={this.handleTeamName1Change} onFocus={this.onTitleFocusIn("title1")} onBlur={this.onTitleFocusOut("title1")}/>
             </form>
             <div className={"vs"}>
                 <img src={vsBitmap}/>
-            </div>/>    
+            </div>
             <form onSubmit={this.addTeamName}>
                 <input style={input2Active ? this.inputStyle : undefined} className={input2Active ? activeStyles : inactiveStyles} value={this.state.title2} onChange={this.handleTeamName2Change} onFocus={this.onTitleFocusIn("title2")} onBlur={this.onTitleFocusOut("title2")}/>
             </form>

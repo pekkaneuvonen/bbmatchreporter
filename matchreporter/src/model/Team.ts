@@ -1,14 +1,28 @@
 import { observable } from "mobx";
-import { Kvalue } from "../types/Kvalue"
+import { Kvalue } from "../types/Kvalue";
+import { Player } from "./Player";
+
 
 export class Team {
+    // prematch
     public name: string = "-";
-    @observable public tv: Kvalue;
+    public teamValue: number;
     public rerolls: number;
     public notes: string;
     @observable public inducements: string;
     public fanFactor: number;
+    public gateValue: number
+
+    @observable public tv: Kvalue;
     @observable public gate: Kvalue;
+
+    // postmatch
+    public scorers: Player[];
+    public cInflicted: Player[];
+    public cSuffered: Player[];
+    public injured: Player[];
+    public completions: Player[];
+    public intercepts: Player[];
 
     constructor (props: any) {
         // console.log('new team name: ', props.name);

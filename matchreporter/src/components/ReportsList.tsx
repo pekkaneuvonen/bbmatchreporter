@@ -5,6 +5,7 @@ import '../css/Reports.css';
 import { AppState, Screens } from "../model/AppState";
 import Report from '../model/Report';
 import { Reports } from '../services/Reports';
+import StringFormatter from '../utils/StringFormatter';
 import TeamTitleInput from './TeamTitleInput';
 
 import bgActive from '../img/backgrounds/ActiveAreaBgBox.png';
@@ -20,8 +21,16 @@ interface IReportListState {
 }
 
 @observer
-class ReportsList extends React.Component<{appState: AppState}, IReportListState> {
+class ReportsList extends React.Component<{appState: AppState, yPos: number}, IReportListState> {
+    constructor(props: any) {
+        super(props);
 
+        this.state = {
+            inputTitle1: "",
+            inputTitle2: ""
+        };
+    }
+    
     public componentWillMount() {
         /*
         Reports
@@ -40,21 +49,29 @@ class ReportsList extends React.Component<{appState: AppState}, IReportListState
     }
 
     public render() {
+        let chooserHeight: number;
+        if (this.props.appState.reportType === "load" && this.props.appState.reportsList && this.props.appState.reportsList.length > 0) {
+            chooserHeight = 500;
+        } else {
+            chooserHeight = window.innerHeight - this.props.yPos;
+        }
         const bgStyle = {
             backgroundImage: `url(${bgActive})`,
+            height: chooserHeight,
         };
-
+        
         return (
-            <div className="reportChooser" style={bgStyle}>
+            <div id="container" className="reportChooser" style={bgStyle}>
                 {this.toggleReportDetails(this.props.appState.reportType)}
             </div>
         );
     }
+
     private toggleReportDetails = (listType: string) => {
         console.log("listType " + listType);
         if (listType === "new") {
-            const defaultTitle1: string = this.props.appState.homeTeam ? this.props.appState.homeTeam.name : "team 1";
-            const defaultTitle2: string = this.props.appState.awayTeam ? this.props.appState.awayTeam.name : "team 2";
+            const defaultTitle1: string = "team 1";
+            const defaultTitle2: string = "team 2";
 
             return <div>
                 <TeamTitleInput 
@@ -63,7 +80,7 @@ class ReportsList extends React.Component<{appState: AppState}, IReportListState
                     title2Default={defaultTitle2} 
                     activityOverride={true}/>
                 <Link to={Screens.Prematch}>
-                    <div onClick={this.reportCreated("go")}>
+                    <div onClick={this.createReport("go")}>
                         <img className={"bottomButton"} src={readyBtn}/>
                     </div>
                 </Link>
@@ -78,7 +95,7 @@ class ReportsList extends React.Component<{appState: AppState}, IReportListState
                             const teamBgStyle = {
                                 backgroundImage: `url(${(this.props.appState.report && report.id === this.props.appState.report.id) ? activeTeamsField : teamsField})`,
                                 backgroundPosition: 'center',
-                                backgroundRepeat  : 'no-repeat',
+                                backgroundRepeat  : 'no-repeat'
                             };
                             const titleStyles: string[] = ["teamTitle", "reportRowSlot"];
                             if (this.props.appState.report && report.id === this.props.appState.report.id) {
@@ -87,17 +104,20 @@ class ReportsList extends React.Component<{appState: AppState}, IReportListState
                             return <Link key={report.id} 
                                 to={Screens.Prematch} 
                                 style={{textDecoration: "none"}}>
-                                    <div 
-                                        style={teamBgStyle} 
-                                        className="reportRow" 
+                                <div style={teamBgStyle} className="reportRow">
+                                    <div className="reportDate">
+                                        {StringFormatter.formatDate(report.date)}
+                                    </div>
+                                    <div className="teamsRow" 
                                         onClick={this.reportClicked(report.id)}>
-                                <div className={titleStyles.join(' ')}>
-                                    {report.home.name}
+                                        <div className={titleStyles.join(' ')}>
+                                            {report.home.name}
+                                        </div>
+                                        <div className={titleStyles.join(' ')}>
+                                            {report.away.name}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className={titleStyles.join(' ')}>
-                                    {report.away.name}
-                                </div>
-                            </div>
                             </Link>
                         }
                     )}
@@ -114,6 +134,15 @@ class ReportsList extends React.Component<{appState: AppState}, IReportListState
         this.props.appState.report = report;
         this.props.appState.homeTeam = report.home;
         this.props.appState.awayTeam = report.away;
+        // this.props.appState.reportType = "load";
+    }
+    private updateReport = (tempId: string, report: Report) => {
+        console.log("updating report ", tempId, report);
+        const updatedReport = this.props.appState.reportsList.find(r => r.id === tempId);
+        if (updatedReport) {
+            updatedReport.date = report.date;
+            updatedReport.id = report.id;
+        }
     }
     private buildReportList = (reportsData: object[]) => {
         // console.log("complete reports data : ", reportsData);
@@ -125,17 +154,31 @@ class ReportsList extends React.Component<{appState: AppState}, IReportListState
     private handleTeamNameChange = (titles: any) => {
         this.setState({inputTitle1: titles.title1, inputTitle2: titles.title2})
     }
-    private reportCreated = (message: string) => {
+    private createReport = (message: string) => {
         return () => {
-            const homeTeam: Team = new Team({name: this.state.inputTitle1});
-            const awayTeam: Team = new Team({name: this.state.inputTitle2});
-            const report: Report = new Report({id:"temp_created_report", title:"temp_created_report", home:homeTeam, away:awayTeam});
-            if (report) {
-                this.openReport(report);
+            if (this.state.inputTitle1 && this.state.inputTitle2) {
+                if (!this.props.appState.createdReportsCount) {
+                    this.props.appState.createdReportsCount = 0;
+                }
+                const reportTempId: string = "temp_created_report" + this.props.appState.createdReportsCount;
+                this.props.appState.createdReportsCount++;
+
+                const homeTeam: Team = new Team({name: this.state.inputTitle1});
+                const awayTeam: Team = new Team({name: this.state.inputTitle2});
+                const reportTemplate: Report = new Report({id:reportTempId, title:reportTempId, home:homeTeam, away:awayTeam});
+                this.props.appState.reportsList.push(reportTemplate);
+                
+                this.openReport(reportTemplate);
+
+                Reports
+                .createReport(reportTemplate)
+                .then((newReport: Report) => {
+                    this.updateReport(reportTempId, newReport);
+                  });
             }
         };
     }
-    private reportClicked = (reportId: number) => {
+    private reportClicked = (reportId: string) => {
         return () => {
             const report = this.props.appState.reportsList.find(r => r.id === reportId);
             if (report) {

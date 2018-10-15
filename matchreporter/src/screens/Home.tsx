@@ -16,13 +16,19 @@ const bgStyle = {
   backgroundImage: `url(${bgHome})`
 };
 @observer
-class Home extends React.Component<IAppProps, {}> {
-
+class Home extends React.Component<IAppProps, {chooserPos: number}> {
+    constructor(props: any) {
+        super(props);
+        this.state = {
+            chooserPos: 0,
+        };
+    }
     public componentWillMount() {
         this.props.appState.screen = Screens.Home;
     }
     public render() {
         console.log("this.props.appState.reportType : ", this.props.appState.reportType);
+
         return <div className="App" style={bgStyle}>
             <Navigator appState={this.props.appState}/>
             <Screentitle src={title}/>
@@ -35,14 +41,16 @@ class Home extends React.Component<IAppProps, {}> {
                     <CircleButton89 
                         chosen={this.props.appState.reportType === "new"} 
                         label={"NEW MATCH"} 
-                        toggleReportType={this.toggleReportType("new")}/>
+                        onClickHandler={this.toggleReportType("new")}/>
                     <CircleButton89 
                         chosen={this.props.appState.reportType === "load"} 
                         label={"LOAD MATCH"} 
-                        toggleReportType={this.toggleReportType("load")}/>
+                        onClickHandler={this.toggleReportType("load")}/>
                 </div>
             </div>
-            <ReportsList appState={this.props.appState}/>
+            <div id="chooser" ref={(chooser) => this.calcChooserHeight(chooser)}>
+            <ReportsList appState={this.props.appState} yPos={this.state.chooserPos}/>
+            </div>
         </div>;
     };
 
@@ -57,5 +65,32 @@ class Home extends React.Component<IAppProps, {}> {
             }
         }
     }
+    private calcChooserHeight(chooser: any): void {
+        const chooserPos: {x: number, y: number} = this.getPosition(chooser);
+        if (chooser && chooserPos.y && (!this.state.chooserPos || this.state.chooserPos !== chooserPos.y)) {
+            this.setState({
+                chooserPos: chooserPos.y
+            });
+        }
+        
+    }
+    private getPosition(element: any) {
+        let xPosition = 0;
+        let yPosition = 0;
+        
+        while (element) {
+            if (element.getBoundingClientRect) {
+                const boundingBox = element.getBoundingClientRect();
+                xPosition += boundingBox.x;
+                yPosition += boundingBox.y;
+            } else {
+                xPosition += (element.offsetLeft - element.scrollLeft + element.clientLeft);
+                yPosition += (element.offsetTop - element.scrollTop + element.clientTop);
+            }
+            element = element.offsetParent;
+        }
+        return { x: xPosition, y: yPosition };
+    }
+
 }
 export default Home;

@@ -4,20 +4,19 @@ import '../../css/App.css';
 import bg from '../../img/circles/propcircle_79.png';
 import activebg from '../../img/circles/propcircle_79_active.png';
 import downarrow from '../../img/circles/propcircleTriangle_white.png';
-import { Kvalue } from '../../types/Kvalue';
 
 // {chosen: boolean, arrow: boolean, label: string, toggleReportType: () => void}, {}
 interface ICircleButtonProps {
     activityOverride?: boolean;
     arrowOverride?: boolean;
-    value: Kvalue;
-    valueChangeHandler: (value: number) => void;
+    value: string;
+    valueChangeHandler: (value: string) => void;
 }
 interface IinputCircleState {
     inputActive: boolean;
 }
 
-class CircleInput89 extends React.Component<ICircleButtonProps, IinputCircleState> {
+class CircleInput79 extends React.Component<ICircleButtonProps, IinputCircleState> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -31,7 +30,7 @@ class CircleInput89 extends React.Component<ICircleButtonProps, IinputCircleStat
             backgroundRepeat  : 'no-repeat',
         };
         return <div className="circlecontainer">
-            <input style={circleStyle} className="circlecontainer79_input" value={this.props.value.asString} onChange={this.handleValueChange} onFocus={this.onFocusIn()} onBlur={this.onFocusOut()}/>
+            <input style={circleStyle} className="circlecontainer79_input" value={this.props.value} onChange={this.handleValueChange} onFocus={this.onFocusIn()} onBlur={this.onFocusOut()}/>
             {this.props.arrowOverride ? <img className="circlecontainer_arrow" src={downarrow}/> : null}
         </div>;
     };
@@ -47,10 +46,7 @@ class CircleInput89 extends React.Component<ICircleButtonProps, IinputCircleStat
         }
     }
     private handleValueChange = (event: any) => {
-        const rawValue: string = event.target.value;
-        const splitValue: string[] = rawValue.split("k");
-        const numericValue: number = parseInt(splitValue.join(""), 10);
-        this.props.valueChangeHandler(numericValue);
+        this.props.valueChangeHandler(event.target.value);
     }
 }
-export default CircleInput89;
+export default CircleInput79;

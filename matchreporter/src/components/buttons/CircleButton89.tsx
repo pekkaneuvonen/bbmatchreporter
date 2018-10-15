@@ -10,7 +10,7 @@ interface ICircleButtonProps {
     chosen: boolean;
     arrowOverride?: boolean;
     label: string;
-    toggleReportType: () => void;
+    onClickHandler: () => void;
 }
 
 class CircleButton89 extends React.Component<ICircleButtonProps, {}> {
@@ -21,7 +21,7 @@ class CircleButton89 extends React.Component<ICircleButtonProps, {}> {
         };
         console.log("this.props.chosen : " + this.props.chosen);
         return <div className="circlecontainer">
-            <button className="circlecontainer89_button" style={circleStyle} onClick={this.props.toggleReportType}>{this.props.label}</button>
+            <button className="circlecontainer89_button" style={circleStyle} onClick={this.props.onClickHandler}>{this.props.label}</button>
             {this.props.arrowOverride || this.props.chosen ? <img className="circlecontainer_arrow" src={downarrow}/> : null}
         </div>;
     };

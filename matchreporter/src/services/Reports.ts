@@ -17,4 +17,10 @@ export class Reports {
             return response.data;
         });
     }
+    public static createReport = (template: object) => {
+        const request: AxiosPromise = axios.post(baseUrl, template);
+        return request.then(response => {
+            return new Report(response.data);
+        });
+    }
 }

@@ -3,11 +3,14 @@ import {Team} from "./Team";
 // tslint:disable:no-console
 
 export class Report {
-    public id: number;
+    public id: string;
+    public date: Date;
     public title: string = "-";
     public totalGate: Kvalue = new Kvalue(0);
+    public totalGateValue: number = 0;
     public home: Team;
     public away: Team;
+    public weather: string[] = [];
 
     constructor (props: any) {
 
@@ -17,11 +20,17 @@ export class Report {
         this.home = new Team(props.home);
         this.away = new Team(props.away);
 
-        // console.log(' home gate ', this.home.gate.asString, this.home.gate.value);
-
-        this.totalGate = new Kvalue(this.home.gate.value + this.away.gate.value);
-        // console.log(' report totalGate: ', this.totalGate.asString);
-
+        if (props.date) {
+            // console.log(' date ', props.date);
+            this.date = new Date(props.date)
+            // console.log(' day ', this.date.getDate());
+        }
+        try {
+            this.totalGate = new Kvalue(this.home.gate.value + this.away.gate.value);
+            // console.log(' report totalGate: ', this.totalGate.asString);
+        } catch (error) {
+            console.log(' unable to calculate report totalGate.');
+        }
     }
 }
 export default Report;

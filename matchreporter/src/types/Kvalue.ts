@@ -16,6 +16,6 @@ export class Kvalue {
     }
 
     public get asString(): string {
-        return String(Math.abs(this.prValue)/1000) + "k";
+        return this.prValue ? String(Math.abs(this.prValue)/1000) + "k" : "-";
     }
 }

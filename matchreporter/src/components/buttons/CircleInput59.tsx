@@ -2,11 +2,10 @@ import * as React from 'react';
 
 import '../../css/App.css';
 import bg from '../../img/circles/propcircle_generated_59.png';
-import { Kvalue } from '../../types/Kvalue';
 
 interface ICircleValueProps {
     value: string;
-    valueChangeHandler: (value: Kvalue) => void;
+    valueChangeHandler: (value: string) => void;
 }
 
 class CircleInput59 extends React.Component<ICircleValueProps, {}> {
@@ -22,15 +21,7 @@ class CircleInput59 extends React.Component<ICircleValueProps, {}> {
         </div>;
     };
     private handleValueChange = (event: any) => {
-        const rawValue: string = event.target.value;
-        const splitValue: string[] = rawValue.split("k");
-        let numericValue: number = parseInt(splitValue[0], 10);
-        if (numericValue !== 0 && splitValue.length > 1) {
-            numericValue *= 1000;
-        }
-        const kValue: Kvalue = new Kvalue(numericValue);
-        this.props.valueChangeHandler(kValue);
-        this.setState({ value: kValue });
+        this.props.valueChangeHandler(event.target.value);
     }
 }
 export default CircleInput59;
