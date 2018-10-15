@@ -1,0 +1,131 @@
+.Prematch {
+    width: 320px;
+    height: 1746px;
+    background: rgba(0, 0, 0, 0);
+}
+.teamtitles {
+    margin-top: 85px;
+}
+.teamvalues {
+    margin-top: 75px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.inducementValue {
+    margin-top: 30px;
+    float: center;
+    margin-bottom: 51px;
+}
+/*
+    inducement circle:
+    even:   margin-top      30 
+            + circle        59 
+            + margin-bottom 52
+            =               141
+    induced:
+            arrow           42
+            + arrow top     -6
+            + margin-top    -6
+            + circle        59 
+            + margin-bottom 52
+            =               141
+*/
+.homeinduced {
+    float: left;
+    margin-left: 50px;
+    margin-top: -6px;
+}
+.awayinduced {
+    float: right;
+    margin-right: 50px;
+    margin-top: -6px;
+}
+.inducements {
+    margin-top: 52px;
+    width: 320px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.inducementsBox {
+    background: black;
+    border: none;
+    flex: 1;
+    height: 120px;
+    color: white;
+    text-align: left;
+    padding: 6px;
+    padding-left: 10px;
+    font-family: 'AlteDIN_G', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    text-decoration: none;
+    resize: none;
+}
+.homeInducements {
+    margin-right: 1px;
+}
+.awayInducements {
+    margin-left: 1px;
+}
+
+.gate {
+    margin-top: 90px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.fameValue {
+    margin-top: 26px;
+}
+.homefame {
+    float: left;
+    margin-left: 50px;
+    margin-top: -6px;
+}
+.awayfame {
+    float: right;
+    margin-right: 50px;
+    margin-top: -6px;
+}
+.weatherChooser {
+    margin-top: 270px;
+}
+.weatherChooserRow {
+    height: 39px;
+    width: 320px;
+    background: black;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    margin-top: 1px;
+}
+.weatherChooserRowArrow {
+    height: 40px;
+    width: 40px;
+}
+.weatherChooserRowtext {
+    user-select: none;
+    text-align: center;
+    font-family: 'AlteDIN_G', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.weatherChooserRowThrow {
+    height: 39px;
+    width: 60px;
+    margin-left: 20px;
+}
+.weatherChooserRowDescription {
+    width: 230px;
+    font-weight: 500;
+    margin-right: 10px;
+    color: white;
+}
