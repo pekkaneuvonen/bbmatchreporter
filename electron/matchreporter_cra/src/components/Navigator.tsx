@@ -39,25 +39,27 @@ class Navigator extends React.Component<IAppProps, {}> {
                     </Link>
                 </div>
                 <div className="navbutton">
-                    <Link to={Screens.Prematch}>
-                        <img src={this.getButtonFor(Screens.Prematch)}/>
-                    </Link>
+                    {this.link(Screens.Prematch)}
                 </div>
                 <div className="navbutton">
-                    <Link to={Screens.Match}>
-                        <img src={this.getButtonFor(Screens.Match)}/>
-                    </Link>
+                    {this.link(Screens.Match)}
                 </div>
                 <div className="navbutton">
-                    <Link to={Screens.Postmatch}>
-                        <img src={this.getButtonFor(Screens.Postmatch)}/>
-                    </Link>
+                    {this.link(Screens.Postmatch)}
                 </div>
             </div>
         </div>
         )
     }
-
+    private link = (screen: string) => {
+        if (this.props.appState.report) {
+            return <Link to={screen}>
+                <img src={this.getButtonFor(screen)}/>
+            </Link>
+        } else {
+            return <img src={this.getButtonFor(screen)}/>
+        }
+    }
     private getButtonFor = (screen: string) => {
         const screens: string[] = [Screens.Home, Screens.Prematch, Screens.Match, Screens.Postmatch];
         const visited: boolean = screens.indexOf(screen) <= screens.indexOf(this.props.appState.screen);

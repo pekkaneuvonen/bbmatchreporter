@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "public/electron.js",
+  "homepage": "./",
   "dependencies": {
     "@types/react-router-dom": "^4.3.1",
     "axios": "^0.18.0",

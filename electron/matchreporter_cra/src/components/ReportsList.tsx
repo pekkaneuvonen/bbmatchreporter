@@ -44,21 +44,24 @@ class ReportsList extends React.Component<{appState: AppState, yPos: number}, IR
             .getReports()
             .then(this.buildReportList)
             .catch(error => {
-                console.log(error);
+                console.log(" error getting reports: ", error);
         });
     }
 
     public render() {
-        let chooserHeight: number;
-        if (this.props.appState.reportType === "load" && this.props.appState.reportsList && this.props.appState.reportsList.length > 0) {
-            chooserHeight = 500;
+        let bgStyle;
+        if (this.props.appState.reportType !== "load" || !this.props.appState.reportsList ||this.props.appState.reportsList.length < 1) {
+            const inputHeight: number = window.innerHeight - this.props.yPos;
+            bgStyle = {
+                backgroundImage: `url(${bgActive})`,
+                height: inputHeight,
+            };
         } else {
-            chooserHeight = window.innerHeight - this.props.yPos;
+            bgStyle = {
+                backgroundImage: `url(${bgActive})`,
+            };
         }
-        const bgStyle = {
-            backgroundImage: `url(${bgActive})`,
-            height: chooserHeight,
-        };
+
         
         return (
             <div id="container" className="reportChooser" style={bgStyle}>
