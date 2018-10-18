@@ -1,5 +1,4 @@
 import { RootState } from "@red/index";
-import { ipcRenderer } from "electron";
 
 export type counterActions = increment | decrement;
 
@@ -36,15 +35,6 @@ const incrementIfOdd = () => {
 
 const incrementAsync = (delay: number = 1000) => {
   return (dispatch: (action: counterActions) => void) => {
-    console.log(ipcRenderer.sendSync("custom-sync-message", " Rock!"));
-    ipcRenderer.on("custom-reply", (event: any, arg: any) => {
-      console.log(arg);
-      if (event) {
-        console.log("event: " + event);
-      }
-    })
-    ipcRenderer.send("custom-message", " Until you drop!");
-
     setTimeout(() => {
       dispatch(increment());
     }, delay);
