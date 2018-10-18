@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom'
-// import Navigator from './components/Navigator';
-// import ReportsList from './components/ReportsList';
 import {AppState, Screens} from "./model/AppState";
+// import Store from "./store";
 
 import './css/App.css';
 import Home from './screens/Home';
@@ -46,6 +45,7 @@ const PostmatchScreen = () => {
 }
 
 class App extends React.Component {
+
   public render() {
     return (
       <Switch>

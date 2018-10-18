@@ -8,5 +8,8 @@
   },
   "rules": {
     "no-console": false
+  },
+  "jsRules": {
+    "no-console": false //Disable for javascript
   }
 }

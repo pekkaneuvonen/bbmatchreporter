@@ -27,8 +27,6 @@ class Home extends React.Component<IAppProps, {chooserPos: number}> {
         this.props.appState.screen = Screens.Home;
     }
     public render() {
-        console.log("this.props.appState.reportType : ", this.props.appState.reportType);
-
         return <div className="App" style={bgStyle}>
             <Navigator appState={this.props.appState}/>
             <Screentitle src={title}/>

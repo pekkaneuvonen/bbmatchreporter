@@ -2,6 +2,7 @@ import { observer } from "mobx-react";
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/Reports.css';
+import { ASYNC_WITH_PATH_LOADED, LOAD_ASYNC_WITH_PATH, LOAD_FILE_WITH_PATH } from '../localAccess/ipcConstants';
 import { AppState, Screens } from "../model/AppState";
 import Report from '../model/Report';
 import { Reports } from '../services/Reports';
@@ -13,6 +14,11 @@ import readyBtn from '../img/buttons/ready.png';
 import teamsField from '../img/reportList/teamtitles.png';
 import activeTeamsField from '../img/reportList/teamtitles_active.png';
 import { Team } from "../model/Team";
+
+declare const window: any;
+const { ipcRenderer } = window.require('electron');
+// const electron = window.require('electron');
+
 
 // tslint:disable:no-console
 interface IReportListState {
@@ -31,15 +37,17 @@ class ReportsList extends React.Component<{appState: AppState, yPos: number}, IR
         };
     }
     
-    public componentWillMount() {
-        /*
-        Reports
-            .getReport("0")
-            .then(this.openReport)
-            .catch(error => {
-                console.log(error);
+    public componentDidMount() {
+        const userAgent = navigator.userAgent.toLowerCase();
+        console.log("userAgent " + userAgent);
+        if (userAgent.indexOf(' electron/') > -1) {
+            console.log("ReportList sendSync: ", ipcRenderer.sendSync(LOAD_FILE_WITH_PATH, 'ping'));
+
+            ipcRenderer.on(ASYNC_WITH_PATH_LOADED, (event: any, arg: any) => {
+                console.log("ReportList ASYNC_WITH_PATH_LOADED: " + arg)
             });
-        */
+            ipcRenderer.send(LOAD_ASYNC_WITH_PATH, 'ping');
+        }
         Reports
             .getReports()
             .then(this.buildReportList)
@@ -47,6 +55,7 @@ class ReportsList extends React.Component<{appState: AppState, yPos: number}, IR
                 console.log(" error getting reports: ", error);
         });
     }
+    
 
     public render() {
         let bgStyle;
@@ -71,7 +80,6 @@ class ReportsList extends React.Component<{appState: AppState, yPos: number}, IR
     }
 
     private toggleReportDetails = (listType: string) => {
-        console.log("listType " + listType);
         if (listType === "new") {
             const defaultTitle1: string = "team 1";
             const defaultTitle2: string = "team 2";

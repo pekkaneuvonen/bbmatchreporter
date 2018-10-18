@@ -16,7 +16,6 @@ class ColoredLine extends React.Component<{colour: string, thickness: string, pa
     */
    public render() {
        const middleOfParent: number = parseInt(this.props.parentHeight, 10)/2;
-       console.log("middleOfParent : " + middleOfParent);
        return <div style={{
                 background: this.props.colour,
                 height: this.props.thickness,

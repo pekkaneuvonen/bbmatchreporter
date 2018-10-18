@@ -1,0 +1,4 @@
+export const LOAD_FILE_WITH_PATH: string = "LOAD_FILE_WITH_PATH";
+export const LOAD_ASYNC_WITH_PATH: string = "LOAD_ASYNC_WITH_PATH";
+export const FILE_WITH_PATH_LOADED: string = "FILE_WITH_PATH_LOADED";
+export const ASYNC_WITH_PATH_LOADED: string = "ASYNC_WITH_PATH_LOADED";

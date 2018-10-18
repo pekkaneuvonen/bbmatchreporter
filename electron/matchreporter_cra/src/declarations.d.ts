@@ -1,0 +1,1 @@
+// Put all your custom type information for 3rd party modules here
