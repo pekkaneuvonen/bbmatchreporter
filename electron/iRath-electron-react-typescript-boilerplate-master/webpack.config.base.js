@@ -38,5 +38,5 @@ module.exports = {
 
   plugins: [],
 
-  externals: Object.keys(externals || {})
+  externals: Object.keys(externals || { sqlite3: 'commonjs sqlite3' })
 };

@@ -2,8 +2,10 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { remote } from "electron";
 import * as path from 'path';
+import * as sql from "sqlite3";
 
-
+// const sqlite3 = require('sqlite3').verbose();
+const db = new sql.Database('mydb.db');
 const styles = require("./Storage.css");
 const fs = require("fs");
 
@@ -109,5 +111,21 @@ export default class Storage extends React.Component<{}, {currentPresIndex: numb
                 }
             });
         }
+
+        db.serialize(function() {
+            db.run("CREATE TABLE if not exists lorem (info TEXT)");
+        
+            var stmt = db.prepare("INSERT INTO lorem VALUES (?)");
+            for (var i = 0; i < 10; i++) {
+                stmt.run("Ipsum " + i);
+            }
+            stmt.finalize();
+        
+            db.each("SELECT rowid AS id, info FROM lorem", function(err: any, row: any) {
+                console.log(row.id + ": " + row.info);
+            });
+        });
+        db.close();
+
     }
 }
