@@ -23,4 +23,9 @@ export class Reports {
             return new Report(response.data);
         });
     }
+
+    public static update = (id: string, newObject: object) => {
+        const request = axios.put(`${baseUrl}/${id}`, newObject);
+        return request.then(response => response.data);
+      }
 }

@@ -134,6 +134,7 @@ class ReportsList extends React.Component<{appState: AppState, yPos: number}, IR
         this.props.appState.report = report;
         this.props.appState.homeTeam = report.home;
         this.props.appState.awayTeam = report.away;
+        this.props.appState.currentWeather = report.weather[0];
         // this.props.appState.reportType = "load";
     }
     private updateReport = (tempId: string, report: Report) => {

@@ -14,7 +14,7 @@ export class AppState {
   @observable public reportType: string;
   @observable public reportsList: Report[] = [];
   public createdReportsCount: number;
-  @observable public weather: string;
+  @observable public currentWeather: string;
   
   @observable public report: Report;
   @observable public homeTeam: Team;
@@ -23,7 +23,8 @@ export class AppState {
   @observable public inducementValueOverride: Kvalue;
   
   @observable public windowWidth: number = 640;
-  
+  public defaultTimerValue: number = 300000; // 5 min = 5 * 60000
+
   constructor() {
     this.screen = Screens.Home;
     this.showTabNavigator = false;

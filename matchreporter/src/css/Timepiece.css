@@ -1,0 +1,109 @@
+.timepiece {
+    width: 320px;
+    display: inline-block;
+    vertical-align: middle;
+    left:0;
+    background: rgba(0, 0, 0, 0);
+}
+*:focus {
+    outline:none;
+}
+.timerbuttons {
+    width: 320px;
+    position: absolute;
+    top: 70px;
+    z-index: 20;
+}
+.timerbutton {
+    background: transparent;
+    border: none;
+}
+.resetbutton {
+    float: left;
+    margin-left: 6px;
+}
+.setbutton {
+    float: right;
+    margin-right: 6px;
+}
+
+.facecontainer {
+    width:100%;
+    top: 55px;
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 11;
+}
+.timer {
+    text-align: center;
+    color: #FF55F8;
+    font-family: 'AlteDIN_G', sans-serif;
+    margin-top: 22px;
+    font-weight: bold;
+    font-size: 80px;
+    text-decoration: none;
+    z-index: 11;
+    user-select: none;
+    border: none;
+}
+.timerinputcontainer {
+    border: none;
+    margin: none;
+    padding: none;
+    z-index: 12;
+}
+.timerinput {
+    color: black;
+    user-select: all;
+    text-align: center;
+    font-family: 'AlteDIN_G', sans-serif;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 80px;
+    text-decoration: none;
+    z-index: 11;
+    border: none;
+    background: #FF55F8;
+}
+.timerpaused {
+    text-align: center;
+    color: white;
+    font-family: 'AlteDIN_G', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    text-decoration: none;
+    z-index: 11;
+    user-select: none;
+}
+
+.center {
+    position: absolute;
+    z-index: 10;
+}
+.degrees {
+    position: absolute;
+    z-index: 3;
+}
+.progresshalves {
+    position: absolute;
+    z-index: 2;
+}
+.base {
+    position: absolute;
+    z-index: 1;
+}
+
+.eventbuttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 126px;
+}
+.eventbutton {
+    background: transparent;
+    border: none;
+}

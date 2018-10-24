@@ -26,11 +26,12 @@ export class Report {
             // console.log(' day ', this.date.getDate());
         }
         try {
-            this.totalGate = new Kvalue(this.home.gate.value + this.away.gate.value);
+            this.totalGate = new Kvalue(this.home.gateValue + this.away.gateValue);
             // console.log(' report totalGate: ', this.totalGate.asString);
         } catch (error) {
             console.log(' unable to calculate report totalGate.');
         }
+        this.weather = props.weather;
     }
 }
 export default Report;

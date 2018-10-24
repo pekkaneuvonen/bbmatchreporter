@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { IAppProps } from "../App";
 import Navigator from '../components/Navigator';
-import Screentitle from '../components/Screentitle';
+import TimePiece from '../components/TimePiece';
 import {Screens} from "../model/AppState";
-
 
 import '../css/App.css';
 import bgMatch from '../img/backgrounds/match.png';
-import title from '../img/MATCH.png';
 
 const bgStyle = {
   backgroundImage: `url(${bgMatch})`
@@ -20,7 +18,7 @@ class Match extends React.Component<IAppProps, {}> {
     public render() {
         return <div className="App" style={bgStyle}>
             <Navigator appState={this.props.appState}/>
-            <Screentitle src={title}/>
+            <TimePiece ticking={false} defautlTimerValue={this.props.appState.defaultTimerValue}/>
         </div>;
     };
 }

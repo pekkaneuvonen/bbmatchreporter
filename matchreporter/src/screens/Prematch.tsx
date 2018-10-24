@@ -5,6 +5,7 @@ import CircleInput79 from '../components/buttons/CircleInput79';
 import Navigator from '../components/Navigator';
 import TeamTitleInput from '../components/TeamTitleInput';
 import {Screens} from "../model/AppState";
+import { Reports } from '../services/Reports';
 
 import CircleInput59 from '../components/buttons/CircleInput59';
 import WeatherChooserRow from "../components/WeatherChooserRow";
@@ -82,12 +83,12 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
             <div className="teamvalues">
                 <CircleInput79 
                     activityOverride={true} 
-                    value={this.props.appState.homeTeam.tv.asString} 
+                    value={this.props.appState.homeTeam.tvString} 
                     valueChangeHandler={this.handleTeamValueChange("home")}
                     arrowOverride={induced === this.props.appState.homeTeam}/>
                 <CircleInput79 
                     activityOverride={true} 
-                    value={this.props.appState.awayTeam.tv.asString} 
+                    value={this.props.appState.awayTeam.tvString} 
                     valueChangeHandler={this.handleTeamValueChange("away")} 
                     arrowOverride={induced === this.props.appState.awayTeam}/>
             </div>
@@ -111,12 +112,12 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
             <div className="gate">
                 <CircleInput79 
                     activityOverride={true} 
-                    value={this.props.appState.homeTeam.gate.asString} 
+                    value={this.props.appState.homeTeam.gateString} 
                     valueChangeHandler={this.handleTeamGateChange("home")}
                     arrowOverride={this.fame < 0}/>
                 <CircleInput79 
                     activityOverride={true} 
-                    value={this.props.appState.awayTeam.gate.asString} 
+                    value={this.props.appState.awayTeam.gateString} 
                     valueChangeHandler={this.handleTeamGateChange("away")} 
                     arrowOverride={this.fame > 0}/>
             </div>
@@ -136,14 +137,16 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
         const weatherTypeCount: number = Object.keys(WeatherType).length / 2
         for (let i = 0; i < weatherTypeCount; i++) {
           table.push(
-          <WeatherChooserRow key={i} chosen={this.props.appState.weather === WeatherType[i]} value={i} clickHandler={this.weatherClickHandler(i)}/>
+          <WeatherChooserRow key={i} chosen={this.props.appState.currentWeather === WeatherType[i]} value={i} clickHandler={this.weatherClickHandler(i)}/>
           );
         }
         return table
       }
     private weatherClickHandler = (value: number) => {
         return (event: any) => {
-            this.props.appState.weather = WeatherType[value];
+            this.props.appState.currentWeather = WeatherType[value];
+            this.props.appState.report.weather[0] = WeatherType[value];
+            this.updateReport();
         }
     }
     private get inducementValue(): Kvalue {
@@ -152,7 +155,7 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
         }
         let rawInducements: Kvalue;
         if (this.props.appState.homeTeam && this.props.appState.awayTeam) {
-            rawInducements = new Kvalue(this.props.appState.homeTeam.tv.value - this.props.appState.awayTeam.tv.value);
+            rawInducements = new Kvalue(this.props.appState.homeTeam.teamValue - this.props.appState.awayTeam.teamValue);
         } else {
             rawInducements = new Kvalue(0);
         }
@@ -172,25 +175,29 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
     }
     private get fame(): number {
         let gateDifference: number = 0;
-        if (this.props.appState.homeTeam.gate.value > 0 && this.props.appState.awayTeam.gate.value > 0) {
-            if (this.props.appState.awayTeam.gate.value >= this.props.appState.homeTeam.gate.value * 2) {
+        if (this.props.appState.homeTeam.gateValue > 0 && this.props.appState.awayTeam.gateValue > 0) {
+            if (this.props.appState.awayTeam.gateValue >= this.props.appState.homeTeam.gateValue * 2) {
                 gateDifference = 2;
-            } else if (this.props.appState.awayTeam.gate.value > this.props.appState.homeTeam.gate.value) {
+            } else if (this.props.appState.awayTeam.gateValue > this.props.appState.homeTeam.gateValue) {
                 gateDifference = 1;
-            } else if (this.props.appState.homeTeam.gate.value >= this.props.appState.awayTeam.gate.value * 2) {
+            } else if (this.props.appState.homeTeam.gateValue >= this.props.appState.awayTeam.gateValue * 2) {
                 gateDifference = -2;
-            } else if (this.props.appState.homeTeam.gate.value > this.props.appState.awayTeam.gate.value) {
+            } else if (this.props.appState.homeTeam.gateValue > this.props.appState.awayTeam.gateValue) {
                 gateDifference = -1;
             }
         }
         return gateDifference;
     }
+
+
+
     private handleTeamNameChange = (titles: any) => {
         if (!this.props.appState.homeTeam || !this.props.appState.awayTeam) {
             window.location.href = "/";
         }
         this.props.appState.homeTeam.name = titles.title1;
         this.props.appState.awayTeam.name = titles.title2;
+        this.updateReport();
     }
     private handleInducementValueChange = (value: string) => {
         console.log("Trying to override calculated inducement value !");
@@ -201,53 +208,53 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
         // this.props.appState.inducementValueOverride = value;
     }
     private handleTeamValueChange = (team: string) => {
-        if (team === "home") {
-            return (value: string) => {
-                const splitValue: string[] = value.split("k");
-                let numericValue: number = parseInt(splitValue.join(""), 10);
-                numericValue *= 1000;
-                const kValue: Kvalue = new Kvalue(numericValue);
-                this.props.appState.homeTeam.tv = kValue;
+        return (value: string) => {
+            const splitValue: string[] = value.split("k");
+            let numericValue: number = parseInt(splitValue.join(""), 10);
+            numericValue *= 1000;
+            // const kValue: Kvalue = new Kvalue(numericValue);
+            if (team === "home") {
+                this.props.appState.homeTeam.teamValue = numericValue;
+            } else {
+                this.props.appState.awayTeam.teamValue = numericValue;
             }
-        } else {
-            return (value: string) => {
-                const splitValue: string[] = value.split("k");
-                let numericValue: number = parseInt(splitValue.join(""), 10);
-                numericValue *= 1000;
-                const kValue: Kvalue = new Kvalue(numericValue);
-                this.props.appState.awayTeam.tv = kValue;
-            }
+            this.updateReport();
         }
     }
     private handleInducementChange = (team: string) => {
-        if (team === "home") {
-            return (event: any) => {
+        return (event: any) => {
+            if (team === "home") {
                 this.props.appState.homeTeam.inducements = event.target.value;
-            }
-        } else {
-            return (event: any) => {
+            } else {
                 this.props.appState.awayTeam.inducements = event.target.value;
             }
+            this.updateReport();
         }
     }
     private handleTeamGateChange = (team: string) => {
-        if (team === "home") {
-            return (value: string) => {
-                const splitValue: string[] = value.split("k");
-                let numericValue: number = parseInt(splitValue.join(""), 10);
-                numericValue *= 1000;
-                const kValue: Kvalue = new Kvalue(numericValue);
-                this.props.appState.homeTeam.gate = kValue;
+        return (value: string) => {
+            const splitValue: string[] = value.split("k");
+            let numericValue: number = parseInt(splitValue.join(""), 10);
+            numericValue *= 1000;
+            // const kValue: Kvalue = new Kvalue(numericValue);
+            if (team === "home") {
+                this.props.appState.homeTeam.gateValue = numericValue;
+            } else {
+                this.props.appState.awayTeam.gateValue = numericValue;
             }
-        } else {
-            return (value: string) => {
-                const splitValue: string[] = value.split("k");
-                let numericValue: number = parseInt(splitValue.join(""), 10);
-                numericValue *= 1000;
-                const kValue: Kvalue = new Kvalue(numericValue);
-                this.props.appState.awayTeam.gate = kValue;
-            }
+            this.updateReport();
         }
+    }
+    private updateReport(): void {
+        console.log("update weather to ", this.props.appState.report.weather);
+        Reports
+        .update(this.props.appState.report.id, this.props.appState.report)
+        .then(changedReport => {
+            console.log(" report on server updated ? :", changedReport);
+        })
+        .catch(error => {
+            console.log(" error on updating current report!");
+        })
     }
 }
 export default Prematch;

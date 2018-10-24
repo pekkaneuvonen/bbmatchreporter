@@ -23,6 +23,7 @@ class Navigator extends React.Component<IAppProps, {}> {
         height: "57px",
         marginTop: "1px",
         width: "100%",
+        zIndex: 50,
     };
 
     public componentDidMount() {
