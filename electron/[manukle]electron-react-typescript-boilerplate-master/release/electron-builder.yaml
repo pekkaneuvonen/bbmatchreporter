@@ -1,0 +1,30 @@
+directories:
+  output: release
+  buildResources: resources
+  app: app
+productName: ElectronReactTypescript
+appId: org.develar.ElectronReactTypescript
+files:
+  - dist/
+  - node_modules/
+  - app.html
+  - main.prod.js
+  - main.prod.js.map
+  - package.json
+dmg:
+  contents:
+    - x: 130
+      'y': 220
+    - x: 410
+      'y': 220
+      type: link
+      path: /Applications
+win:
+  target:
+    - dir
+linux:
+  target:
+    - deb
+    - AppImage
+  category: Development
+electronVersion: 1.7.12

@@ -1,0 +1,10 @@
+version: 0.1.1
+files:
+  - url: electron-react-typescript-boilerplate-0.1.1-mac.zip
+    sha512: Qw4RUdguddtifBsgvXP8gqBEuf93h1L9+rR4IJE93AAPWOJEcmEyumLVH6+TJ2qUh+E5V+he/uIJfBCpOteOgQ==
+  - url: ElectronReactTypescript-0.1.1.dmg
+    sha512: Cl1pZLm7Xvoo4RXO+m7nTlwmwnYELhoANWEL06ULp5CGudhiO47nIhJrgARaDzIO707rnFzzXdlItzpKGhqRDw==
+    size: 47990667
+path: electron-react-typescript-boilerplate-0.1.1-mac.zip
+sha512: Qw4RUdguddtifBsgvXP8gqBEuf93h1L9+rR4IJE93AAPWOJEcmEyumLVH6+TJ2qUh+E5V+he/uIJfBCpOteOgQ==
+releaseDate: '2018-10-22T10:28:03.975Z'
