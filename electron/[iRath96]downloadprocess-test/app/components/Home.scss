@@ -1,0 +1,81 @@
+:local {
+  .container {
+    position: absolute;
+    left: 10px;
+    margin-top: 12px;
+  }
+
+  *:focus {
+    outline:none;
+  }
+  .container h2 {
+    font-size: 1.75rem;
+    font-weight: normal;
+  }
+
+  .container a {
+    font-size: 1rem;
+  }
+
+  .rowwithbuttons {
+    display: flex;
+    align-items: baseline;
+  }
+  .mediumData {
+    margin-top: 12px;
+    font-size: 1rem;
+    color: white;
+    font-weight: normal;
+  }
+  .inputCount {
+    width: 20px;
+    color: rgb(253, 200, 25);
+    margin-right: 10px;
+    border: 0;
+    background: transparent;
+    text-align: center;
+  }
+  .inputDir {
+    margin-top: 3px;
+    margin-left: 0;
+    width: 520px;
+    color: rgb(253, 200, 25);
+    border: 0;
+    background: transparent;
+    text-align: left;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  }
+  .smallData {
+    margin-top: 12px;
+    margin-right: 10px;
+    margin-bottom: 12px;
+    font-size: 0.8rem;
+    color: #B8B8B8;
+    font-weight: lighter;
+  }
+  .assetList {
+    height: 420px;
+    width: 420px;
+    overflow: scroll;
+    white-space: pre-wrap;
+  }
+  button {
+    font-size: 1rem;
+    color: rgb(253, 200, 25);
+    opacity: .75;
+    text-decoration: none;
+    border: none;
+    background: transparent;
+  }
+  button:hover {
+    opacity: 1;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+}
