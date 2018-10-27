@@ -96,14 +96,3 @@
     position: absolute;
     z-index: 1;
 }
-
-.eventbuttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 126px;
-}
-.eventbutton {
-    background: transparent;
-    border: none;
-}
