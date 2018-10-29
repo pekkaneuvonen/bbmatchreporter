@@ -7,7 +7,7 @@ export class Player {
     @observable public casualties: Casualty[];
     @observable public completions: number;
     @observable public intercepts: number;
-    @observable public injuries: Casualty;
+    @observable public injuries: Casualty[];
 
     constructor (props: any) {
         this.name = props.name;

@@ -16,9 +16,8 @@ export class Team {
 
     // postmatch
     public scorers: Player[];
-    public cInflicted: Player[];
-    public cSuffered: Player[];
-    public injured: Player[];
+    public inflicters: Player[];
+    public injureds: Player[];
     public completions: Player[];
     public intercepts: Player[];
 
@@ -39,4 +38,21 @@ export class Team {
     public get tvString(): string {
         return new Kvalue(this.teamValue).asString;
     }
+    /*
+    public get sppResults(): Player[] {
+        const sppList: Player[] = [];
+        if (this.scorers && this.scorers.length > 0) {
+            for (const scorer of this.scorers) {
+                let player: Player | undefined = sppList.find((pl: Player) => {
+                    return pl.name === scorer;
+                });
+                if (!player) {
+                    player = new Player({name: scorer})
+                }
+                player.goals++;
+            }
+        }
+        return sppList;
+    }
+    */
 }

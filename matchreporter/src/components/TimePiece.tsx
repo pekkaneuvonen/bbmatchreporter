@@ -8,51 +8,51 @@ import degrees from '../img/timepiece/degrees.png';
 import progresshalf_1 from '../img/timepiece/progresshalf1.png';
 import progresshalf_2 from '../img/timepiece/progresshalf2.png';
 
+import { AppState } from 'src/model/AppState';
 import resetButton from '../img/timepiece/resetbutton.png';
 import setButton from '../img/timepiece/setbutton.png';
-
-import casualtyButton from '../img/buttons/CASUALTY_active.png';
-import completionButton from '../img/buttons/COMPLETION_active.png';
-import goalButton from '../img/buttons/GOAL_active.png';
-import injuryButton from '../img/buttons/INJURY_active.png';
-import interceptButton from '../img/buttons/INTERCEPT_active.png';
 
 const secondInterval: number = 1000;
 const minuteInterval: number = 60000;
 
 interface ItimepieceState {
-    minutes: number,
-    seconds: number,
-    setValue: number;
-    eventsblocked: boolean;
+    // minutes: number,
+    // seconds: number,
     ticking: boolean;
     time: string;
     timer: NodeJS.Timer;
     timerInput: boolean;
-    timerValue: number;
 }
+export interface ITimerProps {
+    appState: AppState,
+    pauseOverride: boolean,
+    defautlTimerValue?: number,
+  }
+  
 
-
-class TimePiece extends React.Component<{ticking: boolean, defautlTimerValue?: number}, ItimepieceState> {
+class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
 
     constructor (props:any) {
         super(props);
-        const newlySetValue: number = props.defautlTimerValue ? props.defautlTimerValue : 0;
+        let newlySetValue: number = props.defautlTimerValue ? props.defautlTimerValue : 0;
+
+        console.log("timePiece constructor : ",this.props.appState.setTimerValue, this.props.appState.currentTimerValue);
+        if (!this.props.appState.setTimerValue) {
+            this.props.appState.setTimerValue = newlySetValue;
+        }
+        if (!this.props.appState.currentTimerValue) {
+            this.props.appState.currentTimerValue = newlySetValue;
+        } else {
+            newlySetValue = this.props.appState.currentTimerValue;
+        }
         this.state = {
-            eventsblocked: false,
-            minutes: this.getWholeMinutes(newlySetValue),
-            seconds: this.getWholeSeconds(newlySetValue),
-            setValue: newlySetValue,
-            ticking: props.ticking,
+            // minutes: this.getWholeMinutes(newlySetValue),
+            // seconds: this.getWholeSeconds(newlySetValue),
+            ticking: false,
             time: this.formatTimerDisplayFromMilliseconds(newlySetValue),
             timer: setInterval(this.setProgress, secondInterval),
             timerInput: false,
-            timerValue: newlySetValue,
         }
-    }
-    public componentDidMount(): void {
-        console.log(" minutes: " + this.state.minutes);
-        console.log(" seconds: " + this.state.seconds);
     }
     public componentWillUnmount(): void {
         clearInterval(this.state.timer);
@@ -72,7 +72,7 @@ class TimePiece extends React.Component<{ticking: boolean, defautlTimerValue?: n
                     :
                     <div className={"timer"}>{this.state.time}</div>
                 }
-                <div className="timerpaused">{this.state.ticking ? "..." : "PAUSED"}</div>
+                <div className="timerpaused">{this.state.ticking && !this.props.pauseOverride ? "..." : "PAUSED"}</div>
             </div>
             <div className="timerbuttons">
                 <button className={"timerbutton resetbutton"}>
@@ -82,59 +82,42 @@ class TimePiece extends React.Component<{ticking: boolean, defautlTimerValue?: n
                     <img src={setButton}/>
                 </button>
             </div>
-            <div className="eventbuttons">
-                <button className={"eventbutton"}>
-                    <img src={goalButton}/>
-                </button>
-                <button className={"eventbutton"}>
-                    <img src={completionButton}/>
-                </button>
-                <button className={"eventbutton"}>
-                    <img src={injuryButton}/>
-                </button>
-                <button className={"eventbutton"}>
-                    <img src={casualtyButton}/>
-                </button>
-                <button className={"eventbutton"}>
-                    <img src={interceptButton}/>
-                </button>
-            </div>
         </div>;
     }
     
     private changeTimerValue = (event: any) => {
-        console.log("changeTimerValue ", event.target.value);
         const newTime: {minutes: number, seconds: number} = this.formatTimerInput(event.target.value);
-        console.log("timerContent " + newTime);
         const newValue: number = this.getCurrentTimerValueInMilliseconds(newTime.minutes, newTime.seconds);
+        this.props.appState.setTimerValue = newValue;
+        this.props.appState.currentTimerValue = newValue;
 
         this.setState({
-            minutes: newTime.minutes,
-            seconds: newTime.seconds,
-            setValue: newValue, 
+            // minutes: newTime.minutes,
+            // seconds: newTime.seconds,
             time: (newTime.minutes + ":" + (newTime.seconds === 0 ? "00" : newTime.seconds)),
-            timerValue: newValue, 
         });
     }
 
     private timerValueSubmit = (event: any) => {
         event.preventDefault();
         const value0: string = event.target[0].value;
-        console.log("timer Values on Submit ", value0);
         const newTime: {minutes: number, seconds: number} = this.formatTimerInput(value0);
         this.confirmTimerValueSubmit(newTime.minutes, newTime.seconds);
     }
     private setButtonHandler = (event: any) => {
         if (this.state.timerInput) {
-            this.confirmTimerValueSubmit(this.state.minutes, this.state.seconds);
+            this.confirmTimerValueSubmit(-1, -1, this.props.appState.currentTimerValue);
         } else {
-            this.setState({ticking: false, timerInput: true, eventsblocked: true});
+            this.setState({ticking: false, timerInput: true});
+            this.props.appState.eventsblocked = true;
         }
     }
 
-    private confirmTimerValueSubmit(confirmMinutes: number, confirmSeconds:number): void {
-        console.log("confirmTimerValueSubmit " + confirmMinutes + ", " + confirmSeconds);
-
+    private confirmTimerValueSubmit(confirmMinutes: number, confirmSeconds:number, value?: number): void {
+        if (value) {
+            confirmMinutes = this.getWholeMinutes(value);
+            confirmSeconds = this.getWholeSeconds(value);
+        }
         if (confirmSeconds > 59) {
             confirmMinutes++;
             confirmSeconds = 0;
@@ -142,30 +125,29 @@ class TimePiece extends React.Component<{ticking: boolean, defautlTimerValue?: n
         if (confirmMinutes > 9) {
             confirmMinutes = 9;
         }
-        console.log("modified " + confirmMinutes + ", " + confirmSeconds);
 
         const newValue: number = this.getCurrentTimerValueInMilliseconds(confirmMinutes, confirmSeconds);
-        console.log("newValue " + newValue);
+        this.props.appState.setTimerValue = newValue;
+        this.props.appState.currentTimerValue = newValue;
 
         this.setState({
-            eventsblocked: false,
-            minutes: confirmMinutes,
-            seconds: confirmSeconds,
-            setValue: newValue, 
+            // minutes: confirmMinutes,
+            // seconds: confirmSeconds,
             time: (confirmMinutes + ":" + (confirmSeconds === 0 ? "00" : confirmSeconds)), 
             timerInput: false,
-            timerValue: newValue,
         });
+        this.props.appState.eventsblocked = false;
     }
     private resetButtonHandler = (event: any) => {
         if (this.state.timerInput) {
-            this.confirmTimerValueSubmit(this.state.minutes, this.state.seconds);
+            this.confirmTimerValueSubmit(-1, -1, this.props.appState.currentTimerValue);
         } else {
-            this.setState({ticking: false, timerValue: this.state.setValue, time: this.formatTimerDisplayFromMilliseconds(this.state.setValue)})
+            this.props.appState.currentTimerValue = this.props.appState.setTimerValue;
+            this.setState({ticking: false, time: this.formatTimerDisplayFromMilliseconds(this.props.appState.setTimerValue)})
         }
     }
     private toggleticking = (event: any) => {
-        if (!this.state.eventsblocked) {
+        if (!this.props.appState.eventsblocked) {
             if (this.state.ticking) {
                 this.pause();
             } else {
@@ -182,16 +164,16 @@ class TimePiece extends React.Component<{ticking: boolean, defautlTimerValue?: n
         this.setState({ticking: true});
     }
     private setProgress = () => {
-        if (this.state.ticking) {
-            if (this.state.timerValue > 0) {
-                let newValue: number = this.state.timerValue - secondInterval;
+        if (this.state.ticking && !this.props.pauseOverride) {
+            if (this.props.appState.currentTimerValue > 0) {
+                let newValue: number = this.props.appState.currentTimerValue - secondInterval;
                 if (newValue < 0) {
                     newValue = 0;
                 }
                 const newTime: string = this.formatTimerDisplayFromMilliseconds(newValue);
+                this.props.appState.currentTimerValue = newValue;
                 this.setState({
                     time: newTime,
-                    timerValue: newValue,
                 })
             } else {
                 this.timerDone();
@@ -219,13 +201,13 @@ class TimePiece extends React.Component<{ticking: boolean, defautlTimerValue?: n
         let valueInMilliseconds: number = 0;
         if (overrideMinutes !== -1) {
             valueInMilliseconds += overrideMinutes * minuteInterval;
-        } else if (this.state.minutes >= 0) {
-            valueInMilliseconds += this.state.minutes * minuteInterval;
+        /*} else if (this.state.minutes >= 0) {
+            valueInMilliseconds += this.state.minutes * minuteInterval;*/
         }
         if (overrideSeconds !== -1) {
             valueInMilliseconds += overrideSeconds * secondInterval;
-        } else if (this.state.seconds >= 0) {
-            valueInMilliseconds += this.state.seconds * secondInterval;
+        /*} else if (this.state.seconds >= 0) {
+            valueInMilliseconds += this.state.seconds * secondInterval;*/
         }
         return valueInMilliseconds;
     }
@@ -238,22 +220,18 @@ class TimePiece extends React.Component<{ticking: boolean, defautlTimerValue?: n
     private formatTimerInput(display: string): {minutes: number, seconds: number} {
         const displaysections: string[] = display.split(":");
         const timeString: string = displaysections.join("");
-        console.log("raw timeString " + timeString)
 
         let minutesString: string = "0";
         let secondsString: string = "00";
         if (timeString.length > 2) {
             secondsString = timeString.substr(timeString.length - 2);
             minutesString = timeString.substr(0, timeString.length - 2);
-            console.log("modified minutes [" + minutesString + "]")
         } else {
             secondsString = timeString;
         }
-        console.log("modified seconds [" + secondsString + "]");
         if (minutesString.length > 1) {
             minutesString = minutesString.substr(minutesString.length - 1);
         }
-        console.log("trimmed minutes [" + minutesString + "]");
 
         const newMinutes: number = parseInt(minutesString, 10);
         const newSeconds: number = parseInt(secondsString, 10);
