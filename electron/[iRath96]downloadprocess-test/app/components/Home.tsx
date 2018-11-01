@@ -1,6 +1,7 @@
 import * as React from 'react';
 import RequestPipeEngine from '../engines/RequestPipeEngine';
 import FetchStreamEngine from '../engines/FetchStreamEngine';
+import ElectronFetchEngine from '../engines/ElectronFetchEngine';
 import DLAsset from './DLAsset';
 import DLrow from './DLrow';
 import EngineDisplay from './EngineDisplay';
@@ -24,11 +25,13 @@ export interface IDLEngine {
 enum EngineType {
   RequestToPipe = 0,
   FetchWithStreamChunks,
+  ElectronFetch,
 }
 
 enum EngineDescription {
   RequestToPipe = "Request-pipe",
   FetchWithStreamChunks = "Fetch-stream",
+  ElectronFetch = "Electron-Fetch",
 }
 
 interface IEngineManageState {
@@ -66,7 +69,7 @@ export default class Home extends React.Component <{}, IEngineManageState> {
       completedSize: 0,
       progress: 0,
       engineCount: defaultEngineCount,
-      engineType: EngineType.RequestToPipe,
+      engineType: EngineType.ElectronFetch,
       engines: [],
       enginesOn: false,
       alldone: false,
@@ -319,8 +322,10 @@ export default class Home extends React.Component <{}, IEngineManageState> {
         let newEngine: IDLEngine;
         if (this.state.engineType === EngineType.RequestToPipe) {
           newEngine = new RequestPipeEngine(i, this.progressTracker);
-        } else {
+        } else if (this.state.engineType === EngineType.FetchWithStreamChunks) {
           newEngine = new FetchStreamEngine(i, this.progressTracker);
+        } else {
+          newEngine = new ElectronFetchEngine(i, this.progressTracker);
         }
         engines.push(newEngine);
       }
