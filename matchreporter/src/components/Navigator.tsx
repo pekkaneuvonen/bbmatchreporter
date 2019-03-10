@@ -3,8 +3,14 @@ import { Link } from 'react-router-dom';
 import { IAppProps } from "../App";
 // import {Screens} from "../model/AppState";
 
-import base from '../img/navigator/base.png';
-import homebutton from '../img/navigator/tab_home_visited.png';
+import homeLabel from '../img/navigator/homeButtonLabel.png';
+import homeX from '../img/navigator/homeButtonX.png';
+import matchButton from '../img/navigator/MatchButton.png';
+import matchButtonDiv from '../img/navigator/MatchButtonDiv.png';
+import postmatchButton from '../img/navigator/PostMatchButton.png';
+import prematchButton from '../img/navigator/PreMatchButton.png';
+// import homebutton from '../img/navigator/tab_home_visited.png';
+/*
 import matchTabButton from '../img/navigator/tab_match.png';
 import postTabButton from '../img/navigator/tab_post.png';
 import preTabButton from '../img/navigator/tab_pre.png';
@@ -12,16 +18,13 @@ import preTabButton from '../img/navigator/tab_pre.png';
 import matchTabVisButton from '../img/navigator/tab_match_visited.png';
 import postTabVisButton from '../img/navigator/tab_post_visited.png';
 import preTabVisButton from '../img/navigator/tab_pre_visited.png';
+*/
 import { Screens } from '../model/AppState';
 
 
 class Navigator extends React.Component<IAppProps, {}> {
-
     private navbarStyle = {
-        backgroundImage: `url(${base})`,
-        backgroundOrigin: "content-box",
-        height: "57px",
-        marginTop: "1px",
+        height: "80px",
         width: "100%",
         zIndex: 50,
     };
@@ -31,34 +34,40 @@ class Navigator extends React.Component<IAppProps, {}> {
     }
 
     public render() {
+
         return (
         <div style={ this.navbarStyle }>
-            <div className="navigator">
-                <div className="navbutton">
-                    <Link to='/'>
-                        <img src={homebutton}/>
-                    </Link>
-                </div>
-                <div className="navbutton">
-                    <Link to={Screens.Prematch}>
-                        <img src={this.getButtonFor(Screens.Prematch)}/>
-                    </Link>
-                </div>
-                <div className="navbutton">
-                    <Link to={Screens.Match}>
-                        <img src={this.getButtonFor(Screens.Match)}/>
-                    </Link>
-                </div>
-                <div className="navbutton">
-                    <Link to={Screens.Postmatch}>
-                        <img src={this.getButtonFor(Screens.Postmatch)}/>
-                    </Link>
+            <div className="navigatorHomebutton">
+                <Link to='/'>
+                        <img src={homeLabel}/>
+                        <img src={homeX}/>
+                </Link>
+            </div>
+            <div className="navigatorContainer">
+                <div className="navigator">
+                    <div style={ this.props.appState.screen === Screens.Prematch ? {backgroundColor: '#DCDAD6'} : {backgroundColor: '#242424'} }>
+                        <Link to={Screens.Prematch}>
+                            <img src={prematchButton}/>
+                        </Link>
+                    </div>
+                    <img src={matchButtonDiv}/>
+                    <div style={ this.props.appState.screen === Screens.Match ? {backgroundColor: '#DCDAD6'} : {backgroundColor: '#242424'} }>
+                        <Link to={Screens.Match}>
+                            <img src={matchButton}/>
+                        </Link>
+                    </div>
+                    <img src={matchButtonDiv}/>
+                    <div style={ this.props.appState.screen === Screens.Postmatch ? {backgroundColor: '#DCDAD6'} : {backgroundColor: '#242424'} }>
+                        <Link to={Screens.Postmatch}>
+                            <img src={postmatchButton}/>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>
         )
     }
-
+/*
     private getButtonFor = (screen: string) => {
         const screens: string[] = [Screens.Home, Screens.Prematch, Screens.Match, Screens.Postmatch];
         const visited: boolean = screens.indexOf(screen) <= screens.indexOf(this.props.appState.screen);
@@ -71,5 +80,6 @@ class Navigator extends React.Component<IAppProps, {}> {
             return visited ? postTabVisButton : postTabButton;
         }
     }
+*/
 }
 export default Navigator;

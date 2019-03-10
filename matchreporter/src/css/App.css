@@ -6,13 +6,26 @@
   height: 1000px;
   background-color: rgb(0, 0, 0);
 }
+div.navigatorContainer {
+  height: 40px;
+  background: #F2F0EE;
+  padding: 4px 8px 4px 8px;
+  width: "100%";
+}
 div.navigator {
+  height: 40px;
+  background: #242424;
   display: flex;
   flex-direction: row;
-  height: 57px;
+  justify-content: space-evenly;
 }
-div.navbutton {
-  margin-top: 7px;
+div.navigatorHomebutton {
+  background: #242424;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  height: 32px;
+  width: "100%";
 }
 
 *:focus {

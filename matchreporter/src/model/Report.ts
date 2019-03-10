@@ -14,7 +14,7 @@ export class Report {
 
     constructor (props: any) {
 
-        // console.log('new report title: ', props.title);
+        console.log('new report title: ', props.title);
         this.id = props.id;
         this.title = props.title;
         this.home = new Team(props.home);
@@ -31,7 +31,10 @@ export class Report {
         } catch (error) {
             console.log(' unable to calculate report totalGate.');
         }
-        this.weather = props.weather;
+        console.log('new report weather: ', props.weather);
+        if (props.weather) {
+            this.weather = props.weather;
+        }
     }
 }
 export default Report;

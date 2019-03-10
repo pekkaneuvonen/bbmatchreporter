@@ -214,7 +214,9 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
     private formatTimerDisplayFromMilliseconds(value: number): string {
         const wholeminutes: number = this.getWholeMinutes(value);
         const spareseconds: number = this.getWholeSeconds(value);
-        const newTime: string = wholeminutes.toString() + ":" + (spareseconds > 0 ? spareseconds.toString() : "00");
+        const secondsString: string = spareseconds.toString();
+
+        const newTime: string = wholeminutes.toString() + ":" + (secondsString.length > 1 ? secondsString : "0" + secondsString);
         return newTime;
     }
     private formatTimerInput(display: string): {minutes: number, seconds: number} {

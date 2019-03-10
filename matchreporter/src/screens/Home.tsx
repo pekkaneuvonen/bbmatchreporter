@@ -9,6 +9,7 @@ import Screentitle from '../components/Screentitle';
 import {Screens} from "../model/AppState";
 
 import '../css/App.css';
+
 import bgHome from '../img/backgrounds/home.png';
 import title from '../img/MATCHREPORTER.png';
 
