@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 const titleStyle = {
-    marginTop: "12px"
+    marginTop: "16px",
+    zIndex: 1,
 };
 
 class Screentitle extends React.Component<{src: string}, {}> {

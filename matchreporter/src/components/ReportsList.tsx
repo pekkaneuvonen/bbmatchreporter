@@ -1,18 +1,20 @@
 import { observer } from "mobx-react";
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import '../css/Reports.css';
-import { AppState, Screens } from "../model/AppState";
+import { AppState,  } from "../model/AppState";
 import Report from '../model/Report';
 import { Reports } from '../services/Reports';
 import StringFormatter from '../utils/StringFormatter';
-import TeamTitleInput from './TeamTitleInput';
+// import TeamTitleInput from './TeamTitleInput';
 
-import bgActive from '../img/backgrounds/ActiveAreaBgBox.png';
-import readyBtn from '../img/buttons/ready.png';
-import teamsField from '../img/reportList/teamtitles.png';
-import activeTeamsField from '../img/reportList/teamtitles_active.png';
-import { Team } from "../model/Team";
+// import bgActive from '../img/backgrounds/ActiveAreaBgBox.png';
+// import readyBtn from '../img/buttons/ready.png';
+import reportBox from '../img/load/report.png';
+import reportBoxChosen from '../img/load/reportChosen.png';
+// import teamsField from '../img/reportList/teamtitles.png';
+// import activeTeamsField from '../img/reportList/teamtitles_active.png';
+// import { Team } from "../model/Team";
 
 // tslint:disable:no-console
 interface IReportListState {
@@ -21,7 +23,7 @@ interface IReportListState {
 }
 
 @observer
-class ReportsList extends React.Component<{appState: AppState, yPos: number}, IReportListState> {
+class ReportsList extends React.Component<{appState: AppState, openReport: (report: Report) => void}, IReportListState> {
     constructor(props: any) {
         super(props);
 
@@ -49,8 +51,9 @@ class ReportsList extends React.Component<{appState: AppState, yPos: number}, IR
     }
 
     public render() {
+        /*
         let chooserHeight: number;
-        if (this.props.appState.reportType === "load" && this.props.appState.reportsList && this.props.appState.reportsList.length > 0) {
+        if (this.props.appState.reportsList && this.props.appState.reportsList.length > 0) {
             chooserHeight = 500;
         } else {
             chooserHeight = window.innerHeight - this.props.yPos;
@@ -59,14 +62,92 @@ class ReportsList extends React.Component<{appState: AppState, yPos: number}, IR
             backgroundImage: `url(${bgActive})`,
             height: chooserHeight,
         };
-        
+        */
         return (
-            <div id="container" className="reportChooser" style={bgStyle}>
-                {this.toggleReportDetails(this.props.appState.reportType)}
+            <div id="container" className="reportChooser">
+                {this.listContent()}
             </div>
         );
     }
+    private listContent = () =>  {
+        if (!this.props.appState.reportsList || this.props.appState.reportsList.length < 1) {
+            return <div className="no_reportList">
+                Create new report or load from archive. 
+            </div>;
+        } else {
+            return <ul className="reportList">
+                {this.props.appState.reportsList.map(
+                    (report) => {
+                        const teamBgStyle = {
+                            backgroundImage: `url(${reportBox})`,
+                            backgroundRepeat  : 'no-repeat',
+                            color: "#242424",
+                        };
+                        const dateStyles = ["reportDateSlot", "controlRow", "enabledControls"]
+                        const openStyles = ["reportOpenSlot", "controlRow"]
+                        const deleteStyles = ["reportDeleteSlot", "controlRow"]
 
+                        if (this.props.appState.report && report.id === this.props.appState.report.id) {
+                            teamBgStyle.backgroundImage = `url(${reportBoxChosen})`;
+                            teamBgStyle.color = "#F2F0EE";
+                            openStyles.push("enabledControls");
+                            deleteStyles.push("enabledControls");
+                        }
+
+                        return <div key={report.id} style={teamBgStyle} className="reportRow">
+                            <div className="reportSlot">
+                                <div className="reportControls">
+                                    <div className={dateStyles.join(" ")}>
+                                        {report.date ? StringFormatter.formatDate(report.date) : "unknown date"}
+                                    </div>
+                                    <div className={openStyles.join(" ")}onClick={this.reportClicked(report.id)} >
+                                        open
+                                    </div>
+                                    <div className={deleteStyles.join(" ")} onClick={this.deleteClicked(report.id)}>
+                                        delete
+                                    </div>
+                                </div>
+                                <div className="reportTeams" 
+                                    onClick={this.reportClicked(report.id)}>
+                                    <div className="teamName">
+                                        {report.home.name}
+                                    </div>
+                                    <div className="teamName">
+                                        {report.away.name}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                )}
+            </ul>
+        }
+    }
+    /*
+
+                            return <Link key={report.id} 
+                            to={Screens.Prematch} 
+                            style={{textDecoration: "none"}}>
+                            <div style={teamBgStyle} className="reportRow">
+                                <div className="reportSlot">
+                                    <div className="reportDate">
+                                        {report.date ? StringFormatter.formatDate(report.date) : "unknown date"}
+                                    </div>
+                                    <div className="reportTeams" 
+                                        onClick={this.reportClicked(report.id)}>
+                                        <div className="teamName">
+                                            {report.home.name}
+                                        </div>
+                                        <div className="teamName">
+                                            {report.away.name}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Link>
+
+
+                        
     private toggleReportDetails = (listType: string) => {
         console.log("listType " + listType);
         if (listType === "new") {
@@ -129,14 +210,9 @@ class ReportsList extends React.Component<{appState: AppState, yPos: number}, IR
                     </div>;
         }
     }
-    private openReport = (report: Report) => {
-        console.log("opening report ", report);
-        this.props.appState.report = report;
-        this.props.appState.homeTeam = report.home;
-        this.props.appState.awayTeam = report.away;
-        this.props.appState.currentWeather = report.weather ? report.weather[0] : "null";
-        // this.props.appState.reportType = "load";
-    }
+    */
+
+    /*
     private updateReport = (tempId: string, report: Report) => {
         console.log("updating report ", tempId, report);
         const updatedReport = this.props.appState.reportsList.find(r => r.id === tempId);
@@ -145,6 +221,7 @@ class ReportsList extends React.Component<{appState: AppState, yPos: number}, IR
             updatedReport.id = report.id;
         }
     }
+    */
     private buildReportList = (reportsData: object[]) => {
         // console.log("complete reports data : ", reportsData);
         this.props.appState.reportsList = reportsData.map(data => {
@@ -152,6 +229,7 @@ class ReportsList extends React.Component<{appState: AppState, yPos: number}, IR
         })
         console.log("parsed reportList ", this.props.appState.reportsList)
     }
+    /*
     private handleTeamNameChange = (titles: any) => {
         this.setState({inputTitle1: titles.title1, inputTitle2: titles.title2})
     }
@@ -179,11 +257,20 @@ class ReportsList extends React.Component<{appState: AppState, yPos: number}, IR
             }
         };
     }
+    */
     private reportClicked = (reportId: string) => {
         return () => {
             const report = this.props.appState.reportsList.find(r => r.id === reportId);
             if (report) {
-                 this.openReport(report);
+                 this.props.openReport(report);
+            }
+        }
+    }
+    private deleteClicked = (reportId: string) => {
+        return () => {
+            const report = this.props.appState.reportsList.find(r => r.id === reportId);
+            if (report && this.props.appState.report === report) {
+                console.log("delete report ? " + reportId);
             }
         }
     }

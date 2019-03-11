@@ -14,14 +14,14 @@ export class Report {
 
     constructor (props: any) {
 
-        console.log('new report title: ', props.title);
+        console.log('initialising report : ', props.title);
         this.id = props.id;
         this.title = props.title;
         this.home = new Team(props.home);
         this.away = new Team(props.away);
 
         if (props.date) {
-            // console.log(' date ', props.date);
+            console.log(' date ', props.date);
             this.date = new Date(props.date)
             // console.log(' day ', this.date.getDate());
         }
