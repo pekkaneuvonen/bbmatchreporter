@@ -5,15 +5,15 @@
   "dependencies": {
     "@types/react-router-dom": "^4.3.1",
     "axios": "^0.18.0",
-    "cors": "^2.8.4",
-    "less": "^3.8.1",
-    "mobx": "^5.5.0",
-    "mobx-react": "^5.2.8",
-    "prop-types": "^15.6.2",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
+    "cors": "^2.8.5",
+    "less": "^3.9.0",
+    "mobx": "^5.9.0",
+    "mobx-react": "^5.4.3",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4",
     "react-router-dom": "^4.3.1",
-    "react-scripts-ts": "2.16.0"
+    "react-scripts-ts": "^4.0.8"
   },
   "scripts": {
     "start": "react-scripts-ts start",
@@ -22,12 +22,12 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.2",
-    "@types/node": "^10.11.3",
-    "@types/react": "^16.4.14",
-    "@types/react-dom": "^16.0.8",
+    "@types/jest": "^24.0.11",
+    "@types/node": "^10.12.30",
+    "@types/react": "^16.8.7",
+    "@types/react-dom": "^16.8.2",
     "less-loader": "^4.1.0",
-    "typescript": "^2.9.2"
+    "typescript": "^3.3.3333"
   },
   "proxy": "http://localhost:3001"
 }
