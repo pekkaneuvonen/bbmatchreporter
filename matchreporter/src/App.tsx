@@ -5,6 +5,8 @@ import { Route, Switch } from 'react-router-dom'
 import {AppState, Screens} from "./model/AppState";
 
 import './css/App.css';
+import './css/Global.less';
+
 import Home from './screens/Home';
 import Match from './screens/Match';
 import Postmatch from './screens/Postmatch';

@@ -2,8 +2,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 320px;
-  height: 1000px;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  /*width: 320px;*/
   background-color: rgb(0, 0, 0);
 }
 div.navigatorContainer {
@@ -27,6 +29,32 @@ div.navigatorHomebutton {
   height: 32px;
   width: "100%";
 }
+/*
+decolines width 1016px, offset 80px
+*/
+.decorativeLines {
+  position: absolute;
+  z-index: 0;
+  top: 24px;
+  left: calc(50% - (1016px)/2 + 80px);
+}
+/*
+newReport_button width 205px, offset 16px
+*/
+div.newRepcontainer {
+  position: absolute;
+  z-index: 2;
+  top: 126px;
+  left: calc(50% + 16px);
+
+}
+button.newReport_button {
+  background: rgba(0, 0, 0, 0);
+  border: 0px;
+}
+
+
+
 
 *:focus {
   outline:none;
@@ -94,33 +122,7 @@ div.propcircle {
   color: #FFFFFF;
 }
 
-.lineThrough {
-  background: 'black';
-  height: 3px;
-  width: 100%;
-}
-
 .frontpage {
   width: 320px;
   text-align: center;
-}
-
-.Report {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.list {
-  width: 320px;
-  background-color: #F4F4F4;
-  margin: 0px;
-  border: 0px;
-  padding-left: 20px;
-  text-align: left;
-}
-
-@font-face {
-  font-family: 'AlteDIN_G';
-  src: local('AlteDIN_G'), url(../fonts/din1451alt_G.ttf) format('ttf');
 }

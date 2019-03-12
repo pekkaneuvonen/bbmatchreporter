@@ -1,18 +1,28 @@
 import { observer } from "mobx-react";
 import * as React from 'react';
 import { IAppProps } from "../App";
-import CircleButton89 from '../components/buttons/CircleButton89';
-import LineThrough from '../components/LineThrough'
-import Navigator from '../components/Navigator';
+import NewReportButton from '../components/buttons/NewReportButton';
+
 import ReportsList from "../components/ReportsList";
 import Screentitle from '../components/Screentitle';
 import {Screens} from "../model/AppState";
+import Report from '../model/Report';
+import { Team } from "../model/Team";
+import { Reports } from '../services/Reports';
 
 import '../css/App.css';
 
-import bgHome from '../img/backgrounds/home.png';
-import title from '../img/MATCHREPORTER.png';
+import bgHome from '../img/backgrounds/GRASS_9AM.jpg';
+import decolines from '../img/load/decolines1.png';
+import newButton from '../img/load/newrepButton.png';
+import title from '../img/load/title1.png';
+import history from "./history";
 
+/*
+export default function nav(loc) {
+  history.push(loc);
+}
+*/
 const bgStyle = {
   backgroundImage: `url(${bgHome})`
 };
@@ -31,30 +41,88 @@ class Home extends React.Component<IAppProps, {chooserPos: number}> {
         console.log("this.props.appState.reportType : ", this.props.appState.reportType);
 
         return <div className="App" style={bgStyle}>
-            <Navigator appState={this.props.appState}/>
             <Screentitle src={title}/>
-            <div className="mainChooser">
-                <LineThrough 
-                    colour="black"
-                    thickness="3px"
-                    parentHeight="89px"/>
-                <div className="parallelChooserCircles">
-                    <CircleButton89 
-                        chosen={this.props.appState.reportType === "new"} 
-                        label={"NEW MATCH"} 
-                        onClickHandler={this.toggleReportType("new")}/>
-                    <CircleButton89 
-                        chosen={this.props.appState.reportType === "load"} 
-                        label={"LOAD MATCH"} 
-                        onClickHandler={this.toggleReportType("load")}/>
-                </div>
+            <img className="decorativeLines" src={decolines}/>
+            <div className="newRepcontainer">
+                <NewReportButton source={newButton} onClickHandler={this.createNewReport}/>
             </div>
-            <div id="chooser" ref={(chooser) => this.calcChooserHeight(chooser)}>
-            <ReportsList appState={this.props.appState} yPos={this.state.chooserPos}/>
-            </div>
+
+            <ReportsList appState={this.props.appState} openReport={this.openReport}/>
         </div>;
     };
 
+    private createNewReport = () => {
+        const defaultTitle1: string = "team 1";
+        const defaultTitle2: string = "team 2";
+        if (!this.props.appState.createdReportsCount) {
+            this.props.appState.createdReportsCount = 0;
+        }
+        const reportTempId: string = "temp_created_report" + this.props.appState.createdReportsCount;
+        this.props.appState.createdReportsCount++;
+
+        const homeTeam: Team = new Team({name: defaultTitle1});
+        const awayTeam: Team = new Team({name: defaultTitle2});
+        const reportTemplate: Report = new Report({id:reportTempId, title:reportTempId, home:homeTeam, away:awayTeam});
+        
+        Reports
+        .createReport(reportTemplate)
+        .then((newReport: Report) => {
+            this.receivedNewReport(newReport);
+        });
+    }
+    private receivedNewReport = (report: Report) => {
+        if (report) {
+            this.props.appState.reportsList.push(report);
+            this.openReport(report);
+            history.push(Screens.Prematch);
+        }
+    }
+    /*
+    private updateReport = (tempId: string, report: Report) => {
+        console.log("updating report ", tempId, report);
+        const updatedReport = this.props.appState.reportsList.find(r => r.id === tempId);
+        if (updatedReport) {
+            updatedReport.date = report.date;
+            updatedReport.id = report.id;
+            this.openReport(updatedReport);
+        }
+    }
+    */
+    private openReport = (report: Report) => {
+        console.log("opening report ", report);
+        if (this.props.appState.report === report) {
+            history.push(Screens.Prematch);
+        } else {
+            this.props.appState.report = report;
+            this.props.appState.homeTeam = report.home;
+            this.props.appState.awayTeam = report.away;
+            this.props.appState.currentWeather = report.weather ? report.weather[0] : "null";
+        }
+
+        // this.props.appState.reportType = "load";
+    }
+/*
+            <div id="chooser" ref={(chooser) => this.calcChooserHeight(chooser)}>
+
+            </div>
+
+
+    <div className="mainChooser">
+        <LineThrough 
+            colour="black"
+            thickness="3px"
+            parentHeight="89px"/>
+        <div className="parallelChooserCircles">
+            <CircleButton89 
+                chosen={this.props.appState.reportType === "new"} 
+                label={"NEW MATCH"} 
+                onClickHandler={this.toggleReportType("new")}/>
+            <CircleButton89 
+                chosen={this.props.appState.reportType === "load"} 
+                label={"LOAD MATCH"} 
+                onClickHandler={this.toggleReportType("load")}/>
+        </div>
+    </div>
     private toggleReportType = (type: string) => {
         if (type === "new") {
             return () => {
@@ -66,6 +134,9 @@ class Home extends React.Component<IAppProps, {chooserPos: number}> {
             }
         }
     }
+    */
+
+    /*
     private calcChooserHeight(chooser: any): void {
         const chooserPos: {x: number, y: number} = this.getPosition(chooser);
         if (chooser && chooserPos.y && (!this.state.chooserPos || this.state.chooserPos !== chooserPos.y)) {
@@ -75,6 +146,8 @@ class Home extends React.Component<IAppProps, {chooserPos: number}> {
         }
         
     }
+    */
+   /*
     private getPosition(element: any) {
         let xPosition = 0;
         let yPosition = 0;
@@ -92,6 +165,6 @@ class Home extends React.Component<IAppProps, {chooserPos: number}> {
         }
         return { x: xPosition, y: yPosition };
     }
-
+    */
 }
 export default Home;

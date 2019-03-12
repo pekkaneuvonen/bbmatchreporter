@@ -1,22 +1,20 @@
 .reportChooser {
-  margin-top: 0px;
-  width: 320px;
-  background: #000;
-  overflow: scroll;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  left: 0px;
+  margin-top: 128px;
+  background: rgba(0, 0, 0, 0);
+  /* overflow: scroll;*/
+  z-index: 25;
 }
-.bottomButton {
-  width: 320px;
-  height: 52px;
-  position: absolute;
-  top: calc(100vh - 52px);
-}
+
 .no_reportList {
   text-align: center;
   border: 0px;
   padding: 3px;
   margin: 12px;
-  color: #FFFFFF;
-  background: #000;
+  background: rgba(0, 0, 0, 0);
   font-family: 'AlteDIN_G', sans-serif;
   font-weight: 500;
   font-size: 18px;
@@ -25,17 +23,75 @@
   padding-left: 0px;
   margin-top: 0px;
   margin-bottom: 0px;
+  left: 0px;
+  width: 320px;
 }
 .reportRow {
+  margin-left: 0px;
+  left: 0px;
+  color: #242424;
   user-select: none;
-  height: 72px;
-  margin-top: 18px;
+  height: 88px;
+  width: 344px;
 }
-.teamsRow {
+.reportSlot {
+  margin-left: 0px;
+  left: 0px;
   display: flex;
-  height: 50px;
-  user-select: none;
   flex-direction: row;
+  justify-content: space-around;
+  user-select: none;
+  height: 80px;
+  width: 320px;
+}
+.reportControls {
+  width: 80px;
+  z-index: 9;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+.controlRow {
+  border: 0px;
+  padding-left: 0px;
+  padding-top: 0px;
+  width: 80px;
+  height: 24px;
+  text-align: center;
+  font-family: 'Teko', sans-serif;
+  font-weight: 500;
+  font-size: 21px;
+  text-decoration: none;
+  opacity: 0.5;
+}
+.reportDateSlot {
+  background: #F2F0EE;
+}
+.reportOpenSlot {
+  background: #7ED321;
+}
+.reportDeleteSlot {
+  background: #D0021B;
+}
+.enabledControls {
+  opacity: 1;
+  color: #242424;
+}
+.reportTeams {
+  width: 232px;
+  display: flex;
+  user-select: none;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+.teamName {
+  height: 40px;
+  padding-left: 0px;
+  padding-top: 0px;
+  text-align: center;
+  font-family: 'Lobster', cursive;
+  font-size: 24pt;
+  text-decoration: none;
 }
 .inputRow {
   height: 62px;
@@ -50,19 +106,7 @@
   left: calc((320px - 39px) / 2);
   justify-self: center;
 }
-.reportDate {
-  z-index: 9;
-  width: 100%;
-  padding-left: 6px;
-  padding-top: 1px;
-  height: 12px;
-  text-align: left;
-  color: #FFFFFF;
-  font-family: 'AlteDIN', sans-serif;
-  font-weight: 500;
-  font-size: 14px;
-  text-decoration: none;
-}
+
 .reportRowSlot {
   display: flex;
   margin-top: 8px;
@@ -89,7 +133,10 @@
   color: #000;
   text-decoration: none;
 }
-@font-face {
-  font-family: 'AlteDIN';
-  src: local('AlteDIN'), url(../fonts/din1451alt.ttf) format('ttf');
+
+.bottomButton {
+  width: 320px;
+  height: 52px;
+  position: absolute;
+  top: calc(100vh - 52px);
 }
