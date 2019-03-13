@@ -15,11 +15,11 @@ export class Team {
     @observable public gateValue: number;
 
     // postmatch
-    public scorers: Player[];
-    public inflicters: Player[];
-    public injureds: Player[];
-    public completions: Player[];
-    public intercepts: Player[];
+    public scorers: Player[] = [];
+    public inflicters: Player[] = [];
+    public injureds: Player[] = [];
+    public completions: Player[] = [];
+    public intercepts: Player[] = [];
 
     constructor (props: any) {
         // console.log('new team name: ', props.name);

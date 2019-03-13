@@ -4,20 +4,21 @@ import { IAppProps } from "../App";
 import CircleInput79 from '../components/buttons/CircleInput79';
 import Navigator from '../components/Navigator';
 import TeamTitleInput from '../components/TeamTitleInput';
+import TeamValueInput from '../components/TeamValueInput';
+
 import {Screens} from "../model/AppState";
 import { Reports } from '../services/Reports';
 
+import bgHome from '../img/backgrounds/GRASS_9AM_grid.jpg';
 import CircleInput59 from '../components/buttons/CircleInput59';
 import WeatherChooserRow from "../components/WeatherChooserRow";
 import '../css/Prematch.css';
-import bgPrematch from '../img/backgrounds/prematch.png';
 import { Team } from "../model/Team";
 import { WeatherType } from "../model/Weather";
 import { Kvalue } from '../types/Kvalue';
 
 const bgStyle = {
-  backgroundImage: `url(${bgPrematch})`,
-  backgroundRepeat  : 'no-repeat'
+  backgroundImage: `url(${bgHome})`,
 };
 
 interface IscreenState {
@@ -80,17 +81,9 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
                 <TeamTitleInput 
                     titleChangeHandler={this.handleTeamNameChange} title1Default={this.props.appState.homeTeam.name} title2Default={this.props.appState.awayTeam.name}/>
             </div>
-            <div className="teamvalues">
-                <CircleInput79 
-                    activityOverride={true} 
-                    value={this.props.appState.homeTeam.tvString} 
-                    valueChangeHandler={this.handleTeamValueChange("home")}
-                    arrowOverride={induced === this.props.appState.homeTeam}/>
-                <CircleInput79 
-                    activityOverride={true} 
-                    value={this.props.appState.awayTeam.tvString} 
-                    valueChangeHandler={this.handleTeamValueChange("away")} 
-                    arrowOverride={induced === this.props.appState.awayTeam}/>
+            <div className="teamTVs">
+                <TeamValueInput
+                    valueChangeHandler={this.handleTeamValueChange} value1={this.props.appState.homeTeam.tvString} value2={this.props.appState.awayTeam.tvString}/>
             </div>
             <div className={inducementStyles}>
                 <CircleInput59 
@@ -133,11 +126,14 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
     };
     private createWeatherTable = () => {
         const table = [];
-    
+        console.log("currentWeather : " + this.props.appState.currentWeather);
+
         const weatherTypeCount: number = Object.keys(WeatherType).length / 2
         for (let i = 0; i < weatherTypeCount; i++) {
+            console.log("chosen [" + i + " / " + WeatherType[i] + "]: " + (this.props.appState.currentWeather === WeatherType[i]));
+
           table.push(
-          <WeatherChooserRow key={i} chosen={this.props.appState.currentWeather === WeatherType[i]} value={i} clickHandler={this.weatherClickHandler(i)}/>
+            <WeatherChooserRow key={i} chosen={this.props.appState.currentWeather === WeatherType[i]} value={i} clickHandler={this.weatherClickHandler(i)}/>
           );
         }
         return table
@@ -207,6 +203,21 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
         console.log("Trying to override calculated fame value !");
         // this.props.appState.inducementValueOverride = value;
     }
+    private handleTeamValueChange = (values: any) => {
+        if (!this.props.appState.homeTeam || !this.props.appState.awayTeam) {
+            window.location.href = "/";
+        }
+        let split1: string[] = values.value1.split("k");
+        let numericValue1: number = parseInt(split1.join(""), 10);
+        numericValue1 *= 1000;
+        let split2: string[] = values.value2.split("k");
+        let numericValue2: number = parseInt(split2.join(""), 10);
+        numericValue2 *= 1000;
+        this.props.appState.homeTeam.teamValue = numericValue1;
+        this.props.appState.awayTeam.teamValue = numericValue2;
+        this.updateReport();
+    }
+    /*
     private handleTeamValueChange = (team: string) => {
         return (value: string) => {
             const splitValue: string[] = value.split("k");
@@ -221,6 +232,7 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
             this.updateReport();
         }
     }
+    */
     private handleInducementChange = (team: string) => {
         return (event: any) => {
             if (team === "home") {

@@ -4,7 +4,7 @@ import '../css/Reports.css';
 import arrow from '../img/buttonindicator.png';
 import chosenbg from '../img/chosenRow.png';
 import inputField from '../img/weather_throwcircle.png';
-import { WeatherDescription, WeatherType } from "../model/Weather";
+import { WeatherType, WeatherDescription } from "../model/Weather";
 
 interface IWeatherChooserProps {
     chosen: boolean;
@@ -27,6 +27,7 @@ class WeatherChooserRow extends React.Component<IWeatherChooserProps, {}> {
     };
 
     public render() {
+
         let throwSlot: string = "4-10";
         if (this.props.value === WeatherType.SwelteringHeat) {
             throwSlot = "2";
@@ -37,13 +38,12 @@ class WeatherChooserRow extends React.Component<IWeatherChooserProps, {}> {
         } else if (this.props.value === WeatherType.Blizzard) {
             throwSlot = "12";
         }
-
         return <div className="weatherChooserRow" style={this.props.chosen ? this.chosenStyle : undefined} onClick={this.props.clickHandler}>
             <div style={this.circleStyle} className="weatherChooserRowThrow weatherChooserRowtext">
                 {throwSlot}
             </div>
             <img src={arrow} className="weatherChooserRowArrow"/>
-            <div className="weatherChooserRowtext weatherChooserRowDescription">{WeatherDescription[WeatherType[this.props.value]]}</div>
+            <div className="weatherChooserRowtext weatherChooserRowDescription">{WeatherDescription[this.props.value]}</div>
         </div>;
     }
 }

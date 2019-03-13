@@ -40,7 +40,7 @@ class Navigator extends React.Component<IAppProps, {}> {
             <div className="navigatorHomebutton">
                 <Link to='/'>
                         <img src={homeLabel}/>
-                        <img src={homeX}/>
+                        <img style={{right: "0px"}} src={homeX}/>
                 </Link>
             </div>
             <div className="navigatorContainer">

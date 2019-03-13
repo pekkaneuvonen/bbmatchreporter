@@ -4,7 +4,7 @@ import {Team} from "./Team";
 
 export class Report {
     public id: string;
-    public date: Date;
+    public date?: Date;
     public title: string = "-";
     public totalGate: Kvalue = new Kvalue(0);
     public totalGateValue: number = 0;

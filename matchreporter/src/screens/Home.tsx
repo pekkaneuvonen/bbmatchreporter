@@ -89,8 +89,8 @@ class Home extends React.Component<IAppProps, {chooserPos: number}> {
     }
     */
     private openReport = (report: Report) => {
-        console.log("opening report ", report);
         if (this.props.appState.report === report) {
+            console.log("opening report ", report);
             history.push(Screens.Prematch);
         } else {
             this.props.appState.report = report;

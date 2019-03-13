@@ -8,7 +8,7 @@ import degrees from '../img/timepiece/degrees.png';
 import progresshalf_1 from '../img/timepiece/progresshalf1.png';
 import progresshalf_2 from '../img/timepiece/progresshalf2.png';
 
-import { AppState } from 'src/model/AppState';
+import { AppState } from '../model/AppState';
 import resetButton from '../img/timepiece/resetbutton.png';
 import setButton from '../img/timepiece/setbutton.png';
 

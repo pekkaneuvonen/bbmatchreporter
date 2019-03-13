@@ -1,16 +1,61 @@
 .Prematch {
-    width: 320px;
     height: 1746px;
     background: rgba(0, 0, 0, 0);
 }
-.teamtitles {
-    margin-top: 85px;
+.teamNames {
+    height: 140px;
 }
-.teamvalues {
-    margin-top: 75px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+.teamTitle {
+    border: 0px;
+    width: 248px;
+    height: 30px;
+    background: rgba(0, 0, 0, 0);
+    font-family: 'Lobster', cursive;
+    font-size: 24px;
+    text-align: center;
+    color: #242424;
+}
+.teamTitle1 {
+    margin-left: 4px;
+    margin-top: 20px;
+}
+.teamTitle2 {
+    margin-left: 68px;
+    margin-top: 10px;
+}
+
+.teamValues {
+    height: 69px;
+}
+.teamValue {
+    border: 0px;
+    width: 248px;
+    height: 30px;
+    background: rgba(0, 0, 0, 0);
+    font-family: 'Lobster', cursive;
+    font-size: 24px;
+    text-align: center;
+    color: #242424;
+}
+.teamValue1 {
+    margin-left: 4px;
+    margin-top: 20px;
+}
+.teamValue2 {
+    margin-left: 68px;
+    margin-top: 10px;
+}
+
+
+
+
+
+.teamtitles {
+    margin-top: 5px;
+}
+.teamTVs {
+    margin-top: 0px;
+    margin-left: 0px;
 }
 .inducementValue {
     margin-top: 30px;

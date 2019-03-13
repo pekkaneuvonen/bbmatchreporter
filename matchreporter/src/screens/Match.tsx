@@ -11,7 +11,7 @@ import goalButton from '../img/buttons/GOAL_active.png';
 import injuryButton from '../img/buttons/INJURY_active.png';
 import interceptButton from '../img/buttons/INTERCEPT_active.png';
 
-import { Team } from 'src/model/Team';
+import { Team } from '../model/Team';
 import '../css/Match.css';
 import bgMatch from '../img/backgrounds/match.png';
 
@@ -73,16 +73,19 @@ class Match extends React.Component<IAppProps, IMatchState> {
     private eventDetails() {
         const teamStyles: string = "teamSelectorTeam";
         const activeTeamStyles: string = "teamSelectorTeam teamSelectorActiveTeam";
+        console.log("this.state.currentEventType : " + this.state.currentEventType);
+        console.log("EventDescription[] : " + EventDescription[this.state.currentEventType]);
 
+        // EventDescription[EventType[this.state.currentEventType]]
         return <div className="eventContainer">
             <div className="eventTitle">
-                {EventDescription[EventType[this.state.currentEventType]]}
+                {EventDescription[this.state.currentEventType]}
             </div>
             <div className="eventInputSeparator"/>
             <div className="eventInputContainer">
                 <div className="eventInputTeamSelector">
-                    <div className={this.state.currentSelectedTeam === this.props.appState.homeTeam ? activeTeamStyles : teamStyles} onClick={this.teamSelectHandler(this.props.appState.homeTeam)}>{this.props.appState.homeTeam.name}</div>
-                    <div className={this.state.currentSelectedTeam === this.props.appState.awayTeam ? activeTeamStyles : teamStyles} onClick={this.teamSelectHandler(this.props.appState.awayTeam)}>{this.props.appState.awayTeam.name}</div>
+                    <div className={this.state.currentSelectedTeam === this.props.appState.homeTeam ? activeTeamStyles : teamStyles} onClick={this.teamSelectHandler(this.props.appState.homeTeam)}>{this.props.appState.homeTeam ? this.props.appState.homeTeam.name : "no name"}</div>
+                    <div className={this.state.currentSelectedTeam === this.props.appState.awayTeam ? activeTeamStyles : teamStyles} onClick={this.teamSelectHandler(this.props.appState.awayTeam)}>{this.props.appState.awayTeam ? this.props.appState.awayTeam.name : "no name"}</div>
                 </div>
                 {this.eventInputRow("activePlayer")}
                 {this.state.currentEventType === EventType.Casualty ? this.eventInputRow("passivePlayer") : null}
@@ -97,13 +100,17 @@ class Match extends React.Component<IAppProps, IMatchState> {
             </div>
         </div>
     }
-    private teamSelectHandler = (team: Team) => {
+    private teamSelectHandler = (team: Team | undefined) => {
         return (event: any) => {
             this.setState({currentSelectedTeam: team});
         }
     }
     private eventInputRow = (actor: string) => {
         let label: string = "";
+        let stateVar: string = this.state.activePlayer.toString();
+        if (actor === "passivePlayer") {
+            stateVar = this.state.passivePlayer.toString();
+        }
         switch (this.state.currentEventType) {
             case EventType.Goal:
                 label = "scorer:";
@@ -129,7 +136,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
         }
         return <div className="eventInputRow">
                 <div className="eventInputLabel">{label}</div>
-                <input className="eventInputField" value={this.state[actor]} type="text" pattern="[0-9:]*" maxLength={2} onChange={this.eventInputHandlerFactory(actor)}/>
+                <input className="eventInputField" value={stateVar} type="text" pattern="[0-9:]*" maxLength={2} onChange={this.eventInputHandlerFactory(actor)}/>
                 {label === "injured:" ? 
                     <input className="eventInputField" value={this.state.currentInjuryThrow} type="text" pattern="[0-9:]*" maxLength={2} onChange={this.eventInputHandlerFactory("currentInjuryThrow")}/>
                     :

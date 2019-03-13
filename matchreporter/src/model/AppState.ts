@@ -10,25 +10,25 @@ import { Team } from "./Team";
  */
 export class AppState {
   @observable public screen: string;
-  @observable public prevTab: string;
+  @observable public prevTab?: string;
   @observable public showTabNavigator: boolean;
   @observable public showTab: boolean;
-  @observable public reportType: string;
+  @observable public reportType?: string;
   @observable public reportsList: Report[] = [];
-  public createdReportsCount: number;
-  @observable public currentWeather: string;
+  public createdReportsCount: number = 0;
+  @observable public currentWeather: string = "";
   
-  @observable public report: Report;
-  @observable public homeTeam: Team;
-  @observable public awayTeam: Team;
+  @observable public report!: Report;
+  @observable public homeTeam!: Team;
+  @observable public awayTeam!: Team;
 
-  @observable public inducementValueOverride: Kvalue;
+  @observable public inducementValueOverride?: Kvalue;
   
   public defaultTimerValue: number = 300000; // 5 min = 5 * 60000
-  @observable public setTimerValue: number;
-  @observable public currentTimerValue: number;
+  @observable public setTimerValue?: number;
+  @observable public currentTimerValue?: number;
 
-  @observable public eventsblocked: boolean;
+  @observable public eventsblocked: boolean = false;
 
   @observable public windowWidth: number = 640;
 

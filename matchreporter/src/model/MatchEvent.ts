@@ -7,9 +7,9 @@ export enum EventType {
 }
 
 export enum EventDescription {
-    Goal = "GOAL",
-    Completion = "COMPLETION",
-    Casualty = "CASUALTY",
-    Injury = "INJURY",
-    Intercept = "INTERCEPT"
+    "GOAL" = 0,
+    "COMPLETION",
+    "CASUALTY",
+    "INJURY",
+    "INTERCEPT"
 }
