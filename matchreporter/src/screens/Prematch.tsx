@@ -85,6 +85,12 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
                 <TeamValueInput
                     valueChangeHandler={this.handleTeamValueChange} value1={this.props.appState.homeTeam.tvString} value2={this.props.appState.awayTeam.tvString}/>
             </div>
+            <div className="inducements">
+                <InducementsInput
+                    valueChangeHandler={this.handleTeamValueChange} value1={this.props.appState.homeTeam.tvString} value2={this.props.appState.awayTeam.tvString}/>
+            </div>
+
+
             <div className={inducementStyles}>
                 <CircleInput59 
                     value={inducementString}
@@ -207,6 +213,9 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
         if (!this.props.appState.homeTeam || !this.props.appState.awayTeam) {
             window.location.href = "/";
         }
+        console.log("handleTeamValueChange value1 : " + values.value1);
+        console.log("handleTeamValueChange value2 : " + values.value2);
+
         let split1: string[] = values.value1.split("k");
         let numericValue1: number = parseInt(split1.join(""), 10);
         numericValue1 *= 1000;

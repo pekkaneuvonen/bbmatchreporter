@@ -84,16 +84,24 @@
   justify-content: space-evenly;
   flex-direction: column;
 }
-.teamName {
+.teamRow {
   height: 40px;
   padding-left: 0px;
   padding-top: 0px;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
   font-family: 'Lobster', cursive;
-  font-size: 24pt;
+  font-size: 22pt;
   text-decoration: none;
+  text-align: center;
 }
-
+.teamRowName {
+  width: 184px;
+}
+.teamRowScore {
+  width: 48px;
+}
 
 
 

@@ -2,6 +2,26 @@
     height: 1746px;
     background: rgba(0, 0, 0, 0);
 }
+
+.teamtitles {
+    margin: auto;
+    width: 340px;
+    margin-left: calc(50% - 320/2);
+    margin-top: 5px;
+}
+.teamTVs {
+    margin: auto;
+    width: 340px;
+    margin-left: calc(50% - 320/2);
+}
+.inducements {
+    margin: auto;
+    width: 289px;
+    margin-left: calc(50% - 320/2);
+}
+
+
+
 .teamNames {
     height: 140px;
 }
@@ -23,40 +43,46 @@
     margin-left: 68px;
     margin-top: 10px;
 }
+.teamTitle_input {
+    color: #F2F0EE;
+}
 
+.valueContainer {
+    width: 320px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 .teamValues {
     height: 69px;
 }
 .teamValue {
     border: 0px;
-    width: 248px;
-    height: 30px;
+    width: 112px;
+    height: 32px;
+    margin-top: 8px;
     background: rgba(0, 0, 0, 0);
-    font-family: 'Lobster', cursive;
-    font-size: 24px;
+    font-family: 'Teko', sans-serif;
+    font-weight: 500;
+    font-size: 32px;
     text-align: center;
     color: #242424;
 }
-.teamValue1 {
-    margin-left: 4px;
-    margin-top: 20px;
-}
-.teamValue2 {
-    margin-left: 68px;
-    margin-top: 10px;
+.teamValue_input {
+    color: #F2F0EE;
 }
 
-
-
-
-
-.teamtitles {
-    margin-top: 5px;
+.inducements {
+    margin: auto;
+    width: 340px;
+    margin-left: calc(50% - 320/2);
 }
-.teamTVs {
-    margin-top: 0px;
-    margin-left: 0px;
-}
+
+
+
+
+
+
 .inducementValue {
     margin-top: 30px;
     float: center;

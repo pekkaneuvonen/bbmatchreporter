@@ -109,11 +109,21 @@ class ReportsList extends React.Component<{appState: AppState, openReport: (repo
                                 </div>
                                 <div className="reportTeams" 
                                     onClick={this.reportClicked(report.id)}>
-                                    <div className="teamName">
-                                        {report.home.name}
+                                    <div className="teamRow">
+                                        <div className="teamRowName">
+                                            {report.home.name}
+                                        </div>
+                                        <div className="teamRowScore">
+                                            {report.home.scorers.length}
+                                        </div>
                                     </div>
-                                    <div className="teamName">
-                                        {report.away.name}
+                                    <div className="teamRow">
+                                        <div className="teamRowName">
+                                            {report.away.name}
+                                        </div>
+                                        <div className="teamRowScore">
+                                            {report.away.scorers.length}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

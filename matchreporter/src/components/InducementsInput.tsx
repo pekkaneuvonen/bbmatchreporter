@@ -1,23 +1,24 @@
 import * as React from 'react';
 import '../css/Prematch.css';
+import { Team } from "../model/Team";
 
 import valuesBG from '../img/prematch/teamTVs.png';
 import valuesBG_input from '../img/prematch/teamTVs_input.png';
 
-interface ITeamValueInput {
-    value1: string;
-    value2: string;
+interface IInducementsInput {
+    inducementsValue: string;
+    team: Team;
     activityOverride?: boolean;
-    valueChangeHandler: ({}) => void;
+    inducementsDescriptions: string;
+    descriptionsChangeHandler: ({}) => void;
 }
-interface ITVState {
+interface IInducementsState {
     inputActive: boolean;
-    value1: string;
-    value2: string;
+    inducementsDescriptions: string;
 }
 
 
-class TeamValueInput extends React.Component<ITeamValueInput, ITVState> {
+class InducementsInput extends React.Component<IInducementsInput, IInducementsState> {
     private bgStyle = {
         backgroundImage: `url(${valuesBG})`,
         backgroundPosition: 'left',
@@ -32,8 +33,7 @@ class TeamValueInput extends React.Component<ITeamValueInput, ITVState> {
         super(props);
         this.state = {
             inputActive: false,
-            value1: props.value1,
-            value2: props.value2,
+            inducementsDescriptions: props.inducementsDescriptions,
         }
     };
 
@@ -74,7 +74,7 @@ class TeamValueInput extends React.Component<ITeamValueInput, ITVState> {
         this.setState({ value2: event.target.value });
     }
 }
-export default TeamValueInput;
+export default InducementsInput;
 
 
 
