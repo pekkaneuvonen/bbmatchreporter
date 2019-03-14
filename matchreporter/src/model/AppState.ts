@@ -25,8 +25,8 @@ export class AppState {
   @observable public inducementValueOverride?: Kvalue;
   
   public defaultTimerValue: number = 300000; // 5 min = 5 * 60000
-  @observable public setTimerValue?: number;
-  @observable public currentTimerValue?: number;
+  @observable public setTimerValue: number = 0;
+  @observable public currentTimerValue: number = 0;
 
   @observable public eventsblocked: boolean = false;
 

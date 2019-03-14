@@ -36,7 +36,7 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
         super(props);
         let newlySetValue: number = props.defautlTimerValue ? props.defautlTimerValue : 0;
 
-        console.log("timePiece constructor : ",this.props.appState.setTimerValue, this.props.appState.currentTimerValue);
+        console.log("timePiece constructor : ", this.props.appState.setTimerValue, this.props.appState.currentTimerValue);
         if (!this.props.appState.setTimerValue) {
             this.props.appState.setTimerValue = newlySetValue;
         }
