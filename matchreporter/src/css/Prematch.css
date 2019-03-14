@@ -72,10 +72,8 @@
     color: #F2F0EE;
 }
 
-.inducements {
-    margin: auto;
-    width: 340px;
-    margin-left: calc(50% - 320/2);
+.inducementsContainer {
+    height: 289px;
 }
 
 

@@ -5,6 +5,7 @@ import CircleInput79 from '../components/buttons/CircleInput79';
 import Navigator from '../components/Navigator';
 import TeamTitleInput from '../components/TeamTitleInput';
 import TeamValueInput from '../components/TeamValueInput';
+import InducementsInput from '../components/InducementsInput';
 
 import {Screens} from "../model/AppState";
 import { Reports } from '../services/Reports';
@@ -87,7 +88,7 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
             </div>
             <div className="inducements">
                 <InducementsInput
-                    valueChangeHandler={this.handleTeamValueChange} value1={this.props.appState.homeTeam.tvString} value2={this.props.appState.awayTeam.tvString}/>
+                    inducementsValue="350k" side="home" inducementsDescriptions="-" descriptionsChangeHandler={this.inducementDescriptionChange} />
             </div>
 
 
@@ -95,18 +96,6 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
                 <CircleInput59 
                     value={inducementString}
                     valueChangeHandler={this.handleInducementValueChange}/>
-            </div>
-            <div className="inducements">
-                <textarea 
-                    name="homeinducements"
-                    className="inducementsBox homeInducements"
-                    onChange={this.handleInducementChange("home")}
-                    value={this.props.appState.homeTeam.inducements}/>
-                <textarea 
-                    name="awayinducements"
-                    className="inducementsBox awayInducements"
-                    onChange={this.handleInducementChange("away")}
-                    value={this.props.appState.awayTeam.inducements}/>
             </div>
             <div className="gate">
                 <CircleInput79 
@@ -242,13 +231,9 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
         }
     }
     */
-    private handleInducementChange = (team: string) => {
+    private inducementDescriptionChange = (description: string) => {
         return (event: any) => {
-            if (team === "home") {
-                this.props.appState.homeTeam.inducements = event.target.value;
-            } else {
-                this.props.appState.awayTeam.inducements = event.target.value;
-            }
+            console.log("inducementDescriptionChange : " + description);
             this.updateReport();
         }
     }
