@@ -1,8 +1,6 @@
 .Prematch {
-    height: 1746px;
     background: rgba(0, 0, 0, 0);
 }
-
 .teamtitles {
     margin: auto;
     width: 340px;
@@ -224,6 +222,11 @@
     color: #F2F0EE;
 }
 
+
+.bottomButton {
+    width: 320px;
+    height: 52px;
+}
 
 
 

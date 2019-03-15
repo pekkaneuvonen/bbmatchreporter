@@ -148,10 +148,3 @@
   color: #000;
   text-decoration: none;
 }
-
-.bottomButton {
-  width: 320px;
-  height: 52px;
-  position: absolute;
-  top: calc(100vh - 52px);
-}

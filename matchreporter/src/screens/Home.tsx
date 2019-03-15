@@ -18,11 +18,7 @@ import newButton from '../img/load/newrepButton.png';
 import title from '../img/load/title1.png';
 import history from "./history";
 
-/*
-export default function nav(loc) {
-  history.push(loc);
-}
-*/
+
 const bgStyle = {
   backgroundImage: `url(${bgHome})`
 };
@@ -66,10 +62,26 @@ class Home extends React.Component<IAppProps, {chooserPos: number}> {
         
         Reports
         .createReport(reportTemplate)
+        .then((newReport: Report) => this.props.appState.createdReport(newReport))
         .then((newReport: Report) => {
-            this.receivedNewReport(newReport);
+            this.openReport(newReport);
+            history.push(Screens.Prematch);
         });
     }
+    /*
+        .then((newReport: Report) => {
+            this.props.appState.createdReport(newReport);
+            return newReport;
+        })
+        Reports
+        .createReport(reportTemplate)
+        .then((newReport: Report) => {
+            // this.receivedNewReport(newReport);
+            this.props.appState.brandNewReport = true;
+            this.props.appState.reportsList.push(newReport);
+            this.openReport(newReport);
+            history.push(Screens.Prematch);
+        });
     private receivedNewReport = (report: Report) => {
         if (report) {
             this.props.appState.reportsList.push(report);
@@ -77,7 +89,6 @@ class Home extends React.Component<IAppProps, {chooserPos: number}> {
             history.push(Screens.Prematch);
         }
     }
-    /*
     private updateReport = (tempId: string, report: Report) => {
         console.log("updating report ", tempId, report);
         const updatedReport = this.props.appState.reportsList.find(r => r.id === tempId);

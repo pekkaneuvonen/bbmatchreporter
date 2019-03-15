@@ -15,6 +15,7 @@ export class AppState {
   @observable public showTab: boolean;
   @observable public reportType?: string;
   @observable public reportsList: Report[] = [];
+  public brandNewReport: boolean = false;
   public createdReportsCount: number = 0;
   @observable public currentWeather: string = "";
   
@@ -36,6 +37,12 @@ export class AppState {
     this.screen = Screens.Home;
     this.showTabNavigator = false;
     this.showTab = false;
+  }
+
+  public createdReport = (newReport: Report) => {
+    this.brandNewReport = true;
+    this.reportsList.push(newReport);
+    return newReport;
   }
 
   public addScorer(team: Team, playerNum: number): void {

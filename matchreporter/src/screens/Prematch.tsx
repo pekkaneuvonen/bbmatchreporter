@@ -1,7 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from 'react';
 import { IAppProps } from "../App";
-import CircleInput79 from '../components/buttons/CircleInput79';
 import Navigator from '../components/Navigator';
 import TeamTitleInput from '../components/TeamTitleInput';
 import TeamValueInput from '../components/TeamValueInput';
@@ -12,7 +11,7 @@ import {Screens} from "../model/AppState";
 import { Reports } from '../services/Reports';
 
 import bgHome from '../img/backgrounds/GRASS_9AM_grid.jpg';
-import CircleInput59 from '../components/buttons/CircleInput59';
+import doneButton from '../img/prematch/doneButton.png';
 import WeatherChooserRow from "../components/WeatherChooserRow";
 import '../css/Prematch.css';
 import { Team } from "../model/Team";
@@ -29,20 +28,20 @@ interface IscreenState {
     // induced: any;
     // homeInducementContent: string;
     // awayInducementContent: string;
+    newReport: boolean,
     weather: number;
 }
 
 @observer
 class Prematch extends React.Component<IAppProps, IscreenState> {
-
     constructor(props: any) {
         super(props);
-        
         this.state = {
             /*awayInducementContent: "away teams inducements",
             homeInducementContent: "home teams inducements",
             induced: this.inducedSide,
             inducementsValue: this.inducementValue,*/
+            newReport: this.props.appState.brandNewReport,
             weather: 0
         }
     };
@@ -88,25 +87,47 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
             <Navigator appState={this.props.appState}/>
             <div className="teamtitles">
                 <TeamTitleInput 
-                    titleChangeHandler={this.handleTeamNameChange} title1Default={this.props.appState.homeTeam.name} title2Default={this.props.appState.awayTeam.name}/>
+                    activityOverride={this.state.newReport}
+                    titleChangeHandler={this.handleTeamNameChange} 
+                    title1Default={this.props.appState.homeTeam.name} 
+                    title2Default={this.props.appState.awayTeam.name}/>
             </div>
             <div className="teamTVs">
                 <TeamValueInput
-                    valueChangeHandler={this.handleTeamValueChange} value1={this.props.appState.homeTeam.tvString} value2={this.props.appState.awayTeam.tvString}/>
+                    activityOverride={this.state.newReport}
+                    valueChangeHandler={this.handleTeamValueChange} 
+                    value1={this.props.appState.homeTeam.tvString} 
+                    value2={this.props.appState.awayTeam.tvString}/>
             </div>
             <div className="inducementsContainer">
                 <InducementsInput
-                    inducementsValue={inducementString} side={induced} inducementsDescriptions={this.inducedSide ? this.inducedSide.inducements : "-"} descriptionsChangeHandler={this.inducementDescriptionChange()} />
+                    activityOverride={this.state.newReport}
+                    inducementsValue={inducementString} 
+                    side={induced} 
+                    inducementsDescriptions={this.inducedSide ? this.inducedSide.inducements : "-"} 
+                    descriptionsChangeHandler={this.inducementDescriptionChange()} />
             </div>
             <div className="gateContainer">
                 <GatesInput
-                    gateValue1={this.props.appState.homeTeam.gateValue} gateValue2={this.props.appState.awayTeam.gateValue} gatesChangeHandler={this.handleTeamGateChange} />
+                    activityOverride={this.state.newReport}
+                    gateValue1={this.props.appState.homeTeam.gateValue} 
+                    gateValue2={this.props.appState.awayTeam.gateValue} 
+                    gatesChangeHandler={this.handleTeamGateChange} />
             </div>
             <div className="weatherChooserContainer">
                 {this.createWeatherTable()};
             </div>
+            {this.state.newReport ? 
+                <div onClick={this.doneButtonHandler}>
+                    <img className={"bottomButton"} src={doneButton}/>
+                </div>
+            : null}
         </div>;
     };
+    private doneButtonHandler = (event: any) => {
+        this.props.appState.brandNewReport = false;
+        this.setState({newReport: false});
+    }
     private createWeatherTable = () => {
         const table = [];
         console.log("currentWeather : " + this.props.appState.currentWeather);
