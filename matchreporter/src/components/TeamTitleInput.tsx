@@ -40,8 +40,8 @@ class TeamTitleInput extends React.Component<ITeamTitleInput, IReportListState> 
 
     public render() {
         const inputActive: boolean = this.props.activityOverride ? this.props.activityOverride : this.state.inputActive;
-        const teamName1:string  = inputActive ? ["teamTitle", "teamTitle1", "teamTitle_input"].join(" ") : ["teamTitle", "teamTitle1"].join(" ");
-        const teamName2:string  = inputActive ? ["teamTitle", "teamTitle2", "teamTitle_input"].join(" ") : ["teamTitle", "teamTitle2"].join(" ");
+        const teamName1:string  = inputActive ? ["teamTitle", "teamTitle1", "value_input"].join(" ") : ["teamTitle", "teamTitle1"].join(" ");
+        const teamName2:string  = inputActive ? ["teamTitle", "teamTitle2", "value_input"].join(" ") : ["teamTitle", "teamTitle2"].join(" ");
         return <div style={inputActive ? this.inputStyle : this.bgStyle} className={"teamNames"}>
             <form onSubmit={this.addTeamName}>
                 <input className={teamName1} value={this.state.title1} onChange={this.handleTeamName1Change} onFocus={this.onTitleFocusIn("title1")} onBlur={this.onTitleFocusOut("title1")}/>

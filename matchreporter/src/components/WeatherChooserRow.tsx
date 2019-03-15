@@ -1,9 +1,8 @@
 import * as React from 'react';
 import '../css/Reports.css';
 
-import arrow from '../img/buttonindicator.png';
-import chosenbg from '../img/chosenRow.png';
-import inputField from '../img/weather_throwcircle.png';
+import bg from '../img/prematch/weatherRow.png';
+import chosenbg from '../img/prematch/weatherRow_chosen.png';
 import { WeatherType, WeatherDescription } from "../model/Weather";
 
 interface IWeatherChooserProps {
@@ -13,14 +12,14 @@ interface IWeatherChooserProps {
 }
 
 class WeatherChooserRow extends React.Component<IWeatherChooserProps, {}> {
-    private chosenStyle = {
-        backgroundImage: `url(${chosenbg})`,
+    private bgStyle = {
+        backgroundImage: `url(${bg})`,
         backgroundPosition: 'center',
         backgroundRepeat  : 'no-repeat',
         // height: "39px",
     };
-    private circleStyle = {
-        backgroundImage: `url(${inputField})`,
+    private bgChosenStyle = {
+        backgroundImage: `url(${chosenbg})`,
         backgroundPosition: 'center',
         backgroundRepeat  : 'no-repeat',
         // height: "39px",
@@ -38,12 +37,13 @@ class WeatherChooserRow extends React.Component<IWeatherChooserProps, {}> {
         } else if (this.props.value === WeatherType.Blizzard) {
             throwSlot = "12";
         }
-        return <div className="weatherChooserRow" style={this.props.chosen ? this.chosenStyle : undefined} onClick={this.props.clickHandler}>
-            <div style={this.circleStyle} className="weatherChooserRowThrow weatherChooserRowtext">
-                {throwSlot}
+        return <div className="weatherChooserRow" style={this.props.chosen ? this.bgChosenStyle : this.bgStyle} onClick={this.props.clickHandler}>
+            <div className="weatherChooserSlot">
+                <div className={this.props.chosen ? "weatherChooserContent weatherChooserValue value_input" : "weatherChooserContent weatherChooserValue"}>
+                    {throwSlot}
+                </div>
+                <div className={this.props.chosen ? "weatherChooserContent weatherChooserDescription value_input" : "weatherChooserContent weatherChooserDescription"}>{WeatherDescription[this.props.value]}</div>
             </div>
-            <img src={arrow} className="weatherChooserRowArrow"/>
-            <div className="weatherChooserRowtext weatherChooserRowDescription">{WeatherDescription[this.props.value]}</div>
         </div>;
     }
 }

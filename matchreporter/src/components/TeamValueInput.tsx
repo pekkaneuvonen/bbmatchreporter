@@ -40,7 +40,7 @@ class TeamValueInput extends React.Component<ITeamValueInput, ITVState> {
 
     public render() {
         const inputActive: boolean = this.props.activityOverride ? this.props.activityOverride : this.state.inputActive;
-        const valueStyles:string  = inputActive ? ["teamValue", "teamValue_input"].join(" ") : "teamValue";
+        const valueStyles:string  = inputActive ? "teamValue value_input" : "teamValue";
 
         return <div style={inputActive ? this.inputStyle : this.bgStyle} className={"teamValues"}>
             <div className="valueContainer">

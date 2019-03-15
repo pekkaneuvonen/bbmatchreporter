@@ -2,11 +2,15 @@ import * as React from 'react';
 import '../css/Prematch.css';
 import { Team } from "../model/Team";
 
-import inducementBG_unset from '../img/prematch/inducements_unset.png';
-import inducementBG1 from '../img/prematch/inducements1.png';
-import inducementBG2 from '../img/prematch/inducements2.png';
-import inducementBG1_input from '../img/prematch/inducements1_input.png';
-import inducementBG2_input from '../img/prematch/inducements2_input.png';
+import inducementValue_unset from '../img/prematch/inducementValueContainerBlank.png';
+import inducementValue1 from '../img/prematch/inducementValueContainer1.png';
+import inducementValue2 from '../img/prematch/inducementValueContainer2.png';
+
+import inducementBG_unset from '../img/prematch/inducementDescription1Blank.png';
+import inducementBG1 from '../img/prematch/inducementDescription1.png';
+import inducementBG2 from '../img/prematch/inducementDescription2.png';
+import inducementBG1_input from '../img/prematch/inducementDescription1_input.png';
+import inducementBG2_input from '../img/prematch/inducementDescription2_input.png';
 
 interface IInducementsInput {
     inducementsValue: string;
@@ -22,31 +26,6 @@ interface IInducementsState {
 
 
 class InducementsInput extends React.Component<IInducementsInput, IInducementsState> {
-    private bgBase = {
-        backgroundImage: `url(${inducementBG_unset})`,
-        backgroundPosition: 'left',
-        backgroundRepeat  : 'no-repeat',
-    };
-    private background1 = {
-        backgroundImage: `url(${inducementBG1})`,
-        backgroundPosition: 'center',
-        backgroundRepeat  : 'no-repeat',
-    };
-    private background2 = {
-        backgroundImage: `url(${inducementBG2})`,
-        backgroundPosition: 'center',
-        backgroundRepeat  : 'no-repeat',
-    };
-    private background1_input = {
-        backgroundImage: `url(${inducementBG1_input})`,
-        backgroundPosition: 'center',
-        backgroundRepeat  : 'no-repeat',
-    };
-    private background2_input = {
-        backgroundImage: `url(${inducementBG2_input})`,
-        backgroundPosition: 'center',
-        backgroundRepeat  : 'no-repeat',
-    };
 
     constructor(props: any) {
         super(props);
@@ -59,19 +38,51 @@ class InducementsInput extends React.Component<IInducementsInput, IInducementsSt
 
     public render() {
         const inputActive: boolean = this.props.activityOverride ? this.props.activityOverride : this.state.inputActive;
-        let bgStyles;
+
+        let valueBGStyles = this.getBackgroundFor(inducementValue_unset);
+        let valueContentStyles = "inducementsValueBlank";
         if (this.props.side === "home") {
-            bgStyles = inputActive ? this.background1_input : this.background1;
+            valueBGStyles = this.getBackgroundFor(inducementValue1);
+            valueContentStyles = "inducementsValue1";
         } else if (this.props.side === "away") {
-            bgStyles = inputActive ? this.background2_input : this.background2;
+            valueBGStyles = this.getBackgroundFor(inducementValue2);
+            valueContentStyles = "inducementsValue2";
         }
 
-        return <div style={this.bgBase} className={"inducementsContainer"}>
-            <div style={bgStyles}>
+        let bgStyles = this.getBackgroundFor(inducementBG_unset);
+        const descriptionStyles:string = inputActive ? "inducementsDescriptionInput value_input" : "inducementsDescriptionInput";
+        if (this.props.side === "home") {
+            bgStyles = this.getBackgroundFor(inputActive ? inducementBG1_input : inducementBG1);
+        } else if (this.props.side === "away") {
+            bgStyles = this.getBackgroundFor(inputActive ? inducementBG2_input : inducementBG2);
+        }
+        
+        
+        console.log("inducementsValue : " + this.props.inducementsValue);
+        console.log("inducementsDescriptions : " + this.props.inducementsDescriptions);
+        console.log("side : " + this.props.side);
+
+        return <div>
+            <div style={valueBGStyles} className="inducementsValueContainer">
+                <div className={valueContentStyles}>{this.props.inducementsValue}</div>
+            </div>
+            <div style={bgStyles} className={"inducementsDescrContainer"}>
+                <textarea name="inducementDescriptions"
+                    className={descriptionStyles}
+                    onChange={this.handleInducementDescriptionChange}
+                    value={this.state.inducementsDescriptions} onFocus={this.onFormFocusIn} onBlur={this.onFormFocusOut}/>
             </div>
         </div>;
     };
+    private getBackgroundFor = (img: any): any => {
+        return {
+            backgroundImage: `url(${img})`,
+            backgroundPosition: 'left',
+            backgroundRepeat  : 'no-repeat',
+        }
+    }
     /*
+
     <div className="inducements">
         <textarea 
             name="homeinducements"
@@ -101,13 +112,15 @@ class InducementsInput extends React.Component<IInducementsInput, IInducementsSt
     private onFormFocusOut = () => {
         this.setState({inputActive: false});
     }
-    private addTeamValue = (event: any) => {
+    /*
+    private addDescriptionValue = (event: any) => {
         event.preventDefault();
         this.props.descriptionsChangeHandler(this.state.inducementsDescriptions);
     }
+    */
     private handleInducementDescriptionChange = (event: any) => {
         this.props.descriptionsChangeHandler(event.target.value);
-        this.setState(event.target.value);
+        this.setState({inducementsDescriptions: event.target.value});
     }
 }
 export default InducementsInput;
