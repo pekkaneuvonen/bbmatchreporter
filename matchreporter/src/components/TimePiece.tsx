@@ -1,16 +1,26 @@
 import * as React from 'react';
 import '../css/Timepiece.css';
 
-import base from '../img/timepiece/base.png';
 import basecenter from '../img/timepiece/baseCenter.png';
-import degrees from '../img/timepiece/degrees.png';
 
 import progresshalf_1 from '../img/timepiece/progresshalf1.png';
 import progresshalf_2 from '../img/timepiece/progresshalf2.png';
 
 import { AppState } from '../model/AppState';
-import resetButton from '../img/timepiece/resetbutton.png';
-import setButton from '../img/timepiece/setbutton.png';
+import resetButton from '../img/timer/resetButton2.png';
+import setButton from '../img/timer/setButton2.png';
+import resetButton_active from '../img/timer/resetButton.png';
+import setButton_active from '../img/timer/setButton.png';
+
+import base from '../img/timer/base.png';
+import degrees from '../img/timer/degrees.png';
+import timepiece from '../img/timer/timepiece.png';
+import paused from '../img/timer/paused.png';
+import timepiece_paused from '../img/timer/timepiece_paused.png';
+import timepiece_setup from '../img/timer/timepiece_setup.png';
+
+
+
 
 const secondInterval: number = 1000;
 const minuteInterval: number = 60000;
@@ -31,6 +41,11 @@ export interface ITimerProps {
   
 
 class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
+    private pausedStyle = {
+        backgroundImage: `url(${paused})`,
+        backgroundPosition: 'center',
+        backgroundRepeat  : 'no-repeat',
+    };
 
     constructor (props:any) {
         super(props);
@@ -58,33 +73,51 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
         clearInterval(this.state.timer);
     }
     public render() {
-        return <div className="timepiece">
+        const timerPaused: boolean = !this.state.ticking || this.props.pauseOverride;
+        const setButtonStyle = {
+            backgroundImage: `url(${setButton})`,
+            backgroundPosition: 'center',
+            backgroundRepeat  : 'no-repeat',
+        };
+        const resetButtonStyle = {
+            backgroundImage: `url(${resetButton})`,
+            backgroundPosition: 'center',
+            backgroundRepeat  : 'no-repeat',
+        };
+        console.log("timerPaused : " + timerPaused);
+        let timerStyles: string = timerPaused ? "timer timer_paused" : "timer";
+
+        return <div className="timerContainer">
             <div className="facecontainer" onClick={this.toggleticking}>
-                <img src={basecenter} className="center"/>
-                <img src={degrees} className="degrees"/>
-                <img src={progresshalf_1} className={"progresshalves"}/>
-                <img src={progresshalf_2} className={"progresshalves"}/>
                 <img src={base} className="base"/>
-                {this.state.timerInput ? 
-                    <form className={"timerinputcontainer"} onSubmit={this.timerValueSubmit}>
-                        <input className={"timerinput"} type="text" pattern="[0-9:]*" value={this.state.time} onChange={this.changeTimerValue}/>
-                    </form>
-                    :
-                    <div className={"timer"}>{this.state.time}</div>
-                }
-                <div className="timerpaused">{this.state.ticking && !this.props.pauseOverride ? "..." : "PAUSED"}</div>
-            </div>
-            <div className="timerbuttons">
-                <button className={"timerbutton resetbutton"}>
-                    <img src={resetButton} onClick={this.resetButtonHandler}/>
-                </button>
-                <button className={"timerbutton setbutton"} onClick={this.setButtonHandler}>
-                    <img src={setButton}/>
-                </button>
+                <img src={degrees} className="degrees"/>
+                <img src={timepiece} className="timepiece"/>
+                <div className="timerinputcontainer">
+                    {this.state.timerInput ? 
+                        <form className={"timerinputcontainer"} onSubmit={this.timerValueSubmit}>
+                            <input className={"timerinput"} type="text" pattern="[0-9:]*" value={this.state.time} onChange={this.changeTimerValue}/>
+                        </form>
+                        :
+                        <div className={timerStyles}>{this.state.time}</div>
+                    }
+                </div>
+                {timerPaused ? <img src={paused} className="timerpaused"/> : null}
+                <div className="timerbuttons">
+                    <button style={resetButtonStyle} className={"timerbutton resetbutton"} onClick={this.resetButtonHandler}/>
+                    <button style={setButtonStyle} className={"timerbutton setbutton"} onClick={this.setButtonHandler}/>
+                </div>
             </div>
         </div>;
     }
-    
+    /*
+    {this.state.timerInput ? 
+        <form className={"timerinputcontainer"} onSubmit={this.timerValueSubmit}>
+            <input className={"timerinput"} type="text" pattern="[0-9:]*" value={this.state.time} onChange={this.changeTimerValue}/>
+        </form>
+        :
+        <div className={"timer"}>{this.state.time}</div>
+    }
+    */
     private changeTimerValue = (event: any) => {
         const newTime: {minutes: number, seconds: number} = this.formatTimerInput(event.target.value);
         const newValue: number = this.getCurrentTimerValueInMilliseconds(newTime.minutes, newTime.seconds);

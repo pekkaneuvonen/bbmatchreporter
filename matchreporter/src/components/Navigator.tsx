@@ -6,6 +6,7 @@ import { IAppProps } from "../App";
 import homeLabel from '../img/navigator/homeButtonLabel.png';
 import homeX from '../img/navigator/homeButtonX.png';
 import matchButton from '../img/navigator/MatchButton.png';
+import buttonChosenBG from '../img/navigator/naviButtonLight.png';
 import matchButtonDiv from '../img/navigator/MatchButtonDiv.png';
 import postmatchButton from '../img/navigator/PostMatchButton.png';
 import prematchButton from '../img/navigator/PreMatchButton.png';
@@ -45,19 +46,19 @@ class Navigator extends React.Component<IAppProps, {}> {
             </div>
             <div className="navigatorContainer">
                 <div className="navigator">
-                    <div style={ this.props.appState.screen === Screens.Prematch ? {backgroundColor: '#DCDAD6'} : {backgroundColor: '#242424'} }>
+                    <div className={ this.props.appState.screen === Screens.Prematch ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
                         <Link to={Screens.Prematch}>
                             <img src={prematchButton}/>
                         </Link>
                     </div>
                     <img src={matchButtonDiv}/>
-                    <div style={ this.props.appState.screen === Screens.Match ? {backgroundColor: '#DCDAD6'} : {backgroundColor: '#242424'} }>
+                    <div className={ this.props.appState.screen === Screens.Match ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
                         <Link to={Screens.Match}>
                             <img src={matchButton}/>
                         </Link>
                     </div>
                     <img src={matchButtonDiv}/>
-                    <div style={ this.props.appState.screen === Screens.Postmatch ? {backgroundColor: '#DCDAD6'} : {backgroundColor: '#242424'} }>
+                    <div className={ this.props.appState.screen === Screens.Postmatch ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
                         <Link to={Screens.Postmatch}>
                             <img src={postmatchButton}/>
                         </Link>

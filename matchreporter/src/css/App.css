@@ -29,6 +29,18 @@ div.navigatorHomebutton {
   height: 32px;
   width: "100%";
 }
+
+.buttonStyles {
+  flex-grow: 1;
+  background: #242424;
+  align-content: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.buttonChosenStyles {
+  background: #DCDAD6;
+}
 /*
 decolines width 1016px, offset 80px
 */

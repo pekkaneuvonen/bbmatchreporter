@@ -5,6 +5,7 @@ import TimePiece from '../components/TimePiece';
 import {Screens} from "../model/AppState";
 import { EventDescription, EventType } from '../model/MatchEvent';
 
+import bgMatch from '../img/backgrounds/GRASS_1PM.jpg';
 import casualtyButton from '../img/buttons/CASUALTY_active.png';
 import completionButton from '../img/buttons/COMPLETION_active.png';
 import goalButton from '../img/buttons/GOAL_active.png';
@@ -13,7 +14,6 @@ import interceptButton from '../img/buttons/INTERCEPT_active.png';
 
 import { Team } from '../model/Team';
 import '../css/Match.css';
-import bgMatch from '../img/backgrounds/match.png';
 
 const bgStyle = {
   backgroundImage: `url(${bgMatch})`
@@ -48,7 +48,9 @@ class Match extends React.Component<IAppProps, IMatchState> {
         }
         return <div className="Match" style={bgStyle}>
             <Navigator appState={this.props.appState}/>
-            <TimePiece appState={this.props.appState} pauseOverride={this.state.eventInputActive} defautlTimerValue={this.props.appState.defaultTimerValue}/>
+            <div className="timerContainer">
+                <TimePiece appState={this.props.appState} pauseOverride={this.state.eventInputActive} defautlTimerValue={this.props.appState.defaultTimerValue}/>
+            </div>
             <div className="eventbuttons">
                 <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Goal)}>
                     <img src={goalButton}/>
