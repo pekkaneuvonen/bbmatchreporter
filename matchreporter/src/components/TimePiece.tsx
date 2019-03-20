@@ -9,7 +9,7 @@ import progresshalf_2 from '../img/timepiece/progresshalf2.png';
 import { AppState } from '../model/AppState';
 import resetButton from '../img/timer/resetButton2.png';
 import setButton from '../img/timer/setButton2.png';
-import resetButton_active from '../img/timer/resetButton.png';
+import resetButton_disabled from '../img/timer/resetButton_disabled.png';
 import setButton_active from '../img/timer/setButton.png';
 
 import base from '../img/timer/base.png';
@@ -29,6 +29,7 @@ interface ItimepieceState {
     // minutes: number,
     // seconds: number,
     ticking: boolean;
+    setupTime: number;
     time: string;
     timer: NodeJS.Timer;
     timerInput: boolean;
@@ -41,11 +42,6 @@ export interface ITimerProps {
   
 
 class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
-    private pausedStyle = {
-        backgroundImage: `url(${paused})`,
-        backgroundPosition: 'center',
-        backgroundRepeat  : 'no-repeat',
-    };
 
     constructor (props:any) {
         super(props);
@@ -64,6 +60,7 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
             // minutes: this.getWholeMinutes(newlySetValue),
             // seconds: this.getWholeSeconds(newlySetValue),
             ticking: false,
+            setupTime: newlySetValue,
             time: this.formatTimerDisplayFromMilliseconds(newlySetValue),
             timer: setInterval(this.setProgress, secondInterval),
             timerInput: false,
@@ -73,29 +70,34 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
         clearInterval(this.state.timer);
     }
     public render() {
-        const timerPaused: boolean = !this.state.ticking || this.props.pauseOverride;
+        const timerPaused: boolean = (!this.state.ticking || this.props.pauseOverride) && !this.state.timerInput;
+        let timerBGsrc: string = timerPaused ? timepiece_paused : timepiece;
+        if (this.state.timerInput) {
+            timerBGsrc = timepiece_setup;
+        }
         const setButtonStyle = {
-            backgroundImage: `url(${setButton})`,
+            backgroundImage: `url(${this.state.timerInput ? setButton_active : setButton})`,
             backgroundPosition: 'center',
             backgroundRepeat  : 'no-repeat',
         };
         const resetButtonStyle = {
-            backgroundImage: `url(${resetButton})`,
+            backgroundImage: `url(${this.state.timerInput ? resetButton_disabled : resetButton})`,
             backgroundPosition: 'center',
             backgroundRepeat  : 'no-repeat',
         };
-        console.log("timerPaused : " + timerPaused);
         let timerStyles: string = timerPaused ? "timer timer_paused" : "timer";
+        const setupValue: string = this.formatTimerDisplayFromMilliseconds(this.state.setupTime);
+        console.log("setupValue : " + setupValue);
 
         return <div className="timerContainer">
             <div className="facecontainer" onClick={this.toggleticking}>
                 <img src={base} className="base"/>
                 <img src={degrees} className="degrees"/>
-                <img src={timepiece} className="timepiece"/>
+                <img src={timerBGsrc} className="timepiece"/>
                 <div className="timerinputcontainer">
                     {this.state.timerInput ? 
-                        <form className={"timerinputcontainer"} onSubmit={this.timerValueSubmit}>
-                            <input className={"timerinput"} type="text" pattern="[0-9:]*" value={this.state.time} onChange={this.changeTimerValue}/>
+                        <form onSubmit={this.timerValueSubmit}>
+                            <input className={"timerinput"} type="text" pattern="[0-9:]*" value={setupValue} onChange={this.changeTimerValue}/>
                         </form>
                         :
                         <div className={timerStyles}>{this.state.time}</div>
@@ -109,25 +111,19 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
             </div>
         </div>;
     }
-    /*
-    {this.state.timerInput ? 
-        <form className={"timerinputcontainer"} onSubmit={this.timerValueSubmit}>
-            <input className={"timerinput"} type="text" pattern="[0-9:]*" value={this.state.time} onChange={this.changeTimerValue}/>
-        </form>
-        :
-        <div className={"timer"}>{this.state.time}</div>
-    }
-    */
+
     private changeTimerValue = (event: any) => {
+        console.log("changeTimerValue");
         const newTime: {minutes: number, seconds: number} = this.formatTimerInput(event.target.value);
         const newValue: number = this.getCurrentTimerValueInMilliseconds(newTime.minutes, newTime.seconds);
-        this.props.appState.setTimerValue = newValue;
-        this.props.appState.currentTimerValue = newValue;
+        // this.props.appState.setTimerValue = newValue;
+        // this.props.appState.currentTimerValue = newValue;
 
         this.setState({
             // minutes: newTime.minutes,
             // seconds: newTime.seconds,
-            time: (newTime.minutes + ":" + (newTime.seconds === 0 ? "00" : newTime.seconds)),
+            setupTime: newValue,
+            time: this.formatTimerDisplayFromMilliseconds(newValue),
         });
     }
 
@@ -139,7 +135,7 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
     }
     private setButtonHandler = (event: any) => {
         if (this.state.timerInput) {
-            this.confirmTimerValueSubmit(-1, -1, this.props.appState.currentTimerValue);
+            this.confirmTimerValueSubmit(-1, -1, this.state.setupTime);
         } else {
             this.setState({ticking: false, timerInput: true});
             this.props.appState.eventsblocked = true;
@@ -147,6 +143,7 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
     }
 
     private confirmTimerValueSubmit(confirmMinutes: number, confirmSeconds:number, value?: number): void {
+        console.log("confirmTimerValueSubmit");
         if (value) {
             confirmMinutes = this.getWholeMinutes(value);
             confirmSeconds = this.getWholeSeconds(value);
@@ -166,17 +163,29 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
         this.setState({
             // minutes: confirmMinutes,
             // seconds: confirmSeconds,
-            time: (confirmMinutes + ":" + (confirmSeconds === 0 ? "00" : confirmSeconds)), 
+            setupTime: newValue,
+            time: this.formatTimerDisplayFromMilliseconds(newValue), 
             timerInput: false,
         });
         this.props.appState.eventsblocked = false;
     }
     private resetButtonHandler = (event: any) => {
+        console.log("resetButtonHandler");
         if (this.state.timerInput) {
-            this.confirmTimerValueSubmit(-1, -1, this.props.appState.currentTimerValue);
+            // this.confirmTimerValueSubmit(-1, -1, this.props.appState.currentTimerValue);
         } else {
             this.props.appState.currentTimerValue = this.props.appState.setTimerValue;
             this.setState({ticking: false, time: this.formatTimerDisplayFromMilliseconds(this.props.appState.setTimerValue)})
+        }
+    }
+    private cancelSetupHandler = (event: any) => {
+        console.log("cancelSetupHandler");
+        if (this.state.timerInput) {
+            this.setState({
+                ticking: false, 
+                setupTime: this.props.appState.setTimerValue,
+                time: this.formatTimerDisplayFromMilliseconds(this.props.appState.setTimerValue)
+            })
         }
     }
     private toggleticking = (event: any) => {
