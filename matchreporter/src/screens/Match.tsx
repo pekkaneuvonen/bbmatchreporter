@@ -6,11 +6,30 @@ import {Screens} from "../model/AppState";
 import { EventDescription, EventType } from '../model/MatchEvent';
 
 import bgMatch from '../img/backgrounds/GRASS_1PM.jpg';
+/*
 import casualtyButton from '../img/buttons/CASUALTY_active.png';
 import completionButton from '../img/buttons/COMPLETION_active.png';
 import goalButton from '../img/buttons/GOAL_active.png';
 import injuryButton from '../img/buttons/INJURY_active.png';
 import interceptButton from '../img/buttons/INTERCEPT_active.png';
+*/
+import eventButtons from '../img/match/eventButtons.png';
+import eventButtons_disabled from '../img/match/eventButtons_disabled.png';
+import eventConfirmButton from '../img/event/confirmButton.png';
+
+import eventTitleDiv from '../img/event/titleDiv.png';
+import teamselectorBG from '../img/event/teamselector.png';
+import playerselectorBG from '../img/event/playerSelector.png';
+import injuredselectorBG from '../img/event/injuredSelector.png';
+import inflictorselectorBG from '../img/event/inflictorSelector.png';
+import injuryselectorBG from '../img/event/injurySelector.png';
+import injuryComboSelectorBG from '../img/event/injuryComboSelector.png';
+import team1Chosen from '../img/event/teamline_chosen1.png';
+import team2Chosen from '../img/event/teamline_chosen2.png';
+import player1Chosen from '../img/event/playerline_chosen1.png';
+import player2Chosen from '../img/event/playerline_chosen2.png';
+import player1ChosenNarrow from '../img/event/playerline_chosenNarrow1.png';
+import player2ChosenNarrow from '../img/event/playerline_chosenNarrow2.png';
 
 import { Team } from '../model/Team';
 import '../css/Match.css';
@@ -38,7 +57,16 @@ class Match extends React.Component<IAppProps, IMatchState> {
             passivePlayer: 0,
         }
     }
-
+    private eventbuttonsBGstyle = {
+        backgroundImage: `url(${eventButtons})`,
+        backgroundPosition: 'center',
+        backgroundRepeat  : 'no-repeat',
+    };
+    private confirmbuttonBGstyle = {
+        backgroundImage: `url(${eventConfirmButton})`,
+        backgroundPosition: 'center',
+        backgroundRepeat  : 'no-repeat',
+    };
     public componentWillMount() {
         this.props.appState.screen = Screens.Match;
     }
@@ -48,30 +76,94 @@ class Match extends React.Component<IAppProps, IMatchState> {
         }
         return <div className="Match" style={bgStyle}>
             <Navigator appState={this.props.appState}/>
+            {this.state.eventInputActive ? 
+                <div className="eventContainer">
+                    <div className="eventContainerBG"/>
+                    <div className="eventTitle">
+                        {EventDescription[this.state.currentEventType]}
+                    </div>
+
+                    <img className="eventTitlediv" src={eventTitleDiv}/>
+                    {this.teamSelector()}
+                    <img className="eventTitlediv" src={eventTitleDiv}/>
+                    {this.playerSelector()}
+
+                    <div className="confirmButtonContainer">
+                        <button style={this.confirmbuttonBGstyle} className="confirmButton" onClick={this.eventCancelHandler}>
+                            CANCEL
+                        </button>
+                        <button style={this.confirmbuttonBGstyle} className="confirmButton" onClick={this.eventDoneHandler}>
+                            DONE
+                        </button>
+                    </div>
+                </div>
+                : null}
             <div className="timerContainer">
                 <TimePiece appState={this.props.appState} pauseOverride={this.state.eventInputActive} defautlTimerValue={this.props.appState.defaultTimerValue}/>
             </div>
-            <div className="eventbuttons">
-                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Goal)}>
-                    <img src={goalButton}/>
-                </button>
-                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Completion)}>
-                    <img src={completionButton}/>
-                </button>
-                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Injury)}>
-                    <img src={injuryButton}/>
-                </button>
-                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Casualty)}>
-                    <img src={casualtyButton}/>
-                </button>
-                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Intercept)}>
-                    <img src={interceptButton}/>
-                </button>
+            <div style={this.eventbuttonsBGstyle} className="eventbuttonContainer">
+                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Completion)}/>
+                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Goal)}/>
+                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Casualty)}/>
+                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Intercept)}/>
+                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Injury)}/>
             </div>
-            {this.state.eventInputActive ? this.eventDetails() : null}
         </div>;
     };
+    private teamSelector = () => {
+        const selectorBG = {
+            backgroundImage: `url(${teamselectorBG})`,
+            backgroundPosition: 'center',
+            backgroundRepeat  : 'no-repeat',
+        };
+        const team1ChosenStyle = this.state.currentSelectedTeam === this.props.appState.report.home ? {
+            backgroundImage: `url(${team1Chosen})`,
+            backgroundPosition: 'center',
+            backgroundRepeat  : 'no-repeat',
+        } as React.CSSProperties
+        : {backgrounnd: "transparent"} as React.CSSProperties;
+        
+        const team2ChosenStyle = this.state.currentSelectedTeam === this.props.appState.report.away ? {
+            backgroundImage: `url(${team2Chosen})`,
+            backgroundPosition: 'center',
+            backgroundRepeat  : 'no-repeat',
+        } as React.CSSProperties
+        : {backgrounnd: "transparent"} as React.CSSProperties;
 
+        return <div style={selectorBG} className="eventTeamSelector">
+            <div className="eventTeamSlot eventTeamSlot1" style={team1ChosenStyle} onClick={this.teamSelectHandler(this.props.appState.report.home)}>
+                {this.props.appState.report.home.name}
+            </div>
+            <div className="eventTeamSlot eventTeamSlot2" style={team2ChosenStyle} onClick={this.teamSelectHandler(this.props.appState.report.away)}>
+                {this.props.appState.report.away.name}
+            </div>
+        </div>;
+    }
+    private playerSelector = () => {
+        const selectorBG = {
+            backgroundImage: `url(${playerselectorBG})`,
+            backgroundPosition: 'center',
+            backgroundRepeat  : 'no-repeat',
+        };
+
+        let playerChosenStyle = {
+            backgroundPosition: 'center',
+            backgroundRepeat  : 'no-repeat',
+        } as React.CSSProperties;
+
+        if (this.state.currentSelectedTeam === this.props.appState.report.home) {
+            playerChosenStyle.backgroundImage = `url(${player1Chosen})`;
+        } else if (this.state.currentSelectedTeam === this.props.appState.report.away) {
+            playerChosenStyle.backgroundImage = `url(${player2Chosen})`;
+        }
+
+        return <div style={selectorBG} className="eventPlayerSelector">
+            <div className="eventTeamSlot eventTeamSlot1" style={playerChosenStyle} onClick={this.teamSelectHandler(this.props.appState.report.home)}>
+                #{this.state.activePlayer}
+            </div>
+        </div>;
+    }
+    
     private eventDetails() {
         const teamStyles: string = "teamSelectorTeam";
         const activeTeamStyles: string = "teamSelectorTeam teamSelectorActiveTeam";
@@ -83,15 +175,8 @@ class Match extends React.Component<IAppProps, IMatchState> {
             <div className="eventTitle">
                 {EventDescription[this.state.currentEventType]}
             </div>
-            <div className="eventInputSeparator"/>
-            <div className="eventInputContainer">
-                <div className="eventInputTeamSelector">
-                    <div className={this.state.currentSelectedTeam === this.props.appState.homeTeam ? activeTeamStyles : teamStyles} onClick={this.teamSelectHandler(this.props.appState.homeTeam)}>{this.props.appState.homeTeam ? this.props.appState.homeTeam.name : "no name"}</div>
-                    <div className={this.state.currentSelectedTeam === this.props.appState.awayTeam ? activeTeamStyles : teamStyles} onClick={this.teamSelectHandler(this.props.appState.awayTeam)}>{this.props.appState.awayTeam ? this.props.appState.awayTeam.name : "no name"}</div>
-                </div>
-                {this.eventInputRow("activePlayer")}
-                {this.state.currentEventType === EventType.Casualty ? this.eventInputRow("passivePlayer") : null}
-            </div>
+            <img className="eventTitlediv" src={eventTitleDiv}/>
+            <div className="eventTeamSelector"/>
             <div className="confirmButtonContainer">
                 <button className="confirmButton" onClick={this.eventDoneHandler}>
                     DONE
@@ -102,6 +187,16 @@ class Match extends React.Component<IAppProps, IMatchState> {
             </div>
         </div>
     }
+/*
+    <div className="eventInputContainer">
+        <div className="eventInputTeamSelector">
+            <div className={this.state.currentSelectedTeam === this.props.appState.homeTeam ? activeTeamStyles : teamStyles} onClick={this.teamSelectHandler(this.props.appState.homeTeam)}>{this.props.appState.homeTeam ? this.props.appState.homeTeam.name : "no name"}</div>
+            <div className={this.state.currentSelectedTeam === this.props.appState.awayTeam ? activeTeamStyles : teamStyles} onClick={this.teamSelectHandler(this.props.appState.awayTeam)}>{this.props.appState.awayTeam ? this.props.appState.awayTeam.name : "no name"}</div>
+        </div>
+        {this.eventInputRow("activePlayer")}
+        {this.state.currentEventType === EventType.Casualty ? this.eventInputRow("passivePlayer") : null}
+    </div>
+*/
     private teamSelectHandler = (team: Team | undefined) => {
         return (event: any) => {
             this.setState({currentSelectedTeam: team});

@@ -6,8 +6,7 @@ import {Screens} from "../model/AppState";
 
 
 import '../css/App.css';
-import bgPostmatch from '../img/backgrounds/postmatch.png';
-import title from '../img/POSTMATCH.png';
+import bgPostmatch from '../img/backgrounds/GRASS_9PM.jpg';
 
 const bgStyle = {
   backgroundImage: `url(${bgPostmatch})`
@@ -20,7 +19,6 @@ class Postmatch extends React.Component<IAppProps, {}> {
     public render() {
         return <div className="App" style={bgStyle}>
             <Navigator appState={this.props.appState}/>
-            <Screentitle src={title}/>
         </div>;
     };
 }

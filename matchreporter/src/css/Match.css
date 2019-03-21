@@ -1,41 +1,122 @@
 .Match {
     background-color: rgb(0, 0, 0);
-  }
+    height: 548pt;
+}
 .timerContainer {
     margin-top: 32px;
     margin: auto;
     width: 302px;
-    margin-left: calc(50% - 292px/2);
+    margin-left: calc(50% - 272px/2);
 }
-.eventbuttons {
+
+.eventbuttonContainer {
+    margin: auto;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 126px;
+    align-content: flex-start;
+    margin-top: 32px;
+    width: 241px;
+    height: 145px;
 }
 .eventbutton {
+    width: 64px;
+    height: 64px;
+    margin-right: 16px;
     background: transparent;
     border: none;
 }
+
+
 .eventContainer {
-    background: black;
-    width: 100%;
-    border: 0px;
-    padding: 0px;
-    margin: 12px;
-    font-family: 'AlteDIN_G', sans-serif;
-    font-weight: 500;
+    position: absolute;
+    z-index: 32;
+    width: 256px;
+    height: 432px;
+    margin-top: 16px;
+    background: #242424;
+    margin-left: calc(50% - 256px/2);
+    font-family: 'Teko', sans-serif;
+    font-weight: 300;
     font-size: 18px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+}
+.eventContainerBG {
+    position: absolute;
+    width: 248px;
+    height: 424px;
+    border: 4px solid;
+    border-color: #F2F0EE;
+    background: transparent;
+    z-index: 33;
 }
 .eventTitle {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    color: white;
+    padding-top: 14px;
+    height: 32px;
+    font-family: 'Bangers', cursive;
+    font-size: 36px;
+    letter-spacing: 1pt;
+    color: #F2F0EE;
     text-align: center;
 }
+.eventTitlediv {
+    width: 240px;
+    margin-left: 8px;
+    margin-top: 0px;
+}
+.eventTeamSelector {
+    height: 118px;
+    width: 256px;
+    margin-top: 8px;
+    background: #242424;
+    margin-bottom: 4px;
+    z-index: 35;
+}
+.eventTeamSlot {
+    position: absolute;
+    height: 32px;
+    width: 256px;
+    padding-top: 4px;
+    font-family: 'Lobster', cursive;
+    font-size: 20px;
+    text-align: center;
+    color: #242424;
+    z-index: 36;
+}
+.eventTeamSlot1 {
+    margin-top: 28px
+}
+.eventTeamSlot2 {
+    margin-top: 83px
+}
+.eventPlayerSelector {
+    height: 81px;
+    width: 256px;
+    margin-top: 8px;
+    background: #242424;
+}
+
+
+
+.confirmButtonContainer {
+    position: absolute;
+    bottom: 0px;
+}
+.confirmButton {
+    width: 128px;
+    height: 56px;
+    border: none;
+    padding: 12px;
+    font-family: 'Teko', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: #242424;
+}
+
+
+
+
+
+
 .eventInputContainer {
     padding-top: 4px;
     padding-bottom: 4px;
@@ -49,22 +130,15 @@
     background: rgb(131, 131, 131);
     height: 1px;
 }
-.eventInputTeamSelector {
-    display: flex;
-    width: 100%;
-    height: 62px;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-}
+
 .teamSelectorTeam {
     width: 50%;
     padding: 12px;
     text-align: center;
     border: none;
     background: transparent;
-    font-family: 'AlteDIN_G', sans-serif;
-    font-weight: 500;
+    font-family: 'Teko', sans-serif;
+    font-weight: 400;
     font-size: 18px;
     color: white;
 }
@@ -89,23 +163,8 @@
     text-align: center;
     border: none;
     background: transparent;
-    font-family: 'AlteDIN_G', sans-serif;
-    font-weight: 500;
+    font-family: 'Teko', sans-serif;
+    font-weight: 400;
     font-size: 18px;
-    color: white;
-}
-.confirmButtonContainer {
-    display: flex;
-    justify-content: space-between;
-}
-.confirmButton {
-    width: calc(50% - 1px);
-    border: none;
-    padding: 10px;
-    font-family: 'AlteDIN_G', sans-serif;
-    font-weight: 500;
-    font-size: 18px;
-    letter-spacing: 2px;
-    background: rgb(225, 80, 230);
     color: white;
 }

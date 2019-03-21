@@ -1,45 +1,119 @@
-.timerContainer {
-    width: 302px;
-}
-.timepiece {
-    margin-top: 0px;
-    width: 302px;
-    position: absolute;
-    background: rgba(0, 0, 0, 0);
-    z-index: 3;
-}
-
-.degrees {
-    position: absolute;
-    margin-top: 0px;
-    z-index: 2;
-}
-.base {
-    position: absolute;
-    margin-top: 0px;
-    z-index: 1;
-}
-
-.facecontainer {
-    width: 302px;
-    margin-top: 28px;
+.timepieceContainer {
+    top: 28px;
     position: relative;
     text-align: center;
     display: flex;
     flex-direction: column;
-    z-index: 11;
     height: 268px;
 }
 
 *:focus {
     outline:none;
 }
+
+
+.facecontainer {
+    position: absolute;
+    margin: 0px;
+    left: 0px;
+    width: 272px;
+    text-align: center;
+}
+.base {
+    position: absolute;
+    margin: 0px;
+    left: 0px;
+}
+.degrees {
+    position: absolute;
+    margin: 0px;
+    left: 0px;
+}
+.face {
+    margin: 0px;
+    left: 0px;
+    width: 302px;
+    position: absolute;
+    background: rgba(0, 0, 0, 0);
+}
+
+.timerTextContainer {
+    font-family: 'Teko', sans-serif;
+    font-weight: 400;
+    font-size: 96px;
+    border: none;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 43px;
+    width: 224px;
+    height: 76px;
+    position: absolute;
+    margin-left: 24px;
+    border: none;
+    margin: none;
+    padding: none;
+}
+
+.timerTextcontent {
+    color: #242424;
+    user-select: none;
+}
+.timerTextcontent_paused {
+    font-size: 80px;
+    margin-top: -16px;
+    color: #9B9B9B;
+}
+
+
+.timerinput {
+    font-family: 'Teko', sans-serif;
+    font-weight: 400;
+    font-size: 96px;
+    border: none;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 30px;
+    width: 224px;
+    height: 76px;
+    color: #F2F0EE;
+    user-select: all;
+    background: transparent;
+}
+
+
+
+.timerpausedGraphics {
+    position: absolute;
+    left: 40px;
+    width: 192px;
+    height: 40px;
+    top: 96px;
+}
+
+
+.cancelbutton {
+    position: relative;
+    width: 192px;
+    height: 48px;
+    border: none;
+    background: transparent;
+    font-family: 'Teko', sans-serif;
+    color: #F2F0EE;
+    font-weight: 400;
+    font-size: 40px;
+    margin-top: 138px;
+    border: none;
+    text-decoration: none;
+    user-select: none;
+}
+
+
+
 .timerbuttons {
     left: 0px;
     margin: 0px;
     width: 272px;
-    position: absolute;
-    top: 25px;
+    margin-top: 25px;
     z-index: 20;
 }
 .timerbutton {
@@ -56,50 +130,5 @@
     float: right;
 }
 
-.timer {
-    color: #242424;
-    z-index: 11;
-    user-select: none;
-}
-.timer_paused {
-    color: #9B9B9B;
-}
-.timerinputcontainer {
-    font-family: 'Teko', sans-serif;
-    font-weight: 400;
-    font-size: 96px;
-    border: none;
-    text-decoration: none;
-    text-align: center;
-    margin-top: 43px;
-    width: 224px;
-    height: 76px;
-    position: absolute;
-    margin-left: 24px;
-    border: none;
-    margin: none;
-    padding: none;
-    z-index: 12;
-}
-.timerinput {
-    font-family: 'Teko', sans-serif;
-    font-weight: 400;
-    font-size: 96px;
-    border: none;
-    text-decoration: none;
-    text-align: center;
-    margin-top: 30px;
-    width: 224px;
-    height: 76px;
-    color: #F2F0EE;
-    z-index: 14;
-    user-select: all;
-    background: transparent;
-}
-.timerpaused {
-    width: 192px;
-    height: 40px;
-    margin-top: 95px;
-    margin-left: 40px;
-    z-index: 13;
-}
+
+
