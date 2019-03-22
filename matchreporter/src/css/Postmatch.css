@@ -1,0 +1,60 @@
+.Postmatch {
+    background-color: rgb(0, 0, 0);
+    height: 548pt;
+}
+.teams {
+    margin: auto;
+    width: 320px;
+    height: 80px;
+    margin-top: 16px;
+    margin-bottom: 0px;
+}
+.reportTeam {
+    position: absolute;
+    font-family: 'Lobster', cursive;
+    font-size: 20px;
+    text-align: center;
+    user-select: none;
+    color: #242424;
+    background: transparent;
+    width: 216px;
+}
+.reportTeam1 {
+    margin-top: 4px;
+    margin-left: 4px;
+}
+.reportTeam2 {
+    margin-top: 32px;
+    margin-left: 100px;
+}
+
+
+.generalTable {
+    margin: auto;
+    width: 320px;
+    margin-top: 0px;
+    height: 244px;
+}
+.reportTable {
+    margin: none;
+    padding: 0px;
+    font-family: 'Teko', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    text-align: center;
+    user-select: none;
+    color: #242424;
+    background: #F2F0EE;
+    width: 76px;
+    height: 31px;
+}
+.gate {
+    margin-left: 164px;
+}
+.tableRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 4px;
+    padding-right: 4px;
+}

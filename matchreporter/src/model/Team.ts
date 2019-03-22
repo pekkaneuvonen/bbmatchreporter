@@ -13,13 +13,16 @@ export class Team {
 
     @observable public teamValue: number;
     @observable public gateValue: number;
-
+    
     // postmatch
     public scorers: Player[] = [];
     public inflicters: Player[] = [];
     public injureds: Player[] = [];
     public completions: Player[] = [];
     public intercepts: Player[] = [];
+    public winnings: number;
+    public fanFactorModifier: number;
+
 
     constructor (props: any) {
         // console.log('new team name: ', props.name);
@@ -31,12 +34,17 @@ export class Team {
         this.inducements = props.inducements ? props.inducements : "-";
         this.fanFactor = props.fanFactor ? props.fanFactor : 0;
         this.gateValue = props.gateValue ? props.gateValue : 0;
+        this.winnings = props.winnings ? props.winnings : 0;
+        this.fanFactorModifier = props.fanFactorModifier ? props.fanFactorModifier : 0;
     }
     public get gateString(): string {
         return new Kvalue(this.gateValue).asString;
     }
     public get tvString(): string {
         return new Kvalue(this.teamValue).asString;
+    }
+    public get winningsString(): string {
+        return new Kvalue(this.winnings).asString;
     }
     /*
     public get sppResults(): Player[] {

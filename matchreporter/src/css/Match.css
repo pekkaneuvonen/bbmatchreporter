@@ -28,6 +28,9 @@
 }
 
 
+/*
+event container base styles
+*/
 .eventContainer {
     position: absolute;
     z-index: 32;
@@ -60,14 +63,26 @@
 .eventTitlediv {
     width: 240px;
     margin-left: 8px;
-    margin-top: 0px;
+    height: 2px;
 }
+
+/*
+team selector styles
+*/
 .eventTeamSelector {
     height: 118px;
     width: 256px;
     margin-top: 8px;
     background: #242424;
-    margin-bottom: 4px;
+    margin-bottom: 9px;
+    z-index: 35;
+}
+.modifiedTeamSelector {
+    height: 118px;
+    width: 256px;
+    margin-top: -4px;
+    background: #242424;
+    margin-bottom: -4px;
     z-index: 35;
 }
 .eventTeamSlot {
@@ -88,17 +103,24 @@
 .eventTeamSlot2 {
     margin-top: 84px
 }
+
+/*
+active player selector styles
+*/
 .eventPlayerSelector {
-    height: 81px;
+    height: 62px;
     width: 256px;
     margin-top: 8px;
 }
+.modifiedPlayerSelector {
+    margin-top: -4px;
+    margin-bottom: -4px;
+}
 .eventPlayerSlot {
     position: absolute;
-    margin-top: 40px;
+    margin-top: 30px;
     height: 32px;
     width: 256px;
-    font-family: 'Teko', sans-serif;
 }
 .eventPlayerInput {
     height: 32px;
@@ -116,7 +138,46 @@
 }
 
 
+/*
+extra selector styles (injured player and injury etc.)
+*/
+.eventAdditionalSelector {
+    height: 84px;
+    width: 256px;
+    margin-top: -4px;
+    margin-bottom: -4px;
+}
+.eventAdditionalSlot {
+    position: absolute;
+    margin-top: 30px;
+    height: 32px;
+    width: 128px;
+    margin-left: 120px;
+}
+.modifiedAdditionalSlot {
+    margin-left: 8px;
+}
+.narrowInput {
+    height: 32px;
+    width: 80px;
+    margin-left: 24px;
+    border: none;
+    font-family: 'Teko', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: #F2F0EE;
+    text-align: center;
+    text-decoration: none;
+    background: transparent;
+    user-select: all;
+}
 
+
+
+
+/*
+event button styles
+*/
 .confirmButtonContainer {
     position: absolute;
     bottom: 0px;
@@ -132,59 +193,3 @@
     color: #242424;
 }
 
-
-
-
-
-
-.eventInputContainer {
-    padding-top: 4px;
-    padding-bottom: 4px;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-}
-.eventInputSeparator {
-    width: 100%;
-    background: rgb(131, 131, 131);
-    height: 1px;
-}
-
-.teamSelectorTeam {
-    width: 50%;
-    padding: 12px;
-    text-align: center;
-    border: none;
-    background: transparent;
-    font-family: 'Teko', sans-serif;
-    font-weight: 400;
-    font-size: 18px;
-    color: white;
-}
-.teamSelectorActiveTeam {
-    background: white;
-    color: black;
-}
-.eventInputRow {
-    margin-left: 12px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-}
-.eventInputLabel {
-    text-align: center;
-    width: 30%;
-}
-.eventInputField {
-    width: 30%;
-    text-align: center;
-    border: none;
-    background: transparent;
-    font-family: 'Teko', sans-serif;
-    font-weight: 400;
-    font-size: 18px;
-    color: white;
-}

@@ -5,6 +5,9 @@ import { Player } from "./Player";
 import { Report } from "./Report";
 import { Team } from "./Team";
 
+import { Reports } from '../services/Reports';
+import { WeatherType, WeatherDescription } from "./Weather";
+
 /**
  * Application state / root state manager.
  */
@@ -44,7 +47,10 @@ export class AppState {
     this.reportsList.push(newReport);
     return newReport;
   }
-
+  public updateWeather = (weather: any) => {
+    this.report.weather[0] = weather;
+    this.updateReport();
+  }
   public addScorer(team: Team, playerNum: string): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
       if (!team.scorers) {
@@ -73,6 +79,8 @@ export class AppState {
       let player: Player = new Player({name: playerNum});
       player.injuries = [new Casualty({D68: injury})];
       team.injureds.push(player);
+
+
     }
   }
 
@@ -103,7 +111,21 @@ export class AppState {
       team.injureds.push(injured);
     }
   }
+
+  public updateReport(): void {
+    console.log("update weather to ", this.report.weather);
+    Reports
+    .update(this.report.id, this.report)
+    .then(changedReport => {
+        console.log(" report on server updated ? :", changedReport);
+    })
+    .catch(error => {
+        console.log(" error on updating current report!");
+    })
+  }
 }
+
+
 
 export enum Screens {
   Home = "/",

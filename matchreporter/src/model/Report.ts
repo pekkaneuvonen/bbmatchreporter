@@ -36,5 +36,23 @@ export class Report {
             this.weather = props.weather;
         }
     }
+    public get fame(): number {
+        let gateDifference: number = 0;
+        if (this.home && this.away) {
+            if (this.home.gateValue > 0 && this.away.gateValue > 0) {
+                if (this.away.gateValue >= this.home.gateValue * 2) {
+                    gateDifference = 2;
+                } else if (this.away.gateValue > this.home.gateValue) {
+                    gateDifference = 1;
+                } else if (this.home.gateValue >= this.away.gateValue * 2) {
+                    gateDifference = -2;
+                } else if (this.home.gateValue > this.away.gateValue) {
+                    gateDifference = -1;
+                }
+            }
+        }
+        return gateDifference;
+    }
+
 }
 export default Report;

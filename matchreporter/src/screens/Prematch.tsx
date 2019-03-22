@@ -143,8 +143,7 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
     private weatherClickHandler = (value: number) => {
         return (event: any) => {
             this.props.appState.currentWeather = WeatherType[value];
-            this.props.appState.report.weather[0] = WeatherType[value];
-            this.updateReport();
+            this.props.appState.updateWeather(WeatherType[value]);
         }
     }
     private get inducementValue(): Kvalue {
@@ -179,7 +178,7 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
         }
         this.props.appState.homeTeam.name = titles.title1;
         this.props.appState.awayTeam.name = titles.title2;
-        this.updateReport();
+        this.props.appState.updateReport();
     }
 
     private handleTeamValueChange = (values: any) => {
@@ -189,14 +188,14 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
 
         this.props.appState.homeTeam.teamValue = StringFormatter.convertKvalueStringToNumeric(values.value1);
         this.props.appState.awayTeam.teamValue = StringFormatter.convertKvalueStringToNumeric(values.value2);
-        this.updateReport();
+        this.props.appState.updateReport();
     }
 
     private inducementDescriptionChange = () => {
         return (description: string) => {
             // console.log(" update inducementDescriptionChange : " + description);
             this.inducedSide.inducements = description;
-            this.updateReport();
+            this.props.appState.updateReport();
         }
     }
     private handleTeamGateChange = (gates: any) => {
@@ -219,18 +218,8 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
         }
         this.props.appState.report.totalGateValue = this.props.appState.homeTeam.gateValue + this.props.appState.awayTeam.gateValue;
         this.props.appState.report.totalGate = new Kvalue(this.props.appState.report.totalGateValue);
-        this.updateReport();
+        this.props.appState.updateReport();
     }
-    private updateReport(): void {
-        console.log("update weather to ", this.props.appState.report.weather);
-        Reports
-        .update(this.props.appState.report.id, this.props.appState.report)
-        .then(changedReport => {
-            console.log(" report on server updated ? :", changedReport);
-        })
-        .catch(error => {
-            console.log(" error on updating current report!");
-        })
-    }
+
 }
 export default Prematch;
