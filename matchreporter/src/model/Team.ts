@@ -20,12 +20,17 @@ export class Team {
     public injureds: Player[] = [];
     public completions: Player[] = [];
     public intercepts: Player[] = [];
-    public winnings: number;
-    public fanFactorModifier: number;
+    public winnings: string;
+    public fanFactorModifier: string;
+    public mvp: string;
+    public improvements: Player[] = [];
 
 
     constructor (props: any) {
-        // console.log('new team name: ', props.name);
+        console.log('new team name: ', props.name);
+        console.log('props.winnings: ', props.winnings);
+        console.log('props.fanFactorModifier: ', props.fanFactorModifier);
+        console.log('props.mvp: ', props.mvp);
         
         this.name = props.name;
         this.teamValue = props.teamValue ? props.teamValue : 0;
@@ -34,8 +39,9 @@ export class Team {
         this.inducements = props.inducements ? props.inducements : "-";
         this.fanFactor = props.fanFactor ? props.fanFactor : 0;
         this.gateValue = props.gateValue ? props.gateValue : 0;
-        this.winnings = props.winnings ? props.winnings : 0;
-        this.fanFactorModifier = props.fanFactorModifier ? props.fanFactorModifier : 0;
+        this.winnings = props.winnings ? props.winnings : "-";
+        this.fanFactorModifier = props.fanFactorModifier ? props.fanFactorModifier : "-";
+        this.mvp = props.mvp ? props.mvp : "-";
     }
     public get gateString(): string {
         return new Kvalue(this.gateValue).asString;
@@ -43,8 +49,14 @@ export class Team {
     public get tvString(): string {
         return new Kvalue(this.teamValue).asString;
     }
-    public get winningsString(): string {
-        return new Kvalue(this.winnings).asString;
+    public get badlyHurts():number {
+        return 0;
+    }
+    public get seriousInjuries():number {
+        return 0;
+    }
+    public get kills():number {
+        return 0;
     }
     /*
     public get sppResults(): Player[] {

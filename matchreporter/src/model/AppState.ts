@@ -113,7 +113,6 @@ export class AppState {
   }
 
   public updateReport(): void {
-    console.log("update weather to ", this.report.weather);
     Reports
     .update(this.report.id, this.report)
     .then(changedReport => {

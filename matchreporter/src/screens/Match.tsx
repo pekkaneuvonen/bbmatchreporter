@@ -264,6 +264,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
     }
 
     private addInjuryValue = (event: any) => {
+        event.preventDefault();
         console.log("addInjuryValue ", event.target.value);
         this.insertInjury(event.target.value);
     }
@@ -289,6 +290,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
     }
 
     private addPassivePlayerValue = (event: any) => {
+        event.preventDefault();
         console.log("addPassivePlayerValue ", event.target.value);
         this.insertPassivePlayer(event.target.value);
     }
@@ -306,6 +308,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
         })
     }
     private addActivePlayerValue = (event: any) => {
+        event.preventDefault();
         console.log("addPlayerValue ", event.target.value);
         this.insertActivePlayer(event.target.value);
     }

@@ -76,7 +76,7 @@ class ReportsList extends React.Component<{appState: AppState, openReport: (repo
             </div>;
         } else {
             return <ul className="reportList">
-                {this.props.appState.reportsList.map(
+                {this.props.appState.reportsList.slice(0).reverse().map(
                     (report) => {
                         const teamBgStyle = {
                             backgroundImage: `url(${reportBox})`,
