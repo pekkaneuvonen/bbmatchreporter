@@ -47,6 +47,8 @@
 .reportControls {
   width: 80px;
   z-index: 9;
+  user-select: none;
+  text-decoration: none;
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
@@ -62,6 +64,7 @@
   font-weight: 500;
   font-size: 21px;
   text-decoration: none;
+  user-select: none;
   opacity: 0.5;
 }
 .reportDateSlot {
@@ -81,6 +84,7 @@
   width: 232px;
   display: flex;
   user-select: none;
+  text-decoration: none;
   justify-content: space-evenly;
   flex-direction: column;
 }
@@ -94,6 +98,7 @@
   font-family: 'Lobster', cursive;
   font-size: 22pt;
   text-decoration: none;
+  user-select: none;
   text-align: center;
 }
 .teamRowName {

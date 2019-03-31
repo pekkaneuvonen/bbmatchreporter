@@ -178,7 +178,7 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
         this.props.appState.eventsblocked = false;
     }
     private resetButtonHandler = (event: any) => {
-        if (this.state.timerInput) {
+        if (!this.state.timerInput) {
             this.props.appState.currentTimerValue = this.props.appState.setTimerValue;
             this.setState({ticking: false, time: this.formatTimerDisplayFromMilliseconds(this.props.appState.setTimerValue)})
         }

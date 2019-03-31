@@ -17,20 +17,16 @@ import reportBoxChosen from '../img/load/reportChosen.png';
 // import { Team } from "../model/Team";
 
 // tslint:disable:no-console
-interface IReportListState {
-    inputTitle1: string;
-    inputTitle2: string;
-}
 
 @observer
-class ReportsList extends React.Component<{appState: AppState, openReport: (report: Report) => void}, IReportListState> {
-    constructor(props: any) {
+class ReportsList extends React.Component<{
+    appState: AppState, 
+    active: boolean,
+    openReport: (report: Report) => void
+    deleteReport: (report: Report) => void}> {
+    
+        constructor(props: any) {
         super(props);
-
-        this.state = {
-            inputTitle1: "",
-            inputTitle2: ""
-        };
     }
     
     public componentWillMount() {
@@ -42,27 +38,11 @@ class ReportsList extends React.Component<{appState: AppState, openReport: (repo
                 console.log(error);
             });
         */
-        Reports
-            .getReports()
-            .then(this.buildReportList)
-            .catch(error => {
-                console.log(error);
-        });
     }
 
+
     public render() {
-        /*
-        let chooserHeight: number;
-        if (this.props.appState.reportsList && this.props.appState.reportsList.length > 0) {
-            chooserHeight = 500;
-        } else {
-            chooserHeight = window.innerHeight - this.props.yPos;
-        }
-        const bgStyle = {
-            backgroundImage: `url(${bgActive})`,
-            height: chooserHeight,
-        };
-        */
+        console.log(this.props.appState.reportsList ? this.props.appState.reportsList.length : "no reports")
         return (
             <div id="container" className="reportChooser">
                 {this.listContent()}
@@ -87,7 +67,7 @@ class ReportsList extends React.Component<{appState: AppState, openReport: (repo
                         const openStyles = ["reportOpenSlot", "controlRow"]
                         const deleteStyles = ["reportDeleteSlot", "controlRow"]
 
-                        if (this.props.appState.report && report.id === this.props.appState.report.id) {
+                        if (this.props.appState.selectedReport && report.id === this.props.appState.selectedReport.id) {
                             teamBgStyle.backgroundImage = `url(${reportBoxChosen})`;
                             teamBgStyle.color = "#F2F0EE";
                             openStyles.push("enabledControls");
@@ -133,154 +113,32 @@ class ReportsList extends React.Component<{appState: AppState, openReport: (repo
             </ul>
         }
     }
-    /*
 
-                            return <Link key={report.id} 
-                            to={Screens.Prematch} 
-                            style={{textDecoration: "none"}}>
-                            <div style={teamBgStyle} className="reportRow">
-                                <div className="reportSlot">
-                                    <div className="reportDate">
-                                        {report.date ? StringFormatter.formatDate(report.date) : "unknown date"}
-                                    </div>
-                                    <div className="reportTeams" 
-                                        onClick={this.reportClicked(report.id)}>
-                                        <div className="teamName">
-                                            {report.home.name}
-                                        </div>
-                                        <div className="teamName">
-                                            {report.away.name}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </Link>
-
-
-                        
-    private toggleReportDetails = (listType: string) => {
-        console.log("listType " + listType);
-        if (listType === "new") {
-            const defaultTitle1: string = "team 1";
-            const defaultTitle2: string = "team 2";
-
-            return <div>
-                <TeamTitleInput 
-                    titleChangeHandler={this.handleTeamNameChange} 
-                    title1Default={defaultTitle1} 
-                    title2Default={defaultTitle2} 
-                    activityOverride={true}/>
-                <Link to={Screens.Prematch}>
-                    <div onClick={this.createReport("go")}>
-                        <img className={"bottomButton"} src={readyBtn}/>
-                    </div>
-                </Link>
-            </div>
-        } else if (listType === "load") {
-            if (!this.props.appState.reportsList || this.props.appState.reportsList.length < 1) {
-                return <div className="no_reportList">No reports in database.</div>
-            } else {
-                return <ul className="reportList">
-                    {this.props.appState.reportsList.map(
-                        (report) => {
-                            const teamBgStyle = {
-                                backgroundImage: `url(${(this.props.appState.report && report.id === this.props.appState.report.id) ? activeTeamsField : teamsField})`,
-                                backgroundPosition: 'center',
-                                backgroundRepeat  : 'no-repeat'
-                            };
-                            const titleStyles: string[] = ["teamTitle", "reportRowSlot"];
-                            if (this.props.appState.report && report.id === this.props.appState.report.id) {
-                                titleStyles.push("newTeamTitle");
-                            }
-                            return <Link key={report.id} 
-                                to={Screens.Prematch} 
-                                style={{textDecoration: "none"}}>
-                                <div style={teamBgStyle} className="reportRow">
-                                    <div className="reportDate">
-                                        {StringFormatter.formatDate(report.date)}
-                                    </div>
-                                    <div className="teamsRow" 
-                                        onClick={this.reportClicked(report.id)}>
-                                        <div className={titleStyles.join(' ')}>
-                                            {report.home.name}
-                                        </div>
-                                        <div className={titleStyles.join(' ')}>
-                                            {report.away.name}
-                                        </div>
-                                    </div>
-                                </div>
-                            </Link>
-                        }
-                    )}
-                </ul>
-            }
-        } else {
-            return <div className="no_reportList">
-                        Create new report or load from archive. 
-                    </div>;
-        }
-    }
-    */
-
-    /*
-    private updateReport = (tempId: string, report: Report) => {
-        console.log("updating report ", tempId, report);
-        const updatedReport = this.props.appState.reportsList.find(r => r.id === tempId);
-        if (updatedReport) {
-            updatedReport.date = report.date;
-            updatedReport.id = report.id;
-        }
-    }
-    */
-    private buildReportList = (reportsData: object[]) => {
-        // console.log("complete reports data : ", reportsData);
-        this.props.appState.reportsList = reportsData.map(data => {
-            return new Report(data);
-        })
-        console.log("parsed reportList ", this.props.appState.reportsList)
-    }
-    /*
-    private handleTeamNameChange = (titles: any) => {
-        this.setState({inputTitle1: titles.title1, inputTitle2: titles.title2})
-    }
-    private createReport = (message: string) => {
-        return () => {
-            if (this.state.inputTitle1 && this.state.inputTitle2) {
-                if (!this.props.appState.createdReportsCount) {
-                    this.props.appState.createdReportsCount = 0;
-                }
-                const reportTempId: string = "temp_created_report" + this.props.appState.createdReportsCount;
-                this.props.appState.createdReportsCount++;
-
-                const homeTeam: Team = new Team({name: this.state.inputTitle1});
-                const awayTeam: Team = new Team({name: this.state.inputTitle2});
-                const reportTemplate: Report = new Report({id:reportTempId, title:reportTempId, home:homeTeam, away:awayTeam});
-                this.props.appState.reportsList.push(reportTemplate);
-                
-                this.openReport(reportTemplate);
-
-                Reports
-                .createReport(reportTemplate)
-                .then((newReport: Report) => {
-                    this.updateReport(reportTempId, newReport);
-                  });
-            }
-        };
-    }
-    */
     private reportClicked = (reportId: string) => {
         return () => {
-            const report = this.props.appState.reportsList.find(r => r.id === reportId);
-            if (report) {
-                 this.props.openReport(report);
+            if (this.props.active) {
+                const report = this.props.appState.reportsList.find(r => r.id === reportId);
+                if (report) {
+                    console.log("reportClicked : ", report.id);
+                    console.log("currently selected : ", this.props.appState.selectedReport ? (this.props.appState.selectedReport.id === report.id) : "no selection");
+                    if (this.props.appState.selectedReport
+                    && this.props.appState.selectedReport.id === report.id) {
+                        this.props.openReport(report);
+                    } else {
+                        this.props.appState.selectedReport = report;
+                    }
+                }
             }
         }
     }
     private deleteClicked = (reportId: string) => {
         return () => {
-            const report = this.props.appState.reportsList.find(r => r.id === reportId);
-            if (report && this.props.appState.report === report) {
-                console.log("delete report ? " + reportId);
+            if (this.props.active) {
+                const report = this.props.appState.reportsList.find(r => r.id === reportId);
+                if (report && this.props.appState.selectedReport === report) {
+                    console.log("delete report ? " + reportId);
+                    this.props.deleteReport(report);
+                }
             }
         }
     }

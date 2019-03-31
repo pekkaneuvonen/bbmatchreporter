@@ -50,7 +50,8 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
         this.props.appState.screen = Screens.Prematch;
     }
     public render() {
-        if (!this.props.appState.homeTeam || !this.props.appState.awayTeam) {
+        if (!this.props.appState.homeTeam || !this.props.appState.awayTeam
+        || this.props.appState.report.id === "empty") {
             window.location.href = "/";
         }
 

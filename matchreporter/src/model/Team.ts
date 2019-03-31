@@ -27,11 +27,12 @@ export class Team {
 
 
     constructor (props: any) {
+        /*
         console.log('new team name: ', props.name);
         console.log('props.winnings: ', props.winnings);
         console.log('props.fanFactorModifier: ', props.fanFactorModifier);
         console.log('props.mvp: ', props.mvp);
-        
+        */
         this.name = props.name;
         this.teamValue = props.teamValue ? props.teamValue : 0;
         this.rerolls = props.rerolls ? props.rerolls : 0;

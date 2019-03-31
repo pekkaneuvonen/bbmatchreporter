@@ -22,6 +22,7 @@ export class AppState {
   public createdReportsCount: number = 0;
   @observable public currentWeather: string = "";
   
+  @observable public selectedReport: Report | undefined;
   @observable public report!: Report;
   @observable public homeTeam!: Team;
   @observable public awayTeam!: Team;

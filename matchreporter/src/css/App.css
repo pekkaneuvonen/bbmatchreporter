@@ -29,6 +29,12 @@ div.navigatorHomebutton {
   height: 32px;
   width: "100%";
 }
+.version {
+  font-family: 'Teko', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+  width: 160px;
+}
 
 .buttonStyles {
   flex-grow: 1;
@@ -66,75 +72,68 @@ button.newReport_button {
 }
 
 
-
-
-*:focus {
-  outline:none;
-}
-
-div.mainChooser {
+.alertBlock {
+  height: 100%;
   width: 100%;
-  height: 124px;
-  margin-top: 12px;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 32;
 }
-.parallelChooserCircles {
+.deleteAlert {
+  width: 256px;
+  margin: auto;
+  margin-top: 50%;
+  border: 8px solid;
+  border-color: #242424;
+  background: #F2F0EE;
+}
+
+.alertTitle {
+  font-family: 'Teko', sans-serif;
+  font-weight: 500;
+  font-size: 48px;
+  color: #242424;
+  text-align: center;
+  margin-top: 8px;
+}
+.alertMessage {
+  font-family: 'Teko', sans-serif;
+  font-weight: 300;
+  font-size: 24px;
+  color: #242424;
+  text-align: left;
+  margin-top: 8px;
+  margin-left: 12px;
+  width: 232px;
+}
+.alertTeam {
+  font-family: 'Teko', sans-serif;
+  font-weight: 500;
+  font-size: 32px;
+}
+.alertButtons {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-}
-
-.circlecontainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-Index: 0;
-}
-.circlecontainer59_input {
-  font-family: 'AlteDIN_G', sans-serif;
-  align-content: center;
-  text-align: center;
+  margin-top: 24px;
+  font-family: 'Teko', sans-serif;
   font-weight: 500;
-  font-size: 16px;
-  color: #FFFFFF;
-  background: rgba(0, 0, 0, 0);
-  border: 0px;
-  height: 59px;
-  width: 59px;
-}
-.circlecontainer79_input {
-  font-family: 'AlteDIN_G', sans-serif;
-  align-content: center;
+  font-size: 32px;
+  color: #F2F0EE;
   text-align: center;
-  font-weight: 600;
-  font-size: 18px;
-  background: rgba(0, 0, 0, 0);
-  border: 0px;
-  height: 79px;
-  width: 79px;
 }
-.circlecontainer89_button {
-  font-family: 'AlteDIN_G', sans-serif;
-  align-content: center;
-  font-weight: 600;
-  font-size: 18px;
-  background: rgba(0, 0, 0, 0);
-  border: 0px;
-  height: 89px;
-  width: 89px;
+.alertButton {
+  flex-grow: 1;
+  width: 100px;
+  margin: 2px;
+  height: 44px;
+  padding-top: 2px;
+  background: #242424;
 }
-.circlecontainer_arrow {
-  margin-top: -6px;
-  height: 42px;
-  width: 20px;
-}
-div.propcircle {
-  font-family: 'AlteDIN_G', sans-serif;
-  font-size: 19px;
-  font-weight: bold;
-  color: #FFFFFF;
+.alertOkButton {
+  margin-right: 0px;
 }
 
-.frontpage {
-  width: 320px;
-  text-align: center;
+*:focus {
+  outline:none;
 }

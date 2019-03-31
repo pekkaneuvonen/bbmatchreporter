@@ -14,14 +14,14 @@ export class Report {
 
     constructor (props: any) {
 
-        console.log('initialising report : ', props.title);
+        // console.log('initialising report : ', props.title);
         this.id = props.id;
         this.title = props.title;
         this.home = new Team(props.home);
         this.away = new Team(props.away);
 
         if (props.date) {
-            console.log(' date ', props.date);
+            // console.log(' date ', props.date);
             this.date = new Date(props.date)
             // console.log(' day ', this.date.getDate());
         }
@@ -31,7 +31,6 @@ export class Report {
         } catch (error) {
             console.log(' unable to calculate report totalGate.');
         }
-        console.log('new report weather: ', props.weather);
         if (props.weather) {
             this.weather = props.weather;
         }

@@ -71,7 +71,8 @@ class Match extends React.Component<IAppProps, IMatchState> {
         this.props.appState.screen = Screens.Match;
     }
     public render() {
-        if (!this.props.appState.homeTeam || !this.props.appState.awayTeam) {
+        if (!this.props.appState.homeTeam || !this.props.appState.awayTeam
+        || this.props.appState.report.id === "empty") {
             window.location.href = "/";
         }
         return <div className="Match" style={bgStyle}>

@@ -1,33 +1,28 @@
 .Prematch {
-    background: rgba(0, 0, 0, 0);
+    background-color: rgb(0, 0, 0);
 }
 .teamtitles {
     margin: auto;
     width: 340px;
-    margin-left: calc(50% - 320/2);
     margin-top: 5px;
 }
 .teamTVs {
     margin: auto;
     width: 340px;
-    margin-left: calc(50% - 320/2);
 }
 .inducementsContainer {
     margin: auto;
     width: 340px;
     height: 289px;
-    margin-left: calc(50% - 320/2);
 }
 .gateContainer {
     margin: auto;
     width: 340px;
-    margin-left: calc(50% - 320/2);
 }
 .weatherChooserContainer {
     margin: auto;
     width: 340px;
     margin-top: 28px;
-    margin-left: calc(50% - 320/2);
 }
 
 
@@ -69,8 +64,8 @@
 .teamValue {
     border: 0px;
     width: 112px;
-    height: 32px;
-    margin-top: 8px;
+    top: 0px;
+    margin-top: 4px;
     background: rgba(0, 0, 0, 0);
     font-family: 'Teko', sans-serif;
     font-weight: 500;

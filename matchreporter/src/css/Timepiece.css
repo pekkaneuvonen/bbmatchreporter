@@ -38,23 +38,23 @@
 }
 
 .timerTextContainer {
-    font-family: 'Teko', sans-serif;
-    font-weight: 400;
-    font-size: 96px;
-    border: none;
-    text-decoration: none;
-    text-align: center;
-    margin-top: 43px;
-    width: 224px;
+    top: 43px;
     height: 76px;
     position: absolute;
-    margin-left: 24px;
+    left: 24px;
     border: none;
     margin: none;
     padding: none;
 }
 
 .timerTextcontent {
+    font-family: 'Teko', sans-serif;
+    font-weight: 400;
+    font-size: 96px;
+    border: none;
+    text-decoration: none;
+    text-align: center;
+    width: 224px;
     color: #242424;
     user-select: none;
 }
@@ -72,9 +72,7 @@
     border: none;
     text-decoration: none;
     text-align: center;
-    margin-top: 30px;
     width: 224px;
-    height: 76px;
     color: #F2F0EE;
     user-select: all;
     background: transparent;

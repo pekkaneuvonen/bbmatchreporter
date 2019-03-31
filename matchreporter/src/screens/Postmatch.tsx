@@ -49,7 +49,8 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
         this.props.appState.screen = Screens.Postmatch;
     }
     public render() {
-        if (!this.props.appState.homeTeam || !this.props.appState.awayTeam) {
+        if (!this.props.appState.homeTeam || !this.props.appState.awayTeam
+        || this.props.appState.report.id === "empty") {
             window.location.href = "/";
         }
 
