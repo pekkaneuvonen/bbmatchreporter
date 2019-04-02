@@ -97,7 +97,6 @@ class Match extends React.Component<IAppProps, IMatchState> {
                         null
                     }
 
-
                     <div className="confirmButtonContainer">
                         <button style={this.confirmbuttonBGstyle} className="confirmButton" onClick={this.eventCancelHandler}>
                             CANCEL
@@ -162,7 +161,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
             backgroundRepeat  : 'no-repeat',
         };
         let bgStyles: string = "eventPlayerSelector";
-        let slotStyles: string = "eventPlayerSlot";
+        let slotStyles: string = "eventPlayerSlot force-select";
 
         if (this.state.currentEventType === EventType.Casualty) {
             selectorBG.backgroundImage = `url(${inflicterselectorBG})`;
@@ -187,11 +186,13 @@ class Match extends React.Component<IAppProps, IMatchState> {
         return <div style={selectorBG} className={bgStyles}>
             <div className={slotStyles} style={chosenPlayerStyle} >
                 <form onSubmit={this.addActivePlayerValue}>
-                    <input className="eventPlayerInput" type="text" pattern="[0-9:]*" value={this.state.activePlayer} onChange={this.handleActivePlayerChange} />
+                    <input className="eventPlayerInput force-select" type="text" value={this.state.activePlayer} onChange={this.handleActivePlayerChange} />
                 </form>
             </div>
         </div>;
     }
+
+
     private additionalSelector = () => {
         const selectorBG = {
             backgroundImage: `url(${injuryselectorBG})`,
@@ -207,11 +208,11 @@ class Match extends React.Component<IAppProps, IMatchState> {
         let narrowStyles: boolean = false;
         let bgStyles: string = "eventAdditionalSelector";
         let slotStyles: string = "eventPlayerSlot";
-        let injuryInput: string = "eventPlayerInput";
+        let injuryInput: string = "eventPlayerInput force-select";
         if (this.state.currentEventType === EventType.Casualty) {
             selectorBG.backgroundImage = `url(${injuryComboSelectorBG})`;
             slotStyles = "eventAdditionalSlot";
-            injuryInput = "narrowInput";
+            injuryInput = "narrowInput force-select";
             narrowStyles = true;
         }
 
@@ -226,14 +227,14 @@ class Match extends React.Component<IAppProps, IMatchState> {
             {this.state.currentEventType === EventType.Casualty ? 
                 <div className="eventAdditionalSlot modifiedAdditionalSlot" style={passivePlayerStyle} >
                     <form onSubmit={this.addPassivePlayerValue}>
-                        <input className={"narrowInput"} type="text" pattern="[0-9:]*" value={this.state.passivePlayer} onChange={this.handlePassivePlayerChange} />
+                        <input className={"narrowInput force-select"} type="text" value={this.state.passivePlayer} onFocus={this.selectorOnFocus} onChange={this.handlePassivePlayerChange} />
                     </form>
                 </div>
                 : null
             }
             <div className={slotStyles} style={passivePlayerStyle} >
                 <form onSubmit={this.addInjuryValue}>
-                    <input className={injuryInput} type="text" pattern="[0-9:]*" value={this.state.currentInjuryThrow} onChange={this.handleInjuryChange} />
+                    <input className={injuryInput} type="text" value={this.state.currentInjuryThrow} onChange={this.handleInjuryChange} />
                 </form>
             </div>
         </div>;
@@ -249,7 +250,12 @@ class Match extends React.Component<IAppProps, IMatchState> {
     </div>
     */
 
-
+    private selectorOnFocus = (event: any) => {
+        console.log("selectorOnFocus");
+    }
+    private selectorOutFocus = (event: any) => {
+        console.log("selectorOutFocus");
+    }
     private teamSelectHandler = (team: Team | undefined) => {
         return (event: any) => {
             this.setState({currentSelectedTeam: team});

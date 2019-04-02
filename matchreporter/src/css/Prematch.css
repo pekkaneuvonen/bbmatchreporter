@@ -163,6 +163,7 @@
     font-weight: 500;
     font-size: 24px;
     text-align: center;
+    user-select: none;
     color: #242424;
 }
 .fameEven {
@@ -195,19 +196,23 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    user-select: none;
     color: #242424;
 }
 .weatherChooserContent {
     height: 32px;
     padding-top: 12px;
+    user-select: none;
 }
 .weatherChooserValue {
     text-align: center;
     padding-left: 32px;
+    user-select: none;
     width: 48px;
 }
 .weatherChooserDescription {
     text-align: left;
+    user-select: none;
     width: 136px;
     padding-right: 16px;
 }

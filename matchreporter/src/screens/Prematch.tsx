@@ -131,7 +131,7 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
     }
     private createWeatherTable = () => {
         const table = [];
-        console.log("currentWeather : " + this.props.appState.currentWeather);
+        // console.log("currentWeather : " + this.props.appState.currentWeather);
 
         const weatherTypeCount: number = Object.keys(WeatherType).length / 2
         for (let i = 0; i < weatherTypeCount; i++) {
