@@ -74,7 +74,7 @@ class ReportsList extends React.Component<{
                             deleteStyles.push("enabledControls");
                         }
 
-                        return <div key={report.id} style={teamBgStyle} className="reportRow">
+                        return <div key={report.id} style={teamBgStyle} className="reportContainer">
                             <div className="reportSlot">
                                 <div className="reportControls">
                                     <div className={dateStyles.join(" ")}>
@@ -89,21 +89,20 @@ class ReportsList extends React.Component<{
                                 </div>
                                 <div className="reportTeams" 
                                     onClick={this.reportClicked(report.id)}>
-                                    <div className="teamRow">
-                                        <div className="teamRowName">
-                                            {report.home.name}
-                                        </div>
-                                        <div className="teamRowScore">
-                                            {report.home.scorers.length}
-                                        </div>
+                                    <div className="reportRow teamRow">
+                                        {report.home.name}
                                     </div>
-                                    <div className="teamRow">
-                                        <div className="teamRowName">
-                                            {report.away.name}
-                                        </div>
-                                        <div className="teamRowScore">
-                                            {report.away.scorers.length}
-                                        </div>
+                                    <div className="reportRow teamRow">
+                                        {report.away.name}
+                                    </div>
+                                </div>
+                                <div className="reportScore"
+                                    onClick={this.reportClicked(report.id)}>
+                                    <div className="reportRow scoreRow">
+                                        {report.home.scorers.length}
+                                    </div>
+                                    <div className="reportRow scoreRow">
+                                        {report.away.scorers.length}
                                     </div>
                                 </div>
                             </div>

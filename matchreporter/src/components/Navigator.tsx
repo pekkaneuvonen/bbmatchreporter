@@ -38,31 +38,23 @@ class Navigator extends React.Component<IAppProps, {}> {
 
         return (
         <div style={ this.navbarStyle }>
-            <div className="navigatorHomebutton">
-                <Link to='/'>
-                        <img src={homeLabel}/>
-                        <img style={{right: "0px"}} src={homeX}/>
-                </Link>
-            </div>
+            <Link to='/' className="navigatorHomebutton">
+                    <img className="img_centered" src={homeLabel}/>
+                    <img style={{right: "0px"}} src={homeX}/>
+            </Link>
             <div className="navigatorContainer">
                 <div className="navigator">
-                    <div className={ this.props.appState.screen === Screens.Prematch ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
-                        <Link to={Screens.Prematch}>
-                            <img src={prematchButton}/>
-                        </Link>
-                    </div>
+                    <Link to={Screens.Prematch} className={ this.props.appState.screen === Screens.Prematch ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
+                        <img className="img_centered" src={prematchButton}/>
+                    </Link>
                     <img src={matchButtonDiv}/>
-                    <div className={ this.props.appState.screen === Screens.Match ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
-                        <Link to={Screens.Match}>
-                            <img src={matchButton}/>
-                        </Link>
-                    </div>
+                    <Link to={Screens.Match} className={ this.props.appState.screen === Screens.Match ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
+                        <img className="img_centered" src={matchButton}/>
+                    </Link>
                     <img src={matchButtonDiv}/>
-                    <div className={ this.props.appState.screen === Screens.Postmatch ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
-                        <Link to={Screens.Postmatch}>
-                            <img src={postmatchButton}/>
-                        </Link>
-                    </div>
+                    <Link to={Screens.Postmatch} className={ this.props.appState.screen === Screens.Postmatch ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
+                        <img className="img_centered" src={postmatchButton}/>
+                    </Link>
                 </div>
             </div>
         </div>

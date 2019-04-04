@@ -40,7 +40,9 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean}> {
 
         return <div className="App" style={bgStyle}>
             <Screentitle src={title}/>
-            <img className="decorativeLines" src={decolines}/>
+            <div className="decorativeLines">
+                <img className="linesImage" src={decolines}/>
+            </div>
             <div className="version">version 0.39</div>
             <div className="newRepcontainer">
                 <NewReportButton source={newButton} onClickHandler={this.createNewReport}/>
@@ -131,6 +133,7 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean}> {
         this.props.appState.homeTeam = emptyReport.home;
         this.props.appState.awayTeam = emptyReport.away;
         this.props.appState.currentWeather = "null";
+        this.props.appState.currentTimerProgress = 0;
     }
     private getEmptyReport = () => {
         return new Report({title:"", id:"empty", home:new Team(""), away:new Team("")})

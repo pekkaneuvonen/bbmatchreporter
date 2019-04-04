@@ -61,7 +61,10 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
         } else if (this.inducedSide === this.props.appState.awayTeam) {
             induced = "away";
         }
-        let inducementString:string = "+" + this.inducementValue.asString;
+        let inducementString:string = "";
+        if (this.inducementValue.asString !== "-") {
+            inducementString = "+" + this.inducementValue.asString;
+        }
 
 
         /*

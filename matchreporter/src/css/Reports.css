@@ -26,7 +26,7 @@
   left: 0px;
   width: 320px;
 }
-.reportRow {
+.reportContainer {
   margin-left: 0px;
   left: 0px;
   color: #242424;
@@ -39,7 +39,7 @@
   left: 0px;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
   user-select: none;
   height: 80px;
   width: 320px;
@@ -80,32 +80,51 @@
   opacity: 1;
   color: #242424;
 }
+.reportRow {
+
+}
 .reportTeams {
-  width: 232px;
   display: flex;
+  user-select: none;
+  text-decoration: none;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 208px;
+}
+.teamRow {
+  height: 40px;
+  padding-left: 4px;
+  padding-right: 4px;
+  line-height: 36px;
+  font-family: 'Lobster', cursive;
+  font-size: 20pt;
+  text-decoration: none;
+  user-select: none;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.reportScore {
+  display: flex;
+  width: 32px;
   user-select: none;
   text-decoration: none;
   justify-content: space-evenly;
   flex-direction: column;
 }
-.teamRow {
+.scoreRow {
   height: 40px;
   padding-left: 0px;
   padding-top: 0px;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
   font-family: 'Lobster', cursive;
-  font-size: 22pt;
+  font-size: 20pt;
   text-decoration: none;
   user-select: none;
   text-align: center;
-}
-.teamRowName {
-  width: 184px;
-}
-.teamRowScore {
-  width: 48px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 

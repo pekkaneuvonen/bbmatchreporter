@@ -47,14 +47,14 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
         super(props);
         let newlySetValue: number = props.defautlTimerValue ? props.defautlTimerValue : 0;
 
-        console.log("timePiece constructor : ", this.props.appState.setTimerValue, this.props.appState.currentTimerValue);
-        if (!this.props.appState.setTimerValue) {
-            this.props.appState.setTimerValue = newlySetValue;
+        console.log("timePiece constructor : ", this.props.appState.setTimerTotal, this.props.appState.currentTimerProgress);
+        if (!this.props.appState.setTimerTotal) {
+            this.props.appState.setTimerTotal = newlySetValue;
         }
-        if (!this.props.appState.currentTimerValue) {
-            this.props.appState.currentTimerValue = newlySetValue;
+        if (!this.props.appState.currentTimerProgress) {
+            this.props.appState.currentTimerProgress = this.props.appState.setTimerTotal;
         } else {
-            newlySetValue = this.props.appState.currentTimerValue;
+            newlySetValue = this.props.appState.currentTimerProgress;
         }
         this.state = {
             // minutes: this.getWholeMinutes(newlySetValue),
@@ -164,8 +164,8 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
         }
 
         const newValue: number = this.getCurrentTimerValueInMilliseconds(confirmMinutes, confirmSeconds);
-        this.props.appState.setTimerValue = newValue;
-        this.props.appState.currentTimerValue = newValue;
+        this.props.appState.setTimerTotal = newValue;
+        this.props.appState.currentTimerProgress = newValue;
 
         this.setState({
             // minutes: confirmMinutes,
@@ -179,8 +179,8 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
     }
     private resetButtonHandler = (event: any) => {
         if (!this.state.timerInput) {
-            this.props.appState.currentTimerValue = this.props.appState.setTimerValue;
-            this.setState({ticking: false, time: this.formatTimerDisplayFromMilliseconds(this.props.appState.setTimerValue)})
+            this.props.appState.currentTimerProgress = this.props.appState.setTimerTotal;
+            this.setState({ticking: false, time: this.formatTimerDisplayFromMilliseconds(this.props.appState.setTimerTotal)})
         }
     }
     private cancelSetupHandler = (event: any) => {
@@ -188,7 +188,7 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
             this.setState({
                 ticking: false, 
                 timerInput: false,
-                setupTime: this.props.appState.setTimerValue,
+                setupTime: this.props.appState.setTimerTotal,
             });
             this.props.appState.eventsblocked = false;
         }
@@ -212,13 +212,13 @@ class TimePiece extends React.Component<ITimerProps, ItimepieceState> {
     }
     private setProgress = () => {
         if (this.state.ticking && !this.props.pauseOverride) {
-            if (this.props.appState.currentTimerValue > 0) {
-                let newValue: number = this.props.appState.currentTimerValue - secondInterval;
+            if (this.props.appState.currentTimerProgress > 0) {
+                let newValue: number = this.props.appState.currentTimerProgress - secondInterval;
                 if (newValue < 0) {
                     newValue = 0;
                 }
                 const newTime: string = this.formatTimerDisplayFromMilliseconds(newValue);
-                this.props.appState.currentTimerValue = newValue;
+                this.props.appState.currentTimerProgress = newValue;
                 this.setState({
                     time: newTime,
                 })
