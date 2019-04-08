@@ -1,13 +1,13 @@
 import { observable } from "mobx";
-import { Casualty } from "./Injury";
+import { Injury } from "./Injury";
 
 export class Player {
     public name: number;
     @observable public goals: number = 0;
-    @observable public casualties: Casualty[] = [];
+    @observable public casualties: number[] = [];
     @observable public completions: number = 0;
     @observable public intercepts: number = 0;
-    @observable public injuries: Casualty[] = [];
+    @observable public injuries: number[] = [];
 
     constructor (props: any) {
         this.name = props.name;

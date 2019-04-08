@@ -78,7 +78,7 @@ export class AppState {
         team.injureds = [];
       }
       let player: Player = new Player({name: playerNum});
-      player.injuries = [injury];
+      player.injuries = [injury.effect];
       team.injureds.push(player);
 
     }

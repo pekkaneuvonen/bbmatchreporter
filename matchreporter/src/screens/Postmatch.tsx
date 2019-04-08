@@ -123,29 +123,29 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                 <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.completionsString}</div>
             </div>
             <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.scorers.length}</div>
+                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.scorersString}</div>
                 <div className="reportTableField">TD</div>
-                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.scorers.length}</div>
+                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.scorersString}</div>
             </div>
             <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.intercepts.length}</div>
+                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.interceptsString}</div>
                 <div className="reportTableField">INT</div>
-                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.intercepts.length}</div>
+                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.interceptsString}</div>
             </div>
             <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.badlyHurts}</div>
+                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.badlyHurtsString}</div>
                 <div className="reportTableField">BH</div>
-                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.badlyHurts}</div>
+                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.badlyHurtsString}</div>
             </div>
             <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.seriousInjuries}</div>
+                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.seriousInjuriesString}</div>
                 <div className="reportTableField">SI</div>
-                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.seriousInjuries}</div>
+                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.seriousInjuriesString}</div>
             </div>
             <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.kills}</div>
+                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.killsString}</div>
                 <div className="reportTableField">Kill</div>
-                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.kills}</div>
+                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.killsString}</div>
             </div>
             </div>
         </div>;

@@ -269,14 +269,12 @@ class Match extends React.Component<IAppProps, IMatchState> {
 
     
     private handleInjuryChange = (event: any) => {
-        console.log("handleInjuryChange :", event.target.value);
         this.setState({
             currentInjuryThrow: event.target.value,
         });
     }
     private addInjuryValue = (event: any) => {
         event.preventDefault();
-        console.log("addInjuryValue ", event.target.value);
         // this.insertInjury(event.target.value);
         this.setState({
             currentInjuryThrow: event.target.value,
@@ -291,14 +289,12 @@ class Match extends React.Component<IAppProps, IMatchState> {
     }
 
     private handlePassivePlayerChange = (event: any) => {
-        console.log("handlePassivePlayerChange :", event.target.value);
         this.setState({
             passivePlayer: event.target.value,
         });
     }
     private addPassivePlayerValue = (event: any) => {
         event.preventDefault();
-        console.log("addPassivePlayerValue ", event.target.value);
         // this.insertPassivePlayer(event.target.value);
         this.setState({
             passivePlayer: event.target.value,
@@ -307,14 +303,12 @@ class Match extends React.Component<IAppProps, IMatchState> {
     
 
     private handleActivePlayerChange = (event: any) => {
-        console.log("handleActivePlayerChange :", event.target.value);
         this.setState({
             activePlayer: event.target.value,
         });
     }
     private addActivePlayerValue = (event: any) => {
         event.preventDefault();
-        console.log("addPlayerValue ", event.target.value);
         // this.insertActivePlayer(event.target.value);
         this.setState({
             activePlayer: event.target.value,

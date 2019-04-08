@@ -12,71 +12,80 @@ export class Injury {
         // this.effect = this.getEffect(this.D68);
     }
     public get type(): string {
-        if (this.D68 < 60 && this.D68 >= 40) {
+        return Injury.getType(this.D68);
+    }
+    public static getType(D68: number): string {
+        if (D68 < 60 && D68 >= 40) {
             return CasualtyType.SeriousInjury;
-        } else if (this.D68 >= 60) {
+        } else if (D68 >= 60) {
             return CasualtyType.Kill;
         } else {
             return CasualtyType.BadlyHurt;
         }
     }
     public get effect(): string {
-        if (this.D68 < 41) {
+        return Injury.getEffect(this.D68);
+    }
+    public static getEffect(D68: number): string {
+        if (D68 < 41) {
             return InjuryEffect.BH;
-        } else if (this.D68 < 51) {
+        } else if (D68 < 51) {
             return InjuryEffect.MNG;
-        } else if (this.D68 < 53) {
+        } else if (D68 < 53) {
             return InjuryEffect.NigglingInjury;
-        } else if (this.D68 < 55) {
+        } else if (D68 < 55) {
             return InjuryEffect.MovementBust;
-        } else if (this.D68 < 57) {
+        } else if (D68 < 57) {
             return InjuryEffect.ArmorBust;
-        } else if (this.D68 === 57) {
+        } else if (D68 === 57) {
             return InjuryEffect.AgilityBust;
-        } else if (this.D68 < 60) {
+        } else if (D68 < 60) {
             return InjuryEffect.StrengthBust;
-        } else if (this.D68 >= 60 && this.D68 < 69) {
+        } else if (D68 >= 60 && D68 < 69) {
             return InjuryEffect.Dead;
         } else {
             return InjuryEffect.BH;
         }
     }
     public get result(): string {
-        if (this.D68 < 41) {
+        return Injury.getResult(this.D68);
+    }
+    public static getResult(D68: number): string {
+        if (D68 < 41) {
             return InjuryDescription.BadlyHurt;
-        } else if (this.D68 === 41) {
+        } else if (D68 === 41) {
             return InjuryDescription.BrokenRibs;
-        } else if (this.D68 === 42) {
+        } else if (D68 === 42) {
             return InjuryDescription.GroinStrain;
-        } else if (this.D68 === 43) {
+        } else if (D68 === 43) {
             return InjuryDescription.GougedEye;
-        } else if (this.D68 === 44) {
+        } else if (D68 === 44) {
             return InjuryDescription.BrokenJaw;
-        } else if (this.D68 === 45) {
+        } else if (D68 === 45) {
             return InjuryDescription.FracturedArm;
-        } else if (this.D68 === 46) {
+        } else if (D68 === 46) {
             return InjuryDescription.FracturedLeg;
-        } else if (this.D68 === 47) {
+        } else if (D68 === 47) {
             return InjuryDescription.SmashedHand;
-        } else if (this.D68 < 51) {
+        } else if (D68 < 51) {
             return InjuryDescription.PinchedNerve;
-        } else if (this.D68 === 51) {
+        } else if (D68 === 51) {
             return InjuryDescription.DamagedBack;
-        } else if (this.D68 === 52) {
+        } else if (D68 === 52) {
             return InjuryDescription.SmashedKnee;
-        } else if (this.D68 === 53) {
+        } else if (D68 === 53) {
             return InjuryDescription.SmashedHip;
-        } else if (this.D68 === 54) {
+        } else if (D68 === 54) {
             return InjuryDescription.SmashedAnkle;
-        } else if (this.D68 === 55) {
+        } else if (D68 === 55) {
             return InjuryDescription.SeriousConcussion;
-        } else if (this.D68 === 56) {
+        } else if (D68 === 56) {
             return InjuryDescription.FracturedSkull;
-        } else if (this.D68 === 57) {
+        } else if (D68 === 57) {
             return InjuryDescription.BrokenNeck;
-        } else if (this.D68 < 60) {
+        } else if (D68 < 60) {
             return InjuryDescription.SmashedCollarBone;
-        } else if (this.D68 >= 60 && this.D68 < 69) {
+        } else if (D68 >= 60 && D68 < 69) {
             return InjuryDescription.Dead;
         } else {
             return "-";
