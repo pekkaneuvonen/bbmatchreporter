@@ -59,6 +59,15 @@ export class Team {
     public get kills():number {
         return 0;
     }
+    public get completionsString(): string {
+        console.log("get completionsString ", this.completions.length);
+        let cString: string = "";
+        for (let i = 0; i < this.completions.length; i++) {
+            console.log("add ", this.completions[i]);
+            cString = cString.concat(this.completions[i].toString());
+        }
+        return cString;
+    }
     /*
     public get sppResults(): Player[] {
         const sppList: Player[] = [];

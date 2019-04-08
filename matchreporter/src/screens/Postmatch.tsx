@@ -118,9 +118,9 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                     </div>
                 </div>
             <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.completions.length}</div>
+                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.completionsString}</div>
                 <div className="reportTableField">CP</div>
-                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.completions.length}</div>
+                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.completionsString}</div>
             </div>
             <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
                 <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.scorers.length}</div>

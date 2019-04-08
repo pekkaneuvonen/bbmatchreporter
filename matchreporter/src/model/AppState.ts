@@ -1,6 +1,6 @@
 import { observable } from "mobx";
 import { Kvalue } from "../types/Kvalue";
-import { Casualty } from "./Casualty";
+import { Injury } from "./Injury";
 import { Player } from "./Player";
 import { Report } from "./Report";
 import { Team } from "./Team";
@@ -72,15 +72,14 @@ export class AppState {
     }
   }
 
-  public addInjury(team: Team, playerNum: string, injury: number): void {
+  public addInjury(team: Team, playerNum: string, injury: Injury): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
       if (!team.injureds) {
         team.injureds = [];
       }
       let player: Player = new Player({name: playerNum});
-      player.injuries = [new Casualty({D68: injury})];
+      player.injuries = [injury];
       team.injureds.push(player);
-
 
     }
   }
@@ -95,20 +94,20 @@ export class AppState {
     }
   }
 
-  public addCasualty(team: Team, inflicterNum: string, injuredNum: string, injury: number): void {
+  public addCasualty(team: Team, inflicterNum: string, injuredNum: string, injury: Injury): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
       if (!team.inflicters) {
         team.inflicters = [];
       }
       let inflicter: Player = new Player({name: inflicterNum});
-      inflicter.casualties = [new Casualty({D68: injury})];
+      inflicter.casualties = [injury.type];
       team.inflicters.push(inflicter);
       
       if (!team.injureds) {
         team.injureds = [];
       }
       let injured: Player = new Player({name: injuredNum});
-      injured.injuries = [new Casualty({D68: injury})];
+      injured.injuries = [injury.effect];
       team.injureds.push(injured);
     }
   }

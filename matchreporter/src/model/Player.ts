@@ -1,5 +1,5 @@
 import { observable } from "mobx";
-import { Casualty } from "./Casualty";
+import { Casualty } from "./Injury";
 
 export class Player {
     public name: number;

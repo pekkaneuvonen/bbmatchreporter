@@ -32,6 +32,7 @@ import player1ChosenNarrow from '../img/event/playerline_chosenNarrow1.png';
 import player2ChosenNarrow from '../img/event/playerline_chosenNarrow2.png';
 
 import { Team } from '../model/Team';
+import { Injury } from '../model/Injury';
 import '../css/Match.css';
 
 const bgStyle = {
@@ -227,16 +228,20 @@ class Match extends React.Component<IAppProps, IMatchState> {
             {this.state.currentEventType === EventType.Casualty ? 
                 <div className="eventAdditionalSlot modifiedAdditionalSlot" style={passivePlayerStyle} >
                     <form onSubmit={this.addPassivePlayerValue}>
-                        <input className={"narrowInput force-select"} type="text" value={this.state.passivePlayer} onFocus={this.selectorOnFocus} onChange={this.handlePassivePlayerChange} />
+                        <input className={"narrowInput force-select"} type="text" value={this.state.passivePlayer} onFocus={this.selectorOnFocus} onBlur={this.selectorOutFocus} onChange={this.handlePassivePlayerChange} />
                     </form>
                 </div>
                 : null
             }
             <div className={slotStyles} style={passivePlayerStyle} >
                 <form onSubmit={this.addInjuryValue}>
-                    <input className={injuryInput} type="text" value={this.state.currentInjuryThrow} onChange={this.handleInjuryChange} />
+                    <input className={injuryInput} type="text" value={this.state.currentInjuryThrow} onFocus={this.selectorOnFocus} onBlur={this.selectorOutFocus} onChange={this.handleInjuryChange} />
                 </form>
             </div>
+            {this.currentInjury ? 
+                <div className="injuryDescription">{`${this.currentInjury.result} : ${this.currentInjury.effect}`}</div>
+                : "-"
+            }
         </div>;
     }
     /*
@@ -262,30 +267,26 @@ class Match extends React.Component<IAppProps, IMatchState> {
         }
     }
 
-
+    
     private handleInjuryChange = (event: any) => {
         console.log("handleInjuryChange :", event.target.value);
         this.setState({
             currentInjuryThrow: event.target.value,
-        })
+        });
     }
-
     private addInjuryValue = (event: any) => {
         event.preventDefault();
         console.log("addInjuryValue ", event.target.value);
-        this.insertInjury(event.target.value);
+        // this.insertInjury(event.target.value);
+        this.setState({
+            currentInjuryThrow: event.target.value,
+        });
     }
-    private insertInjury = (injury: number) => {
-        console.log("insertInjury ", injury);
-        if (this.state.currentSelectedTeam) {
-            switch (this.state.currentEventType) {
-                case EventType.Casualty:
-                    this.props.appState.addCasualty(this.state.currentSelectedTeam, this.state.activePlayer, this.state.passivePlayer, injury)
-                    break;
-                case EventType.Injury:
-                    this.props.appState.addInjury(this.state.currentSelectedTeam, this.state.activePlayer, injury)
-                    break;
-            }
+    private get currentInjury(): Injury | null {
+        if (this.state.currentInjuryThrow) {
+            return new Injury({D68: this.state.currentInjuryThrow});
+        } else {
+            return null;
         }
     }
 
@@ -293,32 +294,62 @@ class Match extends React.Component<IAppProps, IMatchState> {
         console.log("handlePassivePlayerChange :", event.target.value);
         this.setState({
             passivePlayer: event.target.value,
-        })
+        });
     }
-
     private addPassivePlayerValue = (event: any) => {
         event.preventDefault();
         console.log("addPassivePlayerValue ", event.target.value);
-        this.insertPassivePlayer(event.target.value);
+        // this.insertPassivePlayer(event.target.value);
+        this.setState({
+            passivePlayer: event.target.value,
+        });
     }
-    private insertPassivePlayer = (player: string) => {
-        console.log("insertPassivePlayer ", player);
-        if (this.state.currentSelectedTeam && this.state.currentEventType === EventType.Casualty) {
-            this.props.appState.addCasualty(this.state.currentSelectedTeam, this.state.activePlayer, player, this.state.currentInjuryThrow)
-        }
-    }
+    
 
     private handleActivePlayerChange = (event: any) => {
         console.log("handleActivePlayerChange :", event.target.value);
         this.setState({
             activePlayer: event.target.value,
-        })
+        });
     }
     private addActivePlayerValue = (event: any) => {
         event.preventDefault();
         console.log("addPlayerValue ", event.target.value);
-        this.insertActivePlayer(event.target.value);
+        // this.insertActivePlayer(event.target.value);
+        this.setState({
+            activePlayer: event.target.value,
+        });
     }
+
+
+
+
+/*
+    private insertInjury = (injury: number) => {
+        console.log("insertInjury ", injury);
+        if (this.state.currentSelectedTeam
+        && this.state.activePlayer && this.state.passivePlayer
+        && this.currentInjury) {
+            switch (this.state.currentEventType) {
+                case EventType.Casualty:
+                    this.props.appState.addCasualty(this.state.currentSelectedTeam, this.state.activePlayer, this.state.passivePlayer, this.currentInjury)
+                    break;
+                case EventType.Injury:
+                    this.props.appState.addInjury(this.state.currentSelectedTeam, this.state.activePlayer, this.currentInjury)
+                    break;
+            }
+        }
+    }
+
+
+
+    private insertPassivePlayer = (player: string) => {
+        console.log("insertPassivePlayer ", player);
+        if (this.state.currentSelectedTeam && this.state.currentEventType === EventType.Casualty && this.currentInjury) {
+            this.props.appState.addCasualty(this.state.currentSelectedTeam, this.state.activePlayer, player, this.currentInjury)
+        }
+    }
+
     private insertActivePlayer = (player: string) => {
         console.log("insertActivePlayer ", player);
         if (this.state.currentSelectedTeam) {
@@ -341,7 +372,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
             }
         }
     }
-
+*/
     private eventInputHandlerFactory = (eventTargetProperty: string) => {
         return (event: any) => {
             const property: string = eventTargetProperty;
@@ -369,10 +400,14 @@ class Match extends React.Component<IAppProps, IMatchState> {
                     this.props.appState.addThrower(this.state.currentSelectedTeam, this.state.activePlayer);
                     break;
                 case EventType.Casualty:
-                    this.props.appState.addCasualty(this.state.currentSelectedTeam, this.state.activePlayer, this.state.passivePlayer, this.state.currentInjuryThrow);
+                    if (this.currentInjury) {
+                        this.props.appState.addCasualty(this.state.currentSelectedTeam, this.state.activePlayer, this.state.passivePlayer, this.currentInjury);
+                    }
                     break;
                 case EventType.Injury:
-                    this.props.appState.addInjury(this.state.currentSelectedTeam, this.state.activePlayer, this.state.currentInjuryThrow);
+                    if (this.currentInjury) {
+                        this.props.appState.addInjury(this.state.currentSelectedTeam, this.state.activePlayer, this.currentInjury);
+                    }
                     break;
                 case EventType.Intercept:
                     this.props.appState.addIntercept(this.state.currentSelectedTeam, this.state.activePlayer);

@@ -180,6 +180,25 @@ extra selector styles (injured player and injury etc.)
     z-index: 42;
 }
 
+.injuryDescription {
+    position: relative;
+    height: 18px;
+    width: 256px;
+    margin: 0px;
+    top: 64px;
+    border: none;
+    font-family: 'Teko', sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    color: #F2F0EE;
+    text-align: center;
+    text-decoration: none;
+    -moz-user-select: none;
+    background: transparent;
+    user-select: none;
+    z-index: 45;
+}
+
 
 /*
 event button styles
