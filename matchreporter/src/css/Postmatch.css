@@ -124,13 +124,13 @@
     width: 116px;
 }
 
-.improvements {
+.improvementTable {
+    margin: auto;
+    width: 320px;
     margin-top: 16px;
 }
-.improvementLine {
-    height: 32px;
-    width: 320px;
-    margin: auto;
+.improvementRowField1 {
+    color: #242424;
 }
 .improvementAddLine {
     cursor: pointer;
@@ -139,3 +139,33 @@
     margin: auto;
 }
 
+/*
+.tableRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 8px;
+    height: 32px;
+    width: 302px;
+}
+.reportTableInputSlot {
+    margin: none;
+    padding: 0px;
+    background: transparent;
+    width: 72px;
+}
+.reportTableInputField {
+    margin: none;
+    border: none;
+    padding: 0px;
+    font-family: 'Teko', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    text-align: center;
+    user-select: all;
+    color: #F2F0EE;
+    background: transparent;
+    width: 72px;
+    height: 31px;
+}
+*/

@@ -175,11 +175,23 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     };
 
     private improvementTable = () => {
-
-        return <div className="improvements">
+//    improvementLines: {home: Player | undefined, away: Player | undefined}[],
+        return <div className="improvementTable">
          {this.state.improvementLines.length > 0 ?
-            this.state.improvementLines.map((awayImprovement: {home: Player | undefined, away: Player | undefined}, index) => {
-                return <div key={index} style={this.getBackgroundFor(improvementRow)} className="improvementLine">
+            this.state.improvementLines.map((improvements: {home: Player | undefined, away: Player | undefined}, index) => {
+                const homeline: string = improvements.home ? improvements.home.improvementLine : "-";
+                const awayline: string = improvements.away ? improvements.away.improvementLine : "-";
+                return <div key={index} style={this.getBackgroundFor(improvementRow)} className="tableRow">
+                    <div className="achievementInputSlot">
+                        <form onSubmit={this.addMVPHandler(this.props.appState.homeTeam)}>
+                            <input className="reportTableInputField reportAchievementField1 improvementRowField1" type="text" value={homeline} onChange={this.changeMVPHandle(this.props.appState.homeTeam)} />
+                        </form>
+                    </div>
+                    <div className="achievementInputSlot achievementInputSlot2">
+                        <form onSubmit={this.addMVPHandler(this.props.appState.awayTeam)}>
+                            <input className="reportTableInputField reportAchievementField2 improvementRowField1" type="text" value={awayline} onChange={this.changeMVPHandle(this.props.appState.awayTeam)} />
+                        </form>
+                    </div>
                 </div>
             })
             : null}

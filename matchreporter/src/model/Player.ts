@@ -1,4 +1,5 @@
 import { observable } from "mobx";
+import { Improvement } from "./Improvement";
 
 export class Player {
     public name: number;
@@ -11,5 +12,9 @@ export class Player {
 
     constructor (props: any) {
         this.name = props.name;
+    }
+
+    public get improvementLine(): string {
+        return this.name + ":" + Improvement.getImprovementType(this.improvement);
     }
 }
