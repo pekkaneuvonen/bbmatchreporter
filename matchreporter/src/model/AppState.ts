@@ -52,63 +52,67 @@ export class AppState {
     this.report.weather[0] = weather;
     this.updateReport();
   }
-  public addScorer(team: Team, playerNum: string): void {
+  public addScorer(team: Team, playerNum: number): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
       if (!team.scorers) {
         team.scorers = [];
       }
-      let player: Player  = new Player({name: playerNum});
-      team.scorers.push(player);
+      // let player: Player  = new Player({name: playerNum});
+      team.scorers.push(playerNum);
+      this.updateReport();
     }
   }
 
-  public addThrower(team: Team, playerNum: string): void {
+  public addThrower(team: Team, playerNum: number): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
       if (!team.completions) {
         team.completions = [];
       }
-      let player: Player = new Player({name: playerNum});
-      team.completions.push(player);
+      // let player: Player = new Player({name: playerNum});
+      team.completions.push(playerNum);
+      this.updateReport();
     }
   }
 
-  public addInjury(team: Team, playerNum: string, injury: Injury): void {
+  public addInjury(team: Team, playerNum: number, injuryNum: number): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
       if (!team.injureds) {
         team.injureds = [];
       }
       let player: Player = new Player({name: playerNum});
-      player.injuries = [injury.effect];
+      player.injury = injuryNum;
       team.injureds.push(player);
-
+      this.updateReport();
     }
   }
 
-  public addIntercept(team: Team, playerNum: string): void {
+  public addIntercept(team: Team, playerNum: number): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
       if (!team.intercepts) {
         team.intercepts = [];
       }
-      let player: Player = new Player({name: playerNum});
-      team.intercepts.push(player);
+      // let player: Player = new Player({name: playerNum});
+      team.intercepts.push(playerNum);
+      this.updateReport();
     }
   }
 
-  public addCasualty(team: Team, inflicterNum: string, injuredNum: string, injury: Injury): void {
+  public addCasualty(team: Team, inflicterNum: number, injuredNum: number, injuryNum: number): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
       if (!team.inflicters) {
         team.inflicters = [];
       }
       let inflicter: Player = new Player({name: inflicterNum});
-      inflicter.casualties = [injury.type];
+      inflicter.casualty = injuryNum;
       team.inflicters.push(inflicter);
-      
+
       if (!team.injureds) {
         team.injureds = [];
       }
       let injured: Player = new Player({name: injuredNum});
-      injured.injuries = [injury.effect];
+      injured.injury = injuryNum;
       team.injureds.push(injured);
+      this.updateReport();
     }
   }
 

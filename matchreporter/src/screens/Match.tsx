@@ -34,6 +34,7 @@ import player2ChosenNarrow from '../img/event/playerline_chosenNarrow2.png';
 import { Team } from '../model/Team';
 import { Injury } from '../model/Injury';
 import '../css/Match.css';
+import { number } from 'prop-types';
 
 const bgStyle = {
   backgroundImage: `url(${bgMatch})`
@@ -41,7 +42,7 @@ const bgStyle = {
 interface IMatchState {
     activePlayer: string,
     passivePlayer: string,
-    currentInjuryThrow: number,
+    currentInjuryThrow: string,
     eventInputActive: boolean,
     currentEventType: EventType,
     currentSelectedTeam?: Team,
@@ -53,7 +54,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
         this.state = {
             activePlayer: "-",
             currentEventType: 0,
-            currentInjuryThrow: 0,
+            currentInjuryThrow: "-",
             eventInputActive: false,
             passivePlayer: "-",
         }
@@ -317,56 +318,6 @@ class Match extends React.Component<IAppProps, IMatchState> {
 
 
 
-
-/*
-    private insertInjury = (injury: number) => {
-        console.log("insertInjury ", injury);
-        if (this.state.currentSelectedTeam
-        && this.state.activePlayer && this.state.passivePlayer
-        && this.currentInjury) {
-            switch (this.state.currentEventType) {
-                case EventType.Casualty:
-                    this.props.appState.addCasualty(this.state.currentSelectedTeam, this.state.activePlayer, this.state.passivePlayer, this.currentInjury)
-                    break;
-                case EventType.Injury:
-                    this.props.appState.addInjury(this.state.currentSelectedTeam, this.state.activePlayer, this.currentInjury)
-                    break;
-            }
-        }
-    }
-
-
-
-    private insertPassivePlayer = (player: string) => {
-        console.log("insertPassivePlayer ", player);
-        if (this.state.currentSelectedTeam && this.state.currentEventType === EventType.Casualty && this.currentInjury) {
-            this.props.appState.addCasualty(this.state.currentSelectedTeam, this.state.activePlayer, player, this.currentInjury)
-        }
-    }
-
-    private insertActivePlayer = (player: string) => {
-        console.log("insertActivePlayer ", player);
-        if (this.state.currentSelectedTeam) {
-            switch (this.state.currentEventType) {
-                case EventType.Goal:
-                    this.props.appState.addScorer(this.state.currentSelectedTeam, player)
-                    break;
-                case EventType.Completion:
-                    this.props.appState.addThrower(this.state.currentSelectedTeam, player)
-                    break;
-                case EventType.Casualty:
-                    this.props.appState.addCasualty(this.state.currentSelectedTeam, player, this.state.passivePlayer, this.state.currentInjuryThrow)
-                    break;
-                case EventType.Intercept:
-                    this.props.appState.addIntercept(this.state.currentSelectedTeam, player)
-                    break;
-                case EventType.Injury:
-                    this.props.appState.addInjury(this.state.currentSelectedTeam, player, this.state.currentInjuryThrow)
-                    break;
-            }
-        }
-    }
-*/
     private eventInputHandlerFactory = (eventTargetProperty: string) => {
         return (event: any) => {
             const property: string = eventTargetProperty;
@@ -382,29 +333,40 @@ class Match extends React.Component<IAppProps, IMatchState> {
     }
     private eventDoneHandler = (event: any) => {
         console.log("event done!");
-        if (this.state.activePlayer && this.state.activePlayer !== "-"
-        && this.state.currentSelectedTeam && this.state.currentSelectedTeam !== undefined
-        && (this.state.currentEventType !== EventType.Casualty || this.state.passivePlayer && this.state.passivePlayer !== "-" && this.state.currentInjuryThrow && this.state.currentInjuryThrow !== 0)
-        && (this.state.currentEventType !== EventType.Injury || this.state.currentInjuryThrow && this.state.currentInjuryThrow !== 0)) {
+        let doer: number = this.state.activePlayer ? parseInt(this.state.activePlayer) : -1;
+        let target: number = this.state.passivePlayer ? parseInt(this.state.passivePlayer) : -1;
+        let injury: number = this.state.currentInjuryThrow ? parseInt(this.state.currentInjuryThrow) : -1;
+        /*
+        console.log("team ", this.state.currentSelectedTeam);
+        console.log("doer ", doer);
+        console.log("target ", target);
+        console.log("injury ", injury);
+        */
+        if (this.state.currentSelectedTeam && this.state.currentSelectedTeam !== undefined
+        && doer !== NaN
+        && (this.state.currentEventType !== EventType.Casualty 
+            || target !== NaN && injury !== NaN)
+        && (this.state.currentEventType !== EventType.Injury 
+            || injury !== NaN)) {
             switch (this.state.currentEventType) {
                 case EventType.Goal:
-                    this.props.appState.addScorer(this.state.currentSelectedTeam, this.state.activePlayer);
+                    this.props.appState.addScorer(this.state.currentSelectedTeam, doer);
                     break;
                 case EventType.Completion:
-                    this.props.appState.addThrower(this.state.currentSelectedTeam, this.state.activePlayer);
+                    this.props.appState.addThrower(this.state.currentSelectedTeam, doer);
                     break;
                 case EventType.Casualty:
                     if (this.currentInjury) {
-                        this.props.appState.addCasualty(this.state.currentSelectedTeam, this.state.activePlayer, this.state.passivePlayer, this.currentInjury);
+                        this.props.appState.addCasualty(this.state.currentSelectedTeam, doer, target, injury);
                     }
                     break;
                 case EventType.Injury:
                     if (this.currentInjury) {
-                        this.props.appState.addInjury(this.state.currentSelectedTeam, this.state.activePlayer, this.currentInjury);
+                        this.props.appState.addInjury(this.state.currentSelectedTeam, doer, injury);
                     }
                     break;
                 case EventType.Intercept:
-                    this.props.appState.addIntercept(this.state.currentSelectedTeam, this.state.activePlayer);
+                    this.props.appState.addIntercept(this.state.currentSelectedTeam, doer);
                     break;
                 default:
                     break;
@@ -416,7 +378,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
         this.setState({
             activePlayer: "-", 
             currentEventType: 0, 
-            currentInjuryThrow: 0,
+            currentInjuryThrow: "-",
             currentSelectedTeam: undefined,
             eventInputActive: false, 
             passivePlayer: "-",
@@ -428,7 +390,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
                 this.setState({
                     activePlayer: "-", 
                     currentEventType: matchEvent,
-                    currentInjuryThrow: 0,
+                    currentInjuryThrow: "-",
                     currentSelectedTeam: undefined,
                     eventInputActive: true,
                     passivePlayer: "-",

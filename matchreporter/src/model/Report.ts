@@ -14,7 +14,7 @@ export class Report {
 
     constructor (props: any) {
 
-        // console.log('initialising report : ', props.title);
+        // console.log('initialising report : ', props.id);
         this.id = props.id;
         this.title = props.title;
         this.home = new Team(props.home);

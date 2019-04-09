@@ -6,15 +6,15 @@ export class Injury {
 
     constructor (props: any) {
         // console.log('new casualty: ', props.D68);
-        this.D68 = parseInt(props.D68);
+        this.D68 = props.D68;
 
         // this.result = this.getResult(this.D68);
         // this.effect = this.getEffect(this.D68);
     }
-    public get type(): string {
-        return Injury.getType(this.D68);
+    public get casualtyType(): CasualtyType {
+        return Injury.getCasualtyType(this.D68);
     }
-    public static getType(D68: number): string {
+    public static getCasualtyType(D68: number): CasualtyType {
         if (D68 < 60 && D68 >= 40) {
             return CasualtyType.SeriousInjury;
         } else if (D68 >= 60) {
@@ -23,10 +23,10 @@ export class Injury {
             return CasualtyType.BadlyHurt;
         }
     }
-    public get effect(): string {
+    public get effect(): InjuryEffect {
         return Injury.getEffect(this.D68);
     }
-    public static getEffect(D68: number): string {
+    public static getEffect(D68: number): InjuryEffect {
         if (D68 < 41) {
             return InjuryEffect.BH;
         } else if (D68 < 51) {

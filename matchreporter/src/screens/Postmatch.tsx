@@ -117,40 +117,55 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                         </form>
                     </div>
                 </div>
-            <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.completionsString}</div>
-                <div className="reportTableField">CP</div>
-                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.completionsString}</div>
+                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
+                    <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.completionsString}</div>
+                    <div className="reportTableField">CP</div>
+                    <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.completionsString}</div>
+                </div>
+                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
+                    <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.scorersString}</div>
+                    <div className="reportTableField">TD</div>
+                    <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.scorersString}</div>
+                </div>
+                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
+                    <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.interceptsString}</div>
+                    <div className="reportTableField">INT</div>
+                    <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.interceptsString}</div>
+                </div>
+                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
+                    <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.badlyHurtsString}</div>
+                    <div className="reportTableField">BH</div>
+                    <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.badlyHurtsString}</div>
+                </div>
+                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
+                    <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.seriousInjuriesString}</div>
+                    <div className="reportTableField">SI</div>
+                    <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.seriousInjuriesString}</div>
+                </div>
+                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
+                    <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.killsString}</div>
+                    <div className="reportTableField">Kill</div>
+                    <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.killsString}</div>
+                </div>
             </div>
-            <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.scorersString}</div>
-                <div className="reportTableField">TD</div>
-                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.scorersString}</div>
-            </div>
-            <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.interceptsString}</div>
-                <div className="reportTableField">INT</div>
-                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.interceptsString}</div>
-            </div>
-            <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.badlyHurtsString}</div>
-                <div className="reportTableField">BH</div>
-                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.badlyHurtsString}</div>
-            </div>
-            <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.seriousInjuriesString}</div>
-                <div className="reportTableField">SI</div>
-                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.seriousInjuriesString}</div>
-            </div>
-            <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.killsString}</div>
-                <div className="reportTableField">Kill</div>
-                <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.killsString}</div>
-            </div>
-            </div>
+            {this.improvementTable()}
         </div>;
     };
 
+    private improvementTable = () => {
+        if (this.state.improvementsAway.length > 0
+        || this.state.improvementsHome.length > 0) {
+            return <div className="improvements">
+                {this.state.improvementsAway.map((awayImprovement: Player, index) => {
+                    return <div key={index} style={this.getBackgroundFor(improvementRow)} className="improvementLine">
+                    </div>
+                }
+            )}
+            </div>
+        } else {
+            return null;
+        }
+    }
     private changeWinningsHandler = (side: Team) => {
         return (event: any) => {
             this.addWinningsHandler(side)(event);
