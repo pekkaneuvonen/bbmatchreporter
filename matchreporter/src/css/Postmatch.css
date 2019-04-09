@@ -1,6 +1,5 @@
 .Postmatch {
     background-color: rgb(0, 0, 0);
-    height: 548pt;
 }
 .teams {
     margin: auto;
@@ -123,5 +122,20 @@
     border: none;
     padding-right: 8px;
     width: 116px;
+}
+
+.improvements {
+    margin-top: 16px;
+}
+.improvementLine {
+    height: 32px;
+    width: 320px;
+    margin: auto;
+}
+.improvementAddLine {
+    cursor: pointer;
+    height: 32px;
+    width: 320px;
+    margin: auto;
 }
 

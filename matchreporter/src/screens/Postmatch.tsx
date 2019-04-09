@@ -18,7 +18,8 @@ import { Player } from '../model/Player';
 
 
 const bgStyle = {
-  backgroundImage: `url(${bgPostmatch})`
+  backgroundImage: `url(${bgPostmatch})`,
+  paddingBottom: "32px",
 };
 
 interface IPostmatchState {
@@ -30,10 +31,12 @@ interface IPostmatchState {
     mvpAway: string;
     improvementsHome: Player[];
     improvementsAway: Player[];
+    improvementLines: {home: Player | undefined, away: Player | undefined}[],
 }
 class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     constructor(props: any) {
         super(props);
+
         this.state = {
             winningsHome: this.props.appState.homeTeam ? this.props.appState.homeTeam.winnings : "-",
             winningsAway: this.props.appState.awayTeam ? this.props.appState.awayTeam.winnings : "-",
@@ -43,7 +46,26 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
             mvpAway: this.props.appState.awayTeam ? this.props.appState.awayTeam.mvp : "-",
             improvementsHome: this.props.appState.homeTeam ? this.props.appState.homeTeam.improvements : [],
             improvementsAway: this.props.appState.awayTeam ? this.props.appState.awayTeam.improvements : [],
+            improvementLines: this.constructInitialImprovementRows(this.props.appState.homeTeam, this.props.appState.awayTeam),
         };
+    }
+    private constructInitialImprovementRows = (home: Team, away: Team) => {
+        let initialImprovements: {home: Player | undefined, away: Player | undefined}[] = [];
+        if (home) {
+            for (let hi: number = 0; hi < home.improvements.length; hi++) {
+                initialImprovements.push({home:home.improvements[hi], away: undefined})
+            }
+        }
+        if (away) {
+            for (let ai: number = 0; ai < away.improvements.length; ai++) {
+                if (initialImprovements.length > ai) {
+                    initialImprovements[ai].away = away.improvements[ai];
+                } else {
+                    initialImprovements.push({home: undefined, away:away.improvements[ai]})
+                }
+            }
+        }
+        return initialImprovements;
     }
     public componentWillMount() {
         this.props.appState.screen = Screens.Postmatch;
@@ -153,18 +175,23 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     };
 
     private improvementTable = () => {
-        if (this.state.improvementsAway.length > 0
-        || this.state.improvementsHome.length > 0) {
-            return <div className="improvements">
-                {this.state.improvementsAway.map((awayImprovement: Player, index) => {
-                    return <div key={index} style={this.getBackgroundFor(improvementRow)} className="improvementLine">
-                    </div>
-                }
-            )}
-            </div>
-        } else {
-            return null;
-        }
+
+        return <div className="improvements">
+         {this.state.improvementLines.length > 0 ?
+            this.state.improvementLines.map((awayImprovement: {home: Player | undefined, away: Player | undefined}, index) => {
+                return <div key={index} style={this.getBackgroundFor(improvementRow)} className="improvementLine">
+                </div>
+            })
+            : null}
+            <div style={this.getBackgroundFor(addRow, "center")} className="improvementAddLine" onClick={this.addImprovementLine}></div>
+        </div>
+    }
+    private addImprovementLine = (event: any) => {
+        console.log("addImprovementLine");
+        let newImprovements: {home: Player | undefined, away: Player | undefined}[] = [...this.state.improvementLines];
+
+        newImprovements.push({home: undefined, away: undefined})
+        this.setState({improvementLines: newImprovements});
     }
     private changeWinningsHandler = (side: Team) => {
         return (event: any) => {
@@ -238,10 +265,10 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
         }
     }
 
-    private getBackgroundFor = (img: any): any => {
+    private getBackgroundFor = (img: any, position: string = "left"): any => {
         return {
             backgroundImage: `url(${img})`,
-            backgroundPosition: 'left',
+            backgroundPosition: position,
             backgroundRepeat  : 'no-repeat',
         }
     }
