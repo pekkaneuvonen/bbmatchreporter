@@ -1,6 +1,6 @@
 import { observable } from "mobx";
 import { Kvalue } from "../types/Kvalue";
-import { Player } from "./Player";
+import { GameEvent } from "./GameEvent";
 import { Injury, CasualtyType } from "./Injury";
 
 export class Team {
@@ -15,15 +15,15 @@ export class Team {
     @observable public gateValue: number;
     
     // postmatch
-    public scorers: number[] = [];
-    public inflicters: Player[] = [];
-    public injureds: Player[] = [];
-    public completions: number[] = [];
-    public intercepts: number[] = [];
+    public scorers: string[] = [];
+    public casualties: GameEvent[] = [];
+    public injuries: GameEvent[] = [];
+    public completions: string[] = [];
+    public intercepts: string[] = [];
     public winnings: string;
     public fanFactorModifier: string;
     public mvp: string;
-    public improvements: Player[] = [];
+    public improvements: GameEvent[] = [];
 
 
     constructor (props: any) {
@@ -33,12 +33,12 @@ export class Team {
         console.log('props.fanFactorModifier: ', props.fanFactorModifier);
         console.log('props.mvp: ', props.mvp);
         */
-       this.scorers = props.scorers ? props.scorers : [];
-       this.inflicters = props.inflicters ? props.inflicters : [];
-       this.injureds = props.injureds ? props.injureds : [];
-       this.completions = props.completions ? props.completions : [];
-       this.intercepts = props.intercepts ? props.intercepts : [];
-       this.improvements = props.improvements ? props.improvements : [];
+        this.scorers = props.scorers ? props.scorers : [];
+        this.casualties = props.casualties ? props.casualties : [];
+        this.injuries = props.injuries ? props.injuries : [];
+        this.completions = props.completions ? props.completions : [];
+        this.intercepts = props.intercepts ? props.intercepts : [];
+        this.improvements = props.improvements ? props.improvements : [];
         this.name = props.name;
         this.teamValue = props.teamValue ? props.teamValue : 0;
         this.rerolls = props.rerolls ? props.rerolls : 0;
@@ -68,15 +68,21 @@ export class Team {
     }
     */
     public get completionsString(): string {
-        let cString: string = "";
+        let vString: string = "";
         for (let i = 0; i < this.completions.length; i++) {
-            cString = cString.concat(this.completions[i].toString());
+            if (i > 0) {
+                vString = vString.concat(", ");
+            }
+            vString = vString.concat(this.completions[i].toString());
         }
-        return cString;
+        return vString;
     }
     public get scorersString(): string {
         let vString: string = "";
         for (let i = 0; i < this.scorers.length; i++) {
+            if (i > 0) {
+                vString = vString.concat(", ");
+            }
             vString = vString.concat(this.scorers[i].toString());
         }
         return vString;
@@ -84,6 +90,9 @@ export class Team {
     public get interceptsString(): string {
         let vString: string = "";
         for (let i = 0; i < this.intercepts.length; i++) {
+            if (i > 0) {
+                vString = vString.concat(", ");
+            }
             vString = vString.concat(this.intercepts[i].toString());
         }
         return vString;
@@ -91,12 +100,12 @@ export class Team {
     public get badlyHurtsString(): string {
         let vString: string = "";
         let casCount: number = 0;
-        for (let i = 0; i < this.inflicters.length; i++) {
-            if (Injury.getCasualtyType(this.inflicters[i].casualty) === CasualtyType.BadlyHurt) {
+        for (let i = 0; i < this.casualties.length; i++) {
+            if (Injury.getCasualtyType(this.casualties[i].casualty) === CasualtyType.BadlyHurt) {
                 if (casCount > 0) {
                     vString = vString.concat(", ");
                 }
-                vString = vString.concat(this.inflicters[i].name.toString());
+                vString = vString.concat(this.casualties[i].player);
                 casCount++;
             }
         }
@@ -105,12 +114,12 @@ export class Team {
     public get seriousInjuriesString(): string {
         let vString: string = "";
         let casCount: number = 0;
-        for (let i = 0; i < this.inflicters.length; i++) {
-            if (Injury.getCasualtyType(this.inflicters[i].casualty) === CasualtyType.SeriousInjury) {
+        for (let i = 0; i < this.casualties.length; i++) {
+            if (Injury.getCasualtyType(this.casualties[i].casualty) === CasualtyType.SeriousInjury) {
                 if (casCount > 0) {
                     vString = vString.concat(", ");
                 }
-                vString = vString.concat(this.inflicters[i].name.toString());
+                vString = vString.concat(this.casualties[i].player);
                 casCount++;
             }
         }
@@ -119,12 +128,12 @@ export class Team {
     public get killsString(): string {
         let vString: string = "";
         let casCount: number = 0;
-        for (let i = 0; i < this.inflicters.length; i++) {
-            if (Injury.getCasualtyType(this.inflicters[i].casualty) === CasualtyType.Kill) {
+        for (let i = 0; i < this.casualties.length; i++) {
+            if (Injury.getCasualtyType(this.casualties[i].casualty) === CasualtyType.Kill) {
                 if (casCount > 0) {
                     vString = vString.concat(", ");
                 }
-                vString = vString.concat(this.inflicters[i].name.toString());
+                vString = vString.concat(this.casualties[i].player);
                 casCount++;
             }
         }

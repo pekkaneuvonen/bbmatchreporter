@@ -333,8 +333,6 @@ class Match extends React.Component<IAppProps, IMatchState> {
     }
     private eventDoneHandler = (event: any) => {
         console.log("event done!");
-        let doer: number = this.state.activePlayer ? parseInt(this.state.activePlayer) : -1;
-        let target: number = this.state.passivePlayer ? parseInt(this.state.passivePlayer) : -1;
         let injury: number = this.state.currentInjuryThrow ? parseInt(this.state.currentInjuryThrow) : -1;
         /*
         console.log("team ", this.state.currentSelectedTeam);
@@ -343,30 +341,30 @@ class Match extends React.Component<IAppProps, IMatchState> {
         console.log("injury ", injury);
         */
         if (this.state.currentSelectedTeam && this.state.currentSelectedTeam !== undefined
-        && doer !== NaN
+        && this.state.activePlayer
         && (this.state.currentEventType !== EventType.Casualty 
-            || target !== NaN && injury !== NaN)
+            || this.state.passivePlayer && injury !== NaN)
         && (this.state.currentEventType !== EventType.Injury 
             || injury !== NaN)) {
             switch (this.state.currentEventType) {
                 case EventType.Goal:
-                    this.props.appState.addScorer(this.state.currentSelectedTeam, doer);
+                    this.props.appState.addScorer(this.state.currentSelectedTeam, this.state.activePlayer);
                     break;
                 case EventType.Completion:
-                    this.props.appState.addThrower(this.state.currentSelectedTeam, doer);
+                    this.props.appState.addThrower(this.state.currentSelectedTeam, this.state.activePlayer);
                     break;
                 case EventType.Casualty:
                     if (this.currentInjury) {
-                        this.props.appState.addCasualty(this.state.currentSelectedTeam, doer, target, injury);
+                        this.props.appState.addCasualty(this.state.currentSelectedTeam, this.state.activePlayer, this.state.passivePlayer, injury);
                     }
                     break;
                 case EventType.Injury:
                     if (this.currentInjury) {
-                        this.props.appState.addInjury(this.state.currentSelectedTeam, doer, injury);
+                        this.props.appState.addInjury(this.state.currentSelectedTeam, this.state.activePlayer, injury);
                     }
                     break;
                 case EventType.Intercept:
-                    this.props.appState.addIntercept(this.state.currentSelectedTeam, doer);
+                    this.props.appState.addIntercept(this.state.currentSelectedTeam, this.state.activePlayer);
                     break;
                 default:
                     break;

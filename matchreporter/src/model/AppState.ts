@@ -1,7 +1,7 @@
 import { observable } from "mobx";
 import { Kvalue } from "../types/Kvalue";
 import { Injury } from "./Injury";
-import { Player } from "./Player";
+import { GameEvent } from "./GameEvent";
 import { Report } from "./Report";
 import { Team } from "./Team";
 
@@ -52,66 +52,66 @@ export class AppState {
     this.report.weather[0] = weather;
     this.updateReport();
   }
-  public addScorer(team: Team, playerNum: number): void {
+  public addScorer(team: Team, player: string): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
       if (!team.scorers) {
         team.scorers = [];
       }
       // let player: Player  = new Player({name: playerNum});
-      team.scorers.push(playerNum);
+      team.scorers.push(player);
       this.updateReport();
     }
   }
 
-  public addThrower(team: Team, playerNum: number): void {
+  public addThrower(team: Team, player: string): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
       if (!team.completions) {
         team.completions = [];
       }
       // let player: Player = new Player({name: playerNum});
-      team.completions.push(playerNum);
+      team.completions.push(player);
       this.updateReport();
     }
   }
 
-  public addInjury(team: Team, playerNum: number, injuryNum: number): void {
+  public addInjury(team: Team, player: string, injuryNum: number): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
-      if (!team.injureds) {
-        team.injureds = [];
+      if (!team.injuries) {
+        team.injuries = [];
       }
-      let player: Player = new Player({name: playerNum});
-      player.injury = injuryNum;
-      team.injureds.push(player);
+      let injuryEvent: GameEvent = new GameEvent({player: player});
+      injuryEvent.injury = injuryNum;
+      team.injuries.push(injuryEvent);
       this.updateReport();
     }
   }
 
-  public addIntercept(team: Team, playerNum: number): void {
+  public addIntercept(team: Team, player: string): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
       if (!team.intercepts) {
         team.intercepts = [];
       }
       // let player: Player = new Player({name: playerNum});
-      team.intercepts.push(playerNum);
+      team.intercepts.push(player);
       this.updateReport();
     }
   }
 
-  public addCasualty(team: Team, inflicterNum: number, injuredNum: number, injuryNum: number): void {
+  public addCasualty(team: Team, inflicter: string, injured: string, injuryNum: number): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
-      if (!team.inflicters) {
-        team.inflicters = [];
+      if (!team.casualties) {
+        team.casualties = [];
       }
-      let inflicter: Player = new Player({name: inflicterNum});
-      inflicter.casualty = injuryNum;
-      team.inflicters.push(inflicter);
+      let casualtyEvent: GameEvent = new GameEvent({player: inflicter});
+      casualtyEvent.casualty = injuryNum;
+      team.casualties.push(casualtyEvent);
 
-      if (!team.injureds) {
-        team.injureds = [];
+      if (!team.injuries) {
+        team.injuries = [];
       }
-      let injured: Player = new Player({name: injuredNum});
-      injured.injury = injuryNum;
-      team.injureds.push(injured);
+      let injuryEvent: GameEvent = new GameEvent({player: injured});
+      injuryEvent.injury = injuryNum;
+      team.injuries.push(injuryEvent);
       this.updateReport();
     }
   }

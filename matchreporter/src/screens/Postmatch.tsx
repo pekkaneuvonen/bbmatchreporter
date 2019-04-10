@@ -14,7 +14,7 @@ import achievementRow from '../img/postmatch/achievementLine.png';
 import improvementRow from '../img/postmatch/improvementLine.png';
 import injuryRow from '../img/postmatch/injuryLine.png';
 import addRow from '../img/postmatch/addLine1.png';
-import { Player } from '../model/Player';
+import { GameEvent } from '../model/GameEvent';
 
 
 const bgStyle = {
@@ -29,9 +29,9 @@ interface IPostmatchState {
     ffChangeAway: string,
     mvpHome: string;
     mvpAway: string;
-    improvementsHome: Player[];
-    improvementsAway: Player[];
-    improvementLines: {home: Player, away: Player}[],
+    improvementsHome: GameEvent[];
+    improvementsAway: GameEvent[];
+    improvementLines: {home: GameEvent, away: GameEvent}[],
 }
 class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     constructor(props: any) {
@@ -50,10 +50,10 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
         };
     }
     private constructInitialImprovementRows = (home: Team, away: Team) => {
-        let initialImprovements: {home: Player, away: Player}[] = [];
+        let initialImprovements: {home: GameEvent, away: GameEvent}[] = [];
         if (home) {
             for (let hi: number = 0; hi < home.improvements.length; hi++) {
-                initialImprovements.push({home:home.improvements[hi], away: new Player({name: -1})})
+                initialImprovements.push({home:home.improvements[hi], away: new GameEvent({player: "-"})})
             }
         }
         if (away) {
@@ -61,7 +61,7 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                 if (initialImprovements.length > ai) {
                     initialImprovements[ai].away = away.improvements[ai];
                 } else {
-                    initialImprovements.push({home: new Player({name: -1}), away:away.improvements[ai]})
+                    initialImprovements.push({home: new GameEvent({player: "-"}), away:away.improvements[ai]})
                 }
             }
         }
@@ -113,8 +113,8 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                     </div>
                 </div>
                 <div className="tableRow">
-                    <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.inflicters.length}</div>
-                    <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.inflicters.length}</div>
+                    <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.casualties.length}</div>
+                    <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.casualties.length}</div>
                 </div>
                 <div className="tableRow">
                     <div className="reportTableField reportTableField1">{this.props.appState.report.fame > 0 ? "-" : "+" + Math.abs(this.props.appState.report.fame)}</div>
@@ -177,17 +177,49 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     private improvementTable = () => {
         return <div className="improvementTable">
          {this.state.improvementLines.length > 0 ?
-            this.state.improvementLines.map((improvements: {home: Player, away: Player}, index) => {
+            this.state.improvementLines.map((improvements: {home: GameEvent, away: GameEvent}, index) => {
 
                 return <div key={index} style={this.getBackgroundFor(improvementRow)} className="improvementRow">
-                    <form onSubmit={this.editImprovementHandler(improvements.home)}>
-                        <input className="reportTableInputField reportImprovementPlayerField1" type="text" value={improvements.home.name} onChange={this.changeImprovementPlayerHandle(improvements.home)} />
-                        <input className="reportTableInputField reportImprovementPlayerField1" type="text" value={improvements.home.improvement} onChange={this.changeImprovementThrowHandle(improvements.home)} />
+                    <form onSubmit={this.editImprovementHandler(improvements.home, this.props.appState.homeTeam)}>
+                        <input className="reportTableInputField reportImprovementPlayerField1" 
+                            type="text" 
+                            value={improvements.home.player} 
+                            onFocus={this.improOnFocusHandler} 
+                            onBlur={this.improOnBlurHandler} 
+                            onChange={this.changeImprovementPlayerHandle(improvements.home, this.props.appState.homeTeam)} />
+                        <input className="reportTableInputField reportImprovementThrowField1" 
+                            type="text" 
+                            value={improvements.home.improvementThrow1} 
+                            onFocus={this.improOnFocusHandler} 
+                            onBlur={this.improOnBlurHandler} 
+                            onChange={this.changeImprovementThrowHandle(1, improvements.home, this.props.appState.homeTeam)} />
+                        +
+                        <input className="reportTableInputField reportImprovementThrowField1" 
+                            type="text" 
+                            value={improvements.home.improvementThrow2} 
+                            onFocus={this.improOnFocusHandler} 
+                            onBlur={this.improOnBlurHandler} 
+                            onChange={this.changeImprovementThrowHandle(2, improvements.home, this.props.appState.homeTeam)} />
                     </form>
-                    <form onSubmit={this.editImprovementHandler(improvements.away)} className="improvementInputSlot2">
-                        <input className="reportTableInputField reportImprovementPlayerField2" type="text" value={improvements.away.improvementLine} onChange={this.changeImprovementPlayerHandle(improvements.away)} />
-                        <input className="reportTableInputField reportImprovementPlayerField2" type="text" value={improvements.home.improvement} onChange={this.changeImprovementThrowHandle(improvements.away)} />
-
+                    <form onSubmit={this.editImprovementHandler(improvements.away, this.props.appState.awayTeam)} className="improvementInputSlot2">
+                        <input className="reportTableInputField reportImprovementPlayerField2" 
+                            type="text" 
+                            value={improvements.away.player} 
+                            onFocus={this.improOnFocusHandler} 
+                            onBlur={this.improOnBlurHandler} 
+                            onChange={this.changeImprovementPlayerHandle(improvements.away, this.props.appState.awayTeam)} />
+                        <input className="reportTableInputField reportImprovementThrowField2" type="text" 
+                            value={improvements.away.improvementThrow1} 
+                            onFocus={this.improOnFocusHandler} 
+                            onBlur={this.improOnBlurHandler} 
+                            onChange={this.changeImprovementThrowHandle(1, improvements.away, this.props.appState.awayTeam)} />
+                        +
+                        <input className="reportTableInputField reportImprovementThrowField2" 
+                            type="text" 
+                            value={improvements.away.improvementThrow2} 
+                            onFocus={this.improOnFocusHandler} 
+                            onBlur={this.improOnBlurHandler} 
+                            onChange={this.changeImprovementThrowHandle(2, improvements.away, this.props.appState.awayTeam)} />
                     </form>
                 </div>
             })
@@ -197,27 +229,63 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     }
     private addImprovementLine = (event: any) => {
         console.log("addImprovementLine");
-        let newImprovements: {home: Player, away: Player}[] = [...this.state.improvementLines];
+        let newImprovements: {home: GameEvent, away: GameEvent}[] = [...this.state.improvementLines];
 
-        newImprovements.push({home: new Player({name: -1}), away: new Player({name: -1})})
+        newImprovements.push({home: new GameEvent({player: "-"}), away: new GameEvent({player: "-"})})
         this.setState({improvementLines: newImprovements});
     }
-    private editImprovementHandler = (player: Player) => {
+    private editImprovementHandler = (improvementEvent: GameEvent, team: Team) => {
         return (event: any) => {
-            console.log("editImprovementHandler ", player);
+            console.log("editImprovementHandler ", improvementEvent);
+            this.updateImprovement(improvementEvent, team);
+            this.props.appState.updateReport();
         }
     }
-    private changeImprovementPlayerHandle = (player: Player) => {
+    private improOnFocusHandler = (event: any) => {
+        console.log("improOnFocusHandler ");
+    }
+    private improOnBlurHandler = (event: any) => {
+        console.log("improOnBlurHandler ");
+        this.props.appState.updateReport();
+    }
+    private changeImprovementPlayerHandle = (improvementEvent: GameEvent, team: Team) => {
         return (event: any) => {
-            console.log("changeImprovementPlayerHandle ", player);
+            console.log("changeImprovementPlayerHandle ", improvementEvent);
+            improvementEvent.player = event.target.value;
+            this.updateImprovement(improvementEvent, team);
         }
     }
-    private changeImprovementThrowHandle = (player: Player) => {
+    private changeImprovementThrowHandle = (die: number, improvementEvent: GameEvent, team: Team) => {
         return (event: any) => {
-            console.log("changeImprovementThrowHandle ", player);
+            console.log("changeImprovementThrowHandle ", improvementEvent);
+            const value: number = parseInt(event.target.value);
+            die === 1 ? improvementEvent.improvementThrow1 = value : improvementEvent.improvementThrow2 = value;
+            this.updateImprovement(improvementEvent, team);
         }
     }
-
+    private updateImprovement = (improvementEvent: GameEvent, team: Team) => {
+        let side: string = "home";
+        let improList: GameEvent[] = this.state.improvementsHome;
+        if (team === this.props.appState.awayTeam) {
+            side = "away";
+            improList = this.state.improvementsAway;
+        }
+        const currentIndex: number = improList.indexOf(improvementEvent);
+        console.log("updateImprovement :", side, currentIndex);
+        let newImproList: GameEvent[] = [...improList];
+        if (currentIndex !== -1) {
+            newImproList.splice(currentIndex, 1, improvementEvent);
+        } else {
+            newImproList.push(improvementEvent);
+        }
+        if (team === this.props.appState.homeTeam) { 
+            this.setState({improvementsHome: newImproList});
+            this.props.appState.homeTeam.improvements = newImproList;
+        } else {
+            this.setState({improvementsAway: newImproList});
+            this.props.appState.awayTeam.improvements = newImproList;
+        }
+    }
 
 
     private changeWinningsHandler = (side: Team) => {
