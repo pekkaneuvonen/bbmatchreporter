@@ -8,13 +8,17 @@ export class Player {
     @observable public completions: number = 0;
     @observable public intercepts: number = 0;
     @observable public injury: number;
-    @observable public improvement: number;
+    @observable public improvement: number = 0;
 
     constructor (props: any) {
         this.name = props.name;
     }
 
     public get improvementLine(): string {
-        return this.name + ":" + Improvement.getImprovementType(this.improvement);
+        if (this.name != -1 && this.improvement) {
+            return this.name + ":" + Improvement.getImprovementType(this.improvement);
+        } else {
+            return "-";
+        }
     }
 }

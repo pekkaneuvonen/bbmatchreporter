@@ -31,7 +31,7 @@ interface IPostmatchState {
     mvpAway: string;
     improvementsHome: Player[];
     improvementsAway: Player[];
-    improvementLines: {home: Player | undefined, away: Player | undefined}[],
+    improvementLines: {home: Player, away: Player}[],
 }
 class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     constructor(props: any) {
@@ -50,10 +50,10 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
         };
     }
     private constructInitialImprovementRows = (home: Team, away: Team) => {
-        let initialImprovements: {home: Player | undefined, away: Player | undefined}[] = [];
+        let initialImprovements: {home: Player, away: Player}[] = [];
         if (home) {
             for (let hi: number = 0; hi < home.improvements.length; hi++) {
-                initialImprovements.push({home:home.improvements[hi], away: undefined})
+                initialImprovements.push({home:home.improvements[hi], away: new Player({name: -1})})
             }
         }
         if (away) {
@@ -61,7 +61,7 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                 if (initialImprovements.length > ai) {
                     initialImprovements[ai].away = away.improvements[ai];
                 } else {
-                    initialImprovements.push({home: undefined, away:away.improvements[ai]})
+                    initialImprovements.push({home: new Player({name: -1}), away:away.improvements[ai]})
                 }
             }
         }
@@ -175,23 +175,20 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     };
 
     private improvementTable = () => {
-//    improvementLines: {home: Player | undefined, away: Player | undefined}[],
         return <div className="improvementTable">
          {this.state.improvementLines.length > 0 ?
-            this.state.improvementLines.map((improvements: {home: Player | undefined, away: Player | undefined}, index) => {
-                const homeline: string = improvements.home ? improvements.home.improvementLine : "-";
-                const awayline: string = improvements.away ? improvements.away.improvementLine : "-";
-                return <div key={index} style={this.getBackgroundFor(improvementRow)} className="tableRow">
-                    <div className="achievementInputSlot">
-                        <form onSubmit={this.addMVPHandler(this.props.appState.homeTeam)}>
-                            <input className="reportTableInputField reportAchievementField1 improvementRowField1" type="text" value={homeline} onChange={this.changeMVPHandle(this.props.appState.homeTeam)} />
-                        </form>
-                    </div>
-                    <div className="achievementInputSlot achievementInputSlot2">
-                        <form onSubmit={this.addMVPHandler(this.props.appState.awayTeam)}>
-                            <input className="reportTableInputField reportAchievementField2 improvementRowField1" type="text" value={awayline} onChange={this.changeMVPHandle(this.props.appState.awayTeam)} />
-                        </form>
-                    </div>
+            this.state.improvementLines.map((improvements: {home: Player, away: Player}, index) => {
+
+                return <div key={index} style={this.getBackgroundFor(improvementRow)} className="improvementRow">
+                    <form onSubmit={this.editImprovementHandler(improvements.home)}>
+                        <input className="reportTableInputField reportImprovementPlayerField1" type="text" value={improvements.home.name} onChange={this.changeImprovementPlayerHandle(improvements.home)} />
+                        <input className="reportTableInputField reportImprovementPlayerField1" type="text" value={improvements.home.improvement} onChange={this.changeImprovementThrowHandle(improvements.home)} />
+                    </form>
+                    <form onSubmit={this.editImprovementHandler(improvements.away)} className="improvementInputSlot2">
+                        <input className="reportTableInputField reportImprovementPlayerField2" type="text" value={improvements.away.improvementLine} onChange={this.changeImprovementPlayerHandle(improvements.away)} />
+                        <input className="reportTableInputField reportImprovementPlayerField2" type="text" value={improvements.home.improvement} onChange={this.changeImprovementThrowHandle(improvements.away)} />
+
+                    </form>
                 </div>
             })
             : null}
@@ -200,11 +197,29 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     }
     private addImprovementLine = (event: any) => {
         console.log("addImprovementLine");
-        let newImprovements: {home: Player | undefined, away: Player | undefined}[] = [...this.state.improvementLines];
+        let newImprovements: {home: Player, away: Player}[] = [...this.state.improvementLines];
 
-        newImprovements.push({home: undefined, away: undefined})
+        newImprovements.push({home: new Player({name: -1}), away: new Player({name: -1})})
         this.setState({improvementLines: newImprovements});
     }
+    private editImprovementHandler = (player: Player) => {
+        return (event: any) => {
+            console.log("editImprovementHandler ", player);
+        }
+    }
+    private changeImprovementPlayerHandle = (player: Player) => {
+        return (event: any) => {
+            console.log("changeImprovementPlayerHandle ", player);
+        }
+    }
+    private changeImprovementThrowHandle = (player: Player) => {
+        return (event: any) => {
+            console.log("changeImprovementThrowHandle ", player);
+        }
+    }
+
+
+
     private changeWinningsHandler = (side: Team) => {
         return (event: any) => {
             this.addWinningsHandler(side)(event);
