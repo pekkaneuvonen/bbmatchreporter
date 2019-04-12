@@ -115,6 +115,9 @@
     border: none;
     padding-left: 8px;
     width: 116px;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 .reportAchievementField2 {
     color: #E4297A;
@@ -122,6 +125,9 @@
     border: none;
     padding-right: 8px;
     width: 116px;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y:hidden;
 }
 
 
@@ -134,7 +140,6 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding-left: 8px;
     height: 32px;
     width: 320px;
 }
@@ -160,6 +165,9 @@
     border: none;
     padding-left: 8px;
     width: 48px;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y:hidden;
 }
 .reportImprovementThrowField1 {
     color: #0CB2D5;
@@ -175,6 +183,9 @@
     border: none;
     padding-right: 8px;
     width: 48px;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y:hidden;
 }
 .reportImprovementThrowField2 {
     color: #E4297A;
@@ -190,34 +201,3 @@
     width: 320px;
     margin: auto;
 }
-
-/*
-.tableRow {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding-left: 8px;
-    height: 32px;
-    width: 302px;
-}
-.reportTableInputSlot {
-    margin: none;
-    padding: 0px;
-    background: transparent;
-    width: 72px;
-}
-.reportTableInputField {
-    margin: none;
-    border: none;
-    padding: 0px;
-    font-family: 'Teko', sans-serif;
-    font-weight: 400;
-    font-size: 24px;
-    text-align: center;
-    user-select: all;
-    color: #F2F0EE;
-    background: transparent;
-    width: 72px;
-    height: 31px;
-}
-*/

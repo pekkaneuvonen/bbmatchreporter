@@ -201,7 +201,7 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                             onBlur={this.improOnBlurHandler} 
                             onChange={this.changeImprovementThrowHandle(2, improvements.home, this.props.appState.homeTeam)} />
                     </form>
-                    <form onSubmit={this.editImprovementHandler(improvements.away, this.props.appState.awayTeam)} className="improvementInputSlot2">
+                    <form onSubmit={this.editImprovementHandler(improvements.away, this.props.appState.awayTeam)}>
                         <input className="reportTableInputField reportImprovementPlayerField2" 
                             type="text" 
                             value={improvements.away.player} 
@@ -250,14 +250,12 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     }
     private changeImprovementPlayerHandle = (improvementEvent: GameEvent, team: Team) => {
         return (event: any) => {
-            console.log("changeImprovementPlayerHandle ", improvementEvent);
             improvementEvent.player = event.target.value;
             this.updateImprovement(improvementEvent, team);
         }
     }
     private changeImprovementThrowHandle = (die: number, improvementEvent: GameEvent, team: Team) => {
         return (event: any) => {
-            console.log("changeImprovementThrowHandle ", improvementEvent);
             const value: number = parseInt(event.target.value);
             die === 1 ? improvementEvent.improvementThrow1 = value : improvementEvent.improvementThrow2 = value;
             this.updateImprovement(improvementEvent, team);
