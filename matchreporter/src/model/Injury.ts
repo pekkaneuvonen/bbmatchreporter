@@ -26,6 +26,19 @@ export class Injury {
     public get effect(): InjuryEffect {
         return Injury.getEffect(this.D68);
     }
+    public static getInjuryCode(D68: number): InjuryCode {
+        const type: CasualtyType = this.getCasualtyType(D68);
+        switch (type) {
+            case CasualtyType.BadlyHurt:
+                return InjuryCode.BH;
+            case CasualtyType.SeriousInjury:
+                return InjuryCode.SI;
+            case CasualtyType.Kill:
+                return InjuryCode.DEAD;
+            default:
+                return InjuryCode.BH;
+        }
+    }
     public static getEffect(D68: number): InjuryEffect {
         if (D68 < 41) {
             return InjuryEffect.BH;
@@ -47,10 +60,10 @@ export class Injury {
             return InjuryEffect.BH;
         }
     }
-    public get result(): string {
-        return Injury.getResult(this.D68);
+    public get description(): string {
+        return Injury.getDescription(this.D68);
     }
-    public static getResult(D68: number): string {
+    public static getDescription(D68: number): string {
         if (D68 < 41) {
             return InjuryDescription.BadlyHurt;
         } else if (D68 === 41) {
@@ -120,12 +133,11 @@ export enum CasualtyType {
     Kill = "Kill"
 }
 
-export enum InjuryType {
-    BH = 0,
-    MNG,
-    NigglingInjury,
-    StatDecrease,
-    Dead
+export enum InjuryCode {
+    BH = "BH",
+    MNG = "MNG",
+    SI = "SI",
+    DEAD = "DEAD",
 }
 
 export enum InjuryEffect {

@@ -31,7 +31,6 @@
 .generalTable {
     margin: auto;
     width: 320px;
-    margin-top: 0px;
     height: 244px;
 }
 .gate {
@@ -51,20 +50,7 @@
     background: transparent;
     width: 72px;
 }
-.reportTableInputField {
-    margin: none;
-    border: none;
-    padding: 0px;
-    font-family: 'Teko', sans-serif;
-    font-weight: 400;
-    font-size: 24px;
-    text-align: center;
-    user-select: all;
-    color: #F2F0EE;
-    background: transparent;
-    width: 72px;
-    height: 31px;
-}
+
 .reportTableField {
     margin: none;
     border: none;
@@ -79,7 +65,21 @@
     width: 72px;
     height: 31px;
 }
-
+.reportTableInputField {
+    margin: none;
+    border: none;
+    padding: 0px;
+    font-family: 'Teko', sans-serif;
+    font-weight: 400;
+    font-size: 22px;
+    text-align: center;
+    user-select: all;
+    color: #F2F0EE;
+    background: transparent;
+    padding-top: 2px;
+    width: 72px;
+    height: 31px;
+}
 .reportTableField1 {
     color: #0CB2D5;
 }
@@ -90,7 +90,8 @@
 .achievementTable {
     margin: auto;
     width: 320px;
-    margin-top: 11px;
+    height: 224px; /*268 - 44*/
+    padding-top: 44px;
 }
 .achievementRow {
     display: flex;
@@ -98,106 +99,185 @@
     justify-content: space-between;
     height: 32px;
     border: none;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 .achievementInputSlot {
     margin: none;
     border: none;
-    padding: 0px;
-    background: transparent;
-    width: 116px;
+    width: 112px;
 }
-.achievementInputSlot2 {
-    padding-right: 8px;
-}
+
 .reportAchievementField1 {
     color: #0CB2D5;
     text-align: left;
-    border: none;
-    padding-left: 8px;
-    width: 116px;
     white-space: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
+    width: 128px;
 }
+
 .reportAchievementField2 {
     color: #E4297A;
     text-align: right;
-    border: none;
-    padding-right: 8px;
-    width: 116px;
     white-space: nowrap;
     overflow-x: auto;
     overflow-y:hidden;
+    width: 128px;
+}
+
+.reportAchievementInputField {
+    color: #F2F0EE;
+    width: 112px;
+}
+
+.reportInjuryTable {
+    margin: auto;
+    width: 320px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 44px;
+}
+.reportTableColumn {
+    min-width: 160px;
+    min-width: 64px;
+}
+.reportTableInjurySlot {
+    width: 160px;
+    height: 64px;
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-right: 8px;
+    padding-left: 8px;
+}
+.reportTableInjurySlot2 {
+    align-items: flex-end;
+}
+.reportTableInjuredPlayer {
+    width: 160px;
+    top: 4px;
+    color: #0CB2D5;
+    border: none;
+    text-align: left;
+    height: 28px;
+}
+.reportTableInjuredPlayer2 {
+
+    color: #E4297A;
+    text-align: right;
+}
+.reportTableInjuryDescriptionRow {
+    height: 28px;
+    width: 152px;
+    padding: 0px;
+    margin: 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: flex-start;
+}
+.reportTableInjuryDescriptionRow2 {
+    align-content: flex-end;
+}
+.reportTableInjuryDescription {
+    font-weight: 300;
+    font-size: 16px;
+    text-align: left;
+    padding-top: 6px;
+    width: 102px;
+}
+.reportTableInjuryDescription2 {
+    text-align: right;
+}
+.reportTableInjuryNumber {
+    width: 44px;
+    text-align: center;
+    color: #F2F0EE;
+}
+.reportTableInjuredNoEffect {
+    color: #9B9B9B;
+}
+
+.reportTableInjuredNoEffectNumber {
+    color: #4A4A4A;
 }
 
 
 .improvementTable {
     margin: auto;
     width: 320px;
+    min-height: 44px;
     margin-top: 16px;
-}
-.improvementRow {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    height: 32px;
-    width: 320px;
+    padding-top: 44px;
 }
-.improvementInputSlot {
+.improvementSlotContainer {
+    width: 160px;
+    height: 64px;
+}
+
+.improvementSlot {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    color: #242424;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.improvementSlot2{
+    align-items: flex-end;
+    padding-left: 0px;
+}
+
+.reportImprovementField {
     margin: none;
     border: none;
     padding: 0px;
+    font-family: 'Teko', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+    text-align: center;
+    user-select: all;
+    color: #F2F0EE;
     background: transparent;
-    width: 106px;
+    width: 72px;
+    height: 32px;
 }
-.improvementInputSlot2 {
-    padding-right: 8px;
-}
-
-
-.reportImprovementPlayerField1 {
-    color: #0CB2D5;
+.reportImprovementPlayerField {
+    color: #F2F0EE;
     text-align: left;
     border: none;
+    width: 145px;
     padding-left: 8px;
-    width: 48px;
     white-space: nowrap;
     overflow-x: auto;
     overflow-y:hidden;
 }
-.reportImprovementThrowField1 {
+.reportImprovementThrowField {
     color: #0CB2D5;
-    text-align: left;
+    text-align: center;
     border: none;
-    padding-left: 4px;
-    width: 16px;
+    padding-top: 0px;
+    width: 32px;
+    height: 28px;
+    margin-left: 8px;
 }
 
 .reportImprovementPlayerField2 {
-    color: #E4297A;
     text-align: right;
-    border: none;
     padding-right: 8px;
-    width: 48px;
-    white-space: nowrap;
-    overflow-x: auto;
-    overflow-y:hidden;
 }
 .reportImprovementThrowField2 {
     color: #E4297A;
-    text-align: right;
-    border: none;
-    padding-right: 4px;
-    width: 16px;
+    margin-right: 8px;
 }
 
 .improvementAddLine {
     cursor: pointer;
     height: 32px;
-    width: 320px;
+    width: 116px;
     margin: auto;
+    margin-top: 0px;
 }

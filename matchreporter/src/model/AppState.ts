@@ -106,12 +106,13 @@ export class AppState {
       casualtyEvent.casualty = injuryNum;
       team.casualties.push(casualtyEvent);
 
-      if (!team.injuries) {
-        team.injuries = [];
+      const opposingTeam: Team = team === this.homeTeam ? this.awayTeam : this.homeTeam;
+      if (!opposingTeam.injuries) {
+        opposingTeam.injuries = [];
       }
       let injuryEvent: GameEvent = new GameEvent({player: injured});
       injuryEvent.injury = injuryNum;
-      team.injuries.push(injuryEvent);
+      opposingTeam.injuries.push(injuryEvent);
       this.updateReport();
     }
   }

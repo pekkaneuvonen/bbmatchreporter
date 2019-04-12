@@ -3,17 +3,26 @@ import { IAppProps } from "../App";
 import Navigator from '../components/Navigator';
 import {Screens} from "../model/AppState";
 import { Team } from '../model/Team';
-
+import { Injury, InjuryEffect, InjuryCode } from '../model/Injury';
 
 import '../css/Postmatch.css';
 import bgPostmatch from '../img/backgrounds/GRASS_9PM.jpg';
 
 import teamsContainerBG from '../img/postmatch/teamsContainer.png';
 import generalTableBG from '../img/postmatch/generalTableContainer.png';
-import achievementRow from '../img/postmatch/achievementLine.png';
-import improvementRow from '../img/postmatch/improvementLine.png';
-import injuryRow from '../img/postmatch/injuryLine.png';
-import addRow from '../img/postmatch/addLine1.png';
+import achievementTableBG from '../img/postmatch/achievementTableContainer.png';
+
+import injuriesTableTitle from '../img/postmatch/injuriesTableTitle.png';
+import injurySlotHome from '../img/postmatch/injurySlotHome.png';
+import injurySlotAway from '../img/postmatch/injurySlotAway.png';
+import injurySlotBHHome from '../img/postmatch/injurySlotNoEffectHome.png';
+import injurySlotBHAway from '../img/postmatch/injurySlotNoEffectAway.png';
+
+import improvementsTableTitle from '../img/postmatch/improvementsTableTitle.png';
+import improvementSlotHome from '../img/postmatch/improvementSlotHome.png';
+import improvementSlotAway from '../img/postmatch/improvementSlotAway.png';
+import addImprovementHome from '../img/postmatch/addLineHome.png';
+import addImprovementAway from '../img/postmatch/addLineAway.png';
 import { GameEvent } from '../model/GameEvent';
 
 
@@ -31,7 +40,7 @@ interface IPostmatchState {
     mvpAway: string;
     improvementsHome: GameEvent[];
     improvementsAway: GameEvent[];
-    improvementLines: {home: GameEvent, away: GameEvent}[],
+    // improvementLines: {home: GameEvent, away: GameEvent}[],
 }
 class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     constructor(props: any) {
@@ -40,13 +49,16 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
         this.state = {
             winningsHome: this.props.appState.homeTeam ? this.props.appState.homeTeam.winnings : "-",
             winningsAway: this.props.appState.awayTeam ? this.props.appState.awayTeam.winnings : "-",
+            
             ffChangeHome: this.props.appState.homeTeam ? this.props.appState.homeTeam.fanFactorModifier : "-",
             ffChangeAway: this.props.appState.awayTeam ? this.props.appState.awayTeam.fanFactorModifier : "-",
+            
             mvpHome: this.props.appState.homeTeam ? this.props.appState.homeTeam.mvp : "-",
             mvpAway: this.props.appState.awayTeam ? this.props.appState.awayTeam.mvp : "-",
+            
             improvementsHome: this.props.appState.homeTeam ? this.props.appState.homeTeam.improvements : [],
             improvementsAway: this.props.appState.awayTeam ? this.props.appState.awayTeam.improvements : [],
-            improvementLines: this.constructInitialImprovementRows(this.props.appState.homeTeam, this.props.appState.awayTeam),
+            /*improvementLines: this.constructInitialImprovementRows(this.props.appState.homeTeam, this.props.appState.awayTeam),*/
         };
     }
     private constructInitialImprovementRows = (home: Team, away: Team) => {
@@ -91,24 +103,24 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                 <div className="tableRow">
                     <div className="reportTableInputSlot">
                         <form onSubmit={this.addWinningsHandler(this.props.appState.homeTeam)}>
-                            <input className="reportTableInputField reportTableField1" type="text" value={this.state.winningsHome} onChange={this.changeWinningsHandler(this.props.appState.homeTeam)} />
+                            <input className="reportTableInputField " type="text" value={this.state.winningsHome} onChange={this.changeWinningsHandler(this.props.appState.homeTeam)} />
                         </form>
                     </div>
                     <div className="reportTableInputSlot">
                         <form onSubmit={this.addWinningsHandler(this.props.appState.awayTeam)}>
-                            <input className="reportTableInputField reportTableField2" type="text" value={this.state.winningsAway} onChange={this.changeWinningsHandler(this.props.appState.awayTeam)} />
+                            <input className="reportTableInputField " type="text" value={this.state.winningsAway} onChange={this.changeWinningsHandler(this.props.appState.awayTeam)} />
                         </form>
                     </div>
                 </div>
                 <div className="tableRow">
                     <div className="reportTableInputSlot">
                         <form onSubmit={this.addFFchangeHandler(this.props.appState.homeTeam)}>
-                            <input className="reportTableInputField reportTableField1" type="text" value={this.state.ffChangeHome} onChange={this.changeFFchangeHandler(this.props.appState.homeTeam)} />
+                            <input className="reportTableInputField " type="text" value={this.state.ffChangeHome} onChange={this.changeFFchangeHandler(this.props.appState.homeTeam)} />
                         </form>
                     </div>
                     <div className="reportTableInputSlot">
                         <form onSubmit={this.addFFchangeHandler(this.props.appState.awayTeam)}>
-                            <input className="reportTableInputField reportTableField2" type="text" value={this.state.ffChangeAway} onChange={this.changeFFchangeHandler(this.props.appState.awayTeam)} />
+                            <input className="reportTableInputField " type="text" value={this.state.ffChangeAway} onChange={this.changeFFchangeHandler(this.props.appState.awayTeam)} />
                         </form>
                     </div>
                 </div>
@@ -125,114 +137,174 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                     <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.tvString}</div>
                 </div>
             </div>
-            <div className="achievementTable">
-                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
-                    <div className="achievementInputSlot">
-                        <form onSubmit={this.addMVPHandler(this.props.appState.homeTeam)}>
-                            <input className="reportTableInputField reportAchievementField1" type="text" value={this.state.mvpHome} onChange={this.changeMVPHandle(this.props.appState.homeTeam)} />
-                        </form>
-                    </div>
-                    <div className="reportTableField">MVP</div>
-                    <div className="achievementInputSlot achievementInputSlot2">
-                        <form onSubmit={this.addMVPHandler(this.props.appState.awayTeam)}>
-                            <input className="reportTableInputField reportAchievementField2" type="text" value={this.state.mvpAway} onChange={this.changeMVPHandle(this.props.appState.awayTeam)} />
-                        </form>
-                    </div>
+            <div style={this.getBackgroundFor(achievementTableBG, "top")} className="achievementTable">
+                <div id="mvp" className="achievementRow">
+                    <form onSubmit={this.addMVPHandler(this.props.appState.homeTeam)} className="achievementInputSlot">
+                        <input className="reportTableInputField reportAchievementField1 reportAchievementInputField" type="text" value={this.state.mvpHome} onChange={this.changeMVPHandle(this.props.appState.homeTeam)} />
+                    </form>
+                    <form onSubmit={this.addMVPHandler(this.props.appState.awayTeam)} className="achievementInputSlot">
+                        <input className="reportTableInputField reportAchievementField2 reportAchievementInputField" type="text" value={this.state.mvpAway} onChange={this.changeMVPHandle(this.props.appState.awayTeam)} />
+                    </form>
                 </div>
-                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
+                <div id="cp" className="achievementRow">
                     <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.completionsString}</div>
-                    <div className="reportTableField">CP</div>
                     <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.completionsString}</div>
                 </div>
-                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
+                <div id="td" className="achievementRow">
                     <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.scorersString}</div>
-                    <div className="reportTableField">TD</div>
                     <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.scorersString}</div>
                 </div>
-                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
+                <div id="int" className="achievementRow">
                     <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.interceptsString}</div>
-                    <div className="reportTableField">INT</div>
                     <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.interceptsString}</div>
                 </div>
-                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
+                <div id="bh" className="achievementRow">
                     <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.badlyHurtsString}</div>
-                    <div className="reportTableField">BH</div>
                     <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.badlyHurtsString}</div>
                 </div>
-                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
+                <div id="si" className="achievementRow">
                     <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.seriousInjuriesString}</div>
-                    <div className="reportTableField">SI</div>
                     <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.seriousInjuriesString}</div>
                 </div>
-                <div style={this.getBackgroundFor(achievementRow)} className="achievementRow">
+                <div id="kill" className="achievementRow">
                     <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.killsString}</div>
-                    <div className="reportTableField">Kill</div>
                     <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.killsString}</div>
                 </div>
             </div>
+            {this.injuryTable()}
             {this.improvementTable()}
         </div>;
     };
+    private injuryTable = () => {
+        return <div style={this.getBackgroundFor(injuriesTableTitle, "top")} className="reportInjuryTable" >
+            <div className="reportTableColumn">
+                {this.props.appState.homeTeam.injuries.length > 0 ?
+                    this.props.appState.homeTeam.injuries.map((injury: GameEvent, index) => {
+                        const effect: InjuryEffect = Injury.getEffect(injury.injury);
+                        const type: InjuryCode = Injury.getInjuryCode(injury.injury);
+                        const playerStyles: string = effect === InjuryEffect.BH ? "reportTableField reportTableInjuredPlayer reportTableInjuredNoEffect" : "reportTableField reportTableInjuredPlayer"
+                        const descrStyles: string = effect === InjuryEffect.BH ? "reportTableInjuryDescription reportTableInjuredNoEffect" : "reportTableInjuryDescription"
+                        const numberStyles: string = effect === InjuryEffect.BH ? "reportTableInjuryNumber reportTableInjuredNoEffectNumber" : "reportTableInjuryNumber"
 
-    private improvementTable = () => {
-        return <div className="improvementTable">
-         {this.state.improvementLines.length > 0 ?
-            this.state.improvementLines.map((improvements: {home: GameEvent, away: GameEvent}, index) => {
 
-                return <div key={index} style={this.getBackgroundFor(improvementRow)} className="improvementRow">
-                    <form onSubmit={this.editImprovementHandler(improvements.home, this.props.appState.homeTeam)}>
-                        <input className="reportTableInputField reportImprovementPlayerField1" 
-                            type="text" 
-                            value={improvements.home.player} 
-                            onFocus={this.improOnFocusHandler} 
-                            onBlur={this.improOnBlurHandler} 
-                            onChange={this.changeImprovementPlayerHandle(improvements.home, this.props.appState.homeTeam)} />
-                        <input className="reportTableInputField reportImprovementThrowField1" 
-                            type="text" 
-                            value={improvements.home.improvementThrow1} 
-                            onFocus={this.improOnFocusHandler} 
-                            onBlur={this.improOnBlurHandler} 
-                            onChange={this.changeImprovementThrowHandle(1, improvements.home, this.props.appState.homeTeam)} />
-                        +
-                        <input className="reportTableInputField reportImprovementThrowField1" 
-                            type="text" 
-                            value={improvements.home.improvementThrow2} 
-                            onFocus={this.improOnFocusHandler} 
-                            onBlur={this.improOnBlurHandler} 
-                            onChange={this.changeImprovementThrowHandle(2, improvements.home, this.props.appState.homeTeam)} />
-                    </form>
-                    <form onSubmit={this.editImprovementHandler(improvements.away, this.props.appState.awayTeam)}>
-                        <input className="reportTableInputField reportImprovementPlayerField2" 
-                            type="text" 
-                            value={improvements.away.player} 
-                            onFocus={this.improOnFocusHandler} 
-                            onBlur={this.improOnBlurHandler} 
-                            onChange={this.changeImprovementPlayerHandle(improvements.away, this.props.appState.awayTeam)} />
-                        <input className="reportTableInputField reportImprovementThrowField2" type="text" 
-                            value={improvements.away.improvementThrow1} 
-                            onFocus={this.improOnFocusHandler} 
-                            onBlur={this.improOnBlurHandler} 
-                            onChange={this.changeImprovementThrowHandle(1, improvements.away, this.props.appState.awayTeam)} />
-                        +
-                        <input className="reportTableInputField reportImprovementThrowField2" 
-                            type="text" 
-                            value={improvements.away.improvementThrow2} 
-                            onFocus={this.improOnFocusHandler} 
-                            onBlur={this.improOnBlurHandler} 
-                            onChange={this.changeImprovementThrowHandle(2, improvements.away, this.props.appState.awayTeam)} />
-                    </form>
-                </div>
-            })
-            : null}
-            <div style={this.getBackgroundFor(addRow, "center")} className="improvementAddLine" onClick={this.addImprovementLine}></div>
+                        return <div key={index} style={effect === InjuryEffect.BH ? this.getBackgroundFor(injurySlotBHHome, "left top") : this.getBackgroundFor(injurySlotHome, "left top")} className="reportTableInjurySlot">
+                            <div className={playerStyles}>
+                                {injury.player}
+                            </div>
+                            <div className="reportTableField reportTableInjuryDescriptionRow ">
+                                <div className={numberStyles}>{type}</div>
+                                <div className={descrStyles}>{effect}</div>
+                            </div>
+                        </div>
+                    })
+                : null}
+            </div>
+            <div className="reportTableColumn2">
+                {this.props.appState.awayTeam.injuries.length > 0 ?
+                    this.props.appState.awayTeam.injuries.map((injury: GameEvent, index) => {
+                        const effect: InjuryEffect = Injury.getEffect(injury.injury);
+                        const type: InjuryCode = Injury.getInjuryCode(injury.injury);
+                        const playerStyles: string = effect === InjuryEffect.BH ? "reportTableField reportTableInjuredPlayer reportTableInjuredPlayer2 reportTableInjuredNoEffect" : "reportTableField reportTableInjuredPlayer reportTableInjuredPlayer2"
+                        const descrStyles: string = effect === InjuryEffect.BH ? "reportTableInjuryDescription reportTableInjuryDescription2 reportTableInjuredNoEffect" : "reportTableInjuryDescription reportTableInjuryDescription2"
+                        const numberStyles: string = effect === InjuryEffect.BH ? "reportTableInjuryNumber reportTableInjuredNoEffectNumber" : "reportTableInjuryNumber"
+
+
+                        return <div key={index} style={effect === InjuryEffect.BH ? this.getBackgroundFor(injurySlotBHAway, "right top") : this.getBackgroundFor(injurySlotAway, "right top")} className="reportTableInjurySlot reportTableInjurySlot2">
+                            <div className={playerStyles}>
+                                {injury.player}
+                            </div>
+                            <div className="reportTableField reportTableInjuryDescriptionRow reportTableInjuryDescriptionRow2">
+                                <div className={descrStyles}>{effect}</div>
+                                <div className={numberStyles}>{type}</div>
+                            </div>
+                        </div>
+                    })
+                : null}
+            </div>
         </div>
     }
-    private addImprovementLine = (event: any) => {
-        console.log("addImprovementLine");
-        let newImprovements: {home: GameEvent, away: GameEvent}[] = [...this.state.improvementLines];
+    private improvementTable = () => {
+        return <div style={this.getBackgroundFor(improvementsTableTitle, "center top")} className="improvementTable">
+            <div className="tableColumn">
+                {this.state.improvementsHome.length > 0 ?
+                    this.state.improvementsHome.map((improvement: GameEvent, index) => {
+                        return <div key={index} style={this.getBackgroundFor(improvementSlotHome)} className="improvementSlotContainer">
+                            <div className="improvementSlot">
+                                <form onSubmit={this.editImprovementHandler(improvement, this.props.appState.homeTeam)}>
+                                    <input className="reportImprovementField reportImprovementPlayerField" 
+                                        type="text" 
+                                        value={improvement.player} 
+                                        onFocus={this.improOnFocusHandler} 
+                                        onBlur={this.improOnBlurHandler} 
+                                        onChange={this.changeImprovementPlayerHandle(improvement, this.props.appState.homeTeam)} />
+                                </form>
+                                <form onSubmit={this.editImprovementHandler(improvement, this.props.appState.homeTeam)}>
+                                    <input className="reportImprovementField reportImprovementThrowField" 
+                                        type="text" 
+                                        value={improvement.improvementThrow1} 
+                                        onFocus={this.improOnFocusHandler} 
+                                        onBlur={this.improOnBlurHandler} 
+                                        onChange={this.changeImprovementThrowHandle(1, improvement, this.props.appState.homeTeam)} />
+                                    <input className="reportImprovementField reportImprovementThrowField" 
+                                        type="text" 
+                                        value={improvement.improvementThrow2} 
+                                        onFocus={this.improOnFocusHandler} 
+                                        onBlur={this.improOnBlurHandler} 
+                                        onChange={this.changeImprovementThrowHandle(2, improvement, this.props.appState.homeTeam)} />
+                                </form>
+                            </div>
+                        </div>
+                    })
+                : null}
+                <div style={this.getBackgroundFor(addImprovementHome, "center top")} className="improvementAddLine" onClick={this.addImprovementLine("home")}></div>
+            </div>
+            <div className="tableColumn tableColumn2">
+            {this.state.improvementsAway.length > 0 ?
+                    this.state.improvementsAway.map((improvement: GameEvent, index) => {
+                        return <div key={index} style={this.getBackgroundFor(improvementSlotAway)} className="improvementSlotContainer">
+                            <div className="improvementSlot improvementSlot2">
+                                <form onSubmit={this.editImprovementHandler(improvement, this.props.appState.awayTeam)}>
+                                    <input className="reportImprovementField reportImprovementPlayerField reportImprovementPlayerField2" 
+                                        type="text" 
+                                        value={improvement.player} 
+                                        onFocus={this.improOnFocusHandler} 
+                                        onBlur={this.improOnBlurHandler} 
+                                        onChange={this.changeImprovementPlayerHandle(improvement, this.props.appState.awayTeam)} />
+                                </form>
+                                <form onSubmit={this.editImprovementHandler(improvement, this.props.appState.awayTeam)}>
+                                    <input className="reportImprovementField reportImprovementThrowField reportImprovementThrowField2" 
+                                        type="text" 
+                                        value={improvement.improvementThrow1} 
+                                        onFocus={this.improOnFocusHandler} 
+                                        onBlur={this.improOnBlurHandler} 
+                                        onChange={this.changeImprovementThrowHandle(1, improvement, this.props.appState.awayTeam)} />
+                                    <input className="reportTableInputField reportImprovementThrowField reportImprovementThrowField2" 
+                                        type="text" 
+                                        value={improvement.improvementThrow2} 
+                                        onFocus={this.improOnFocusHandler} 
+                                        onBlur={this.improOnBlurHandler} 
+                                        onChange={this.changeImprovementThrowHandle(2, improvement, this.props.appState.awayTeam)} />
+                                </form>
+                            </div>
+                        </div>
+                    })
+                : null}
+                <div style={this.getBackgroundFor(addImprovementAway, "center top")} className="improvementAddLine" onClick={this.addImprovementLine("away")}></div>
+            </div>
+        </div>
+    }
+    private addImprovementLine = (side: string) => {
+        return (event: any) => {
+            console.log("addImprovementLine for ", side);
+            let newImprovements: GameEvent[] = side === "home" ?[...this.state.improvementsHome] : [...this.state.improvementsAway];
 
-        newImprovements.push({home: new GameEvent({player: "-"}), away: new GameEvent({player: "-"})})
-        this.setState({improvementLines: newImprovements});
+            newImprovements.push(new GameEvent({player: "-"}));
+            side === "home" ? 
+                this.setState({improvementsHome: newImprovements})
+            :
+                this.setState({improvementsAway: newImprovements})
+            ;
+        }
     }
     private editImprovementHandler = (improvementEvent: GameEvent, team: Team) => {
         return (event: any) => {
