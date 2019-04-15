@@ -43,7 +43,7 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean}> {
             <div className="decorativeLines">
                 <img className="linesImage" src={decolines}/>
             </div>
-            <div className="version">version 0.39</div>
+            <div className="version">version 0.40</div>
             <div className="newRepcontainer">
                 <NewReportButton source={newButton} onClickHandler={this.createNewReport}/>
             </div>

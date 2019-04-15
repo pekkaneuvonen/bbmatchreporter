@@ -240,7 +240,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
                 </form>
             </div>
             {this.currentInjury ? 
-                <div className="injuryDescription">{`${this.currentInjury.result} : ${this.currentInjury.effect}`}</div>
+                <div className="injuryDescription">{`${this.currentInjury.description} : ${this.currentInjury.effect}`}</div>
                 : "-"
             }
         </div>;
