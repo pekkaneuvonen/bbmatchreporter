@@ -10,7 +10,7 @@ import Report from '../model/Report';
 import { Team } from "../model/Team";
 import { Reports } from '../services/Reports';
 
-import '../css/App.css';
+import '../css/Home.css';
 
 import bgHome from '../img/backgrounds/GRASS_9AM.jpg';
 import decolines from '../img/load/decolines1.png';
@@ -24,31 +24,39 @@ const bgStyle = {
 };
 
 @observer
-class Home extends React.Component<IAppProps, {showDeleteAlert: boolean}> {
+class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTitleHeader: boolean}> {
+    // private scrollContainer: React.RefObject<HTMLDivElement>;
+    private topScrollTreshold: number = 145;
     constructor(props: any) {
         super(props);
         this.state = {
             showDeleteAlert: false,
+            showTitleHeader: false,
         }
+        // this.scrollContainer = React.createRef();
         this.buildReportList();
     }
     public componentWillMount() {
         this.props.appState.screen = Screens.Home;
         this.resetReport();
     }
+
     public render() {
+        return <div className="home" style={bgStyle}>
+            <div className="content" onScroll={this.scrollContainerHandler}>
+                <Screentitle src={title}/>
+                <div className="decorativeLines">
+                    <img className="linesImage" src={decolines}/>
+                </div>
+                <div className="version">version 0.40</div>
+                <div className="newRepcontainer">
+                    <NewReportButton source={newButton} onClickHandler={this.createNewReport}/>
+                </div>
 
-        return <div className="App" style={bgStyle}>
-            <Screentitle src={title}/>
-            <div className="decorativeLines">
-                <img className="linesImage" src={decolines}/>
-            </div>
-            <div className="version">version 0.40</div>
-            <div className="newRepcontainer">
-                <NewReportButton source={newButton} onClickHandler={this.createNewReport}/>
+                <ReportsList appState={this.props.appState} active={!this.state.showDeleteAlert} openReport={this.openReport} deleteReport={this.deleteReport}/>
+
             </div>
 
-            <ReportsList appState={this.props.appState} active={!this.state.showDeleteAlert} openReport={this.openReport} deleteReport={this.deleteReport}/>
             {this.state.showDeleteAlert && this.props.appState.selectedReport ? 
             <div className="alertBlock">
                 <div className="deleteAlert">
@@ -68,6 +76,23 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean}> {
             }
         </div>;
     };
+    private scrollContainerHandler = (event: any) => {
+        /*
+        console.log("scrollContainerHandler");
+        console.log("event ", event);
+        console.log("event.target ", event.target);
+        console.log("scrollTop ", event.target.scrollTop);
+        */
+
+        if (event.target.scrollTop >= this.topScrollTreshold && this.state.showTitleHeader === false) {
+            console.log("topScrollTreshold reached!");
+            this.setState({showTitleHeader: true});
+        } else if (event.target.scrollTop < this.topScrollTreshold &&this.state.showTitleHeader === true) {
+            this.setState({showTitleHeader: false});
+            console.log("topScrollTreshold unreached!");
+        }
+    }
+
     private formattedDate = (date: Date | undefined) => {
         return date ? date.toDateString() : "unknown date";
     }
