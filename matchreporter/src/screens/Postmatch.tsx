@@ -23,6 +23,11 @@ import improvementSlotHome from '../img/postmatch/improvementSlotHome.png';
 import improvementSlotAway from '../img/postmatch/improvementSlotAway.png';
 import addImprovementHome from '../img/postmatch/addLineHome.png';
 import addImprovementAway from '../img/postmatch/addLineAway.png';
+
+import deleteRowHome from '../img/postmatch/deleteRowHome.png';
+import deleteRowAway from '../img/postmatch/deleteRowAway.png';
+
+
 import { GameEvent } from '../model/GameEvent';
 
 
@@ -40,9 +45,13 @@ interface IPostmatchState {
     mvpAway: string;
     improvementsHome: GameEvent[];
     improvementsAway: GameEvent[];
+    selectedEvent: GameEvent | undefined;
     // improvementLines: {home: GameEvent, away: GameEvent}[],
 }
+
 class Postmatch extends React.Component<IAppProps, IPostmatchState> {
+    rowPressTimer: NodeJS.Timeout;
+
     constructor(props: any) {
         super(props);
 
@@ -58,9 +67,12 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
             
             improvementsHome: this.props.appState.homeTeam ? this.props.appState.homeTeam.improvements : [],
             improvementsAway: this.props.appState.awayTeam ? this.props.appState.awayTeam.improvements : [],
-            /*improvementLines: this.constructInitialImprovementRows(this.props.appState.homeTeam, this.props.appState.awayTeam),*/
+            
+            selectedEvent: undefined,
         };
     }
+
+    /*
     private constructInitialImprovementRows = (home: Team, away: Team) => {
         let initialImprovements: {home: GameEvent, away: GameEvent}[] = [];
         if (home) {
@@ -79,6 +91,7 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
         }
         return initialImprovements;
     }
+    */
     public componentWillMount() {
         this.props.appState.screen = Screens.Postmatch;
     }
@@ -94,7 +107,8 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                 <div className="reportTeam reportTeam1">{this.props.appState.homeTeam.name}</div>
                 <div className="reportTeam reportTeam2">{this.props.appState.awayTeam.name}</div>
             </div>
-            <div style={this.getBackgroundFor(generalTableBG)} className="generalTable">
+            <div style={this.getBackgroundFor(generalTableBG)} className="generalTable"
+            onClick={this.clearSelectedRow}>
                 <div className="reportTableField gate">{this.props.appState.report.totalGate.asString}</div>
                 <div className="tableRow">
                     <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.scorers.length}</div>
@@ -137,38 +151,39 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                     <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.tvString}</div>
                 </div>
             </div>
-            <div style={this.getBackgroundFor(achievementTableBG, "top")} className="achievementTable">
+            <div style={this.getBackgroundFor(achievementTableBG, "top")} className="achievementTable"
+            onClick={this.clearSelectedRow}>
                 <div id="mvp" className="achievementRow">
                     <form onSubmit={this.addMVPHandler(this.props.appState.homeTeam)} className="achievementInputSlot">
-                        <input className="reportTableInputField reportAchievementField1 reportAchievementInputField" type="text" value={this.state.mvpHome} onChange={this.changeMVPHandle(this.props.appState.homeTeam)} />
+                        <input className="invisible-scrollbar reportTableInputField reportAchievementField1 reportAchievementInputField" type="text" value={this.state.mvpHome} onChange={this.changeMVPHandle(this.props.appState.homeTeam)} />
                     </form>
                     <form onSubmit={this.addMVPHandler(this.props.appState.awayTeam)} className="achievementInputSlot">
-                        <input className="reportTableInputField reportAchievementField2 reportAchievementInputField" type="text" value={this.state.mvpAway} onChange={this.changeMVPHandle(this.props.appState.awayTeam)} />
+                        <input className="invisible-scrollbar reportTableInputField reportAchievementField2 reportAchievementInputField" type="text" value={this.state.mvpAway} onChange={this.changeMVPHandle(this.props.appState.awayTeam)} />
                     </form>
                 </div>
                 <div id="cp" className="achievementRow">
-                    <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.completionsString}</div>
-                    <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.completionsString}</div>
+                    <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.completionsString}</div>
+                    <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.completionsString}</div>
                 </div>
                 <div id="td" className="achievementRow">
-                    <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.scorersString}</div>
-                    <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.scorersString}</div>
+                    <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.scorersString}</div>
+                    <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.scorersString}</div>
                 </div>
                 <div id="int" className="achievementRow">
-                    <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.interceptsString}</div>
-                    <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.interceptsString}</div>
+                    <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.interceptsString}</div>
+                    <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.interceptsString}</div>
                 </div>
                 <div id="bh" className="achievementRow">
-                    <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.badlyHurtsString}</div>
-                    <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.badlyHurtsString}</div>
+                    <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.badlyHurtsString}</div>
+                    <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.badlyHurtsString}</div>
                 </div>
                 <div id="si" className="achievementRow">
-                    <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.seriousInjuriesString}</div>
+                    <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.seriousInjuriesString}</div>
                     <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.seriousInjuriesString}</div>
                 </div>
                 <div id="kill" className="achievementRow">
-                    <div className="reportTableField reportAchievementField1">{this.props.appState.homeTeam.killsString}</div>
-                    <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.killsString}</div>
+                    <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.killsString}</div>
+                    <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.killsString}</div>
                 </div>
             </div>
             {this.injuryTable()}
@@ -182,19 +197,25 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                     this.props.appState.homeTeam.injuries.map((injury: GameEvent, index) => {
                         const effect: InjuryEffect = Injury.getEffect(injury.injury);
                         const type: InjuryCode = Injury.getInjuryCode(injury.injury);
-                        const playerStyles: string = effect === InjuryEffect.BH ? "reportTableField reportTableInjuredPlayer reportTableInjuredNoEffect" : "reportTableField reportTableInjuredPlayer"
+                        const playerStyles: string = effect === InjuryEffect.BH ? "invisible-scrollbar reportTableField reportTableInjuredPlayer reportTableInjuredNoEffect" : "invisible-scrollbar reportTableField reportTableInjuredPlayer"
                         const descrStyles: string = effect === InjuryEffect.BH ? "reportTableInjuryDescription reportTableInjuredNoEffect" : "reportTableInjuryDescription"
                         const numberStyles: string = effect === InjuryEffect.BH ? "reportTableInjuryNumber reportTableInjuredNoEffectNumber" : "reportTableInjuryNumber"
 
 
-                        return <div key={index} style={effect === InjuryEffect.BH ? this.getBackgroundFor(injurySlotBHHome, "left top") : this.getBackgroundFor(injurySlotHome, "left top")} className="reportTableInjurySlot">
+                        return <div key={index} style={effect === InjuryEffect.BH ? this.getBackgroundFor(injurySlotBHHome, "left top") : this.getBackgroundFor(injurySlotHome, "left top")} className="reportTableInjurySlot"
+                        onClick={this.getSelectRowHandlerFor(injury)}>
                             <div className={playerStyles}>
                                 {injury.player}
                             </div>
-                            <div className="reportTableField reportTableInjuryDescriptionRow ">
+                            <div className="invisible-scrollbar reportTableField reportTableInjuryDescriptionRow ">
                                 <div className={numberStyles}>{type}</div>
                                 <div className={descrStyles}>{effect}</div>
                             </div>
+                            {this.state.selectedEvent === injury ?
+                                <button className={"deleteButton"} style={this.getBackgroundFor(deleteRowHome, "left top")} onClick={this.getInjuryDeletionHandler(this.props.appState.homeTeam)}/>
+                            :
+                                null
+                            }
                         </div>
                     })
                 : null}
@@ -204,34 +225,46 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                     this.props.appState.awayTeam.injuries.map((injury: GameEvent, index) => {
                         const effect: InjuryEffect = Injury.getEffect(injury.injury);
                         const type: InjuryCode = Injury.getInjuryCode(injury.injury);
-                        const playerStyles: string = effect === InjuryEffect.BH ? "reportTableField reportTableInjuredPlayer reportTableInjuredPlayer2 reportTableInjuredNoEffect" : "reportTableField reportTableInjuredPlayer reportTableInjuredPlayer2"
+                        const playerStyles: string = effect === InjuryEffect.BH ? "invisible-scrollbar reportTableField reportTableInjuredPlayer reportTableInjuredPlayer2 reportTableInjuredNoEffect" : "invisible-scrollbar reportTableField reportTableInjuredPlayer reportTableInjuredPlayer2"
                         const descrStyles: string = effect === InjuryEffect.BH ? "reportTableInjuryDescription reportTableInjuryDescription2 reportTableInjuredNoEffect" : "reportTableInjuryDescription reportTableInjuryDescription2"
                         const numberStyles: string = effect === InjuryEffect.BH ? "reportTableInjuryNumber reportTableInjuredNoEffectNumber" : "reportTableInjuryNumber"
 
 
-                        return <div key={index} style={effect === InjuryEffect.BH ? this.getBackgroundFor(injurySlotBHAway, "right top") : this.getBackgroundFor(injurySlotAway, "right top")} className="reportTableInjurySlot reportTableInjurySlot2">
+                        return <div key={index} style={effect === InjuryEffect.BH ? this.getBackgroundFor(injurySlotBHAway, "right top") : this.getBackgroundFor(injurySlotAway, "right top")} className="reportTableInjurySlot reportTableInjurySlot2"
+                        onClick={this.getSelectRowHandlerFor(injury)}>
                             <div className={playerStyles}>
                                 {injury.player}
                             </div>
-                            <div className="reportTableField reportTableInjuryDescriptionRow reportTableInjuryDescriptionRow2">
+                            <div className="invisible-scrollbar reportTableField reportTableInjuryDescriptionRow reportTableInjuryDescriptionRow2">
                                 <div className={descrStyles}>{effect}</div>
                                 <div className={numberStyles}>{type}</div>
                             </div>
+                            {this.state.selectedEvent === injury ?
+                                <button className={"deleteButton"} style={this.getBackgroundFor(deleteRowAway, "left top")} onClick={this.getInjuryDeletionHandler(this.props.appState.awayTeam)}/>
+                            :
+                                null
+                            }
                         </div>
                     })
                 : null}
             </div>
         </div>
     }
+
     private improvementTable = () => {
         return <div style={this.getBackgroundFor(improvementsTableTitle, "center top")} className="improvementTable">
             <div className="tableColumn">
                 {this.state.improvementsHome.length > 0 ?
                     this.state.improvementsHome.map((improvement: GameEvent, index) => {
-                        return <div key={index} style={this.getBackgroundFor(improvementSlotHome)} className="improvementSlotContainer">
+                        return <div key={index} style={this.getBackgroundFor(improvementSlotHome)} className="improvementSlotContainer"
+                        onTouchStart={this.getRowPressHandlerFor(improvement)} 
+                        onTouchEnd={this.getRowReleaseHandlerFor(improvement)} 
+                        onMouseDown={this.getRowPressHandlerFor(improvement)} 
+                        onMouseUp={this.getRowReleaseHandlerFor(improvement)} 
+                        onMouseLeave={this.getRowReleaseHandlerFor(improvement)}>
                             <div className="improvementSlot">
                                 <form onSubmit={this.editImprovementHandler(improvement, this.props.appState.homeTeam)}>
-                                    <input className="reportImprovementField reportImprovementPlayerField" 
+                                    <input className="invisible-scrollbar reportImprovementField reportImprovementPlayerField" 
                                         type="text" 
                                         value={improvement.player} 
                                         onFocus={this.improOnFocusHandler} 
@@ -252,6 +285,11 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                                         onBlur={this.improOnBlurHandler} 
                                         onChange={this.changeImprovementThrowHandle(2, improvement, this.props.appState.homeTeam)} />
                                 </form>
+                                {this.state.selectedEvent === improvement ?
+                                    <button className={"deleteButton"} style={this.getBackgroundFor(deleteRowHome, "left top")} onClick={this.getImprovementDeletionHandler(this.props.appState.homeTeam)}/>
+                                :
+                                    null
+                                }
                             </div>
                         </div>
                     })
@@ -261,10 +299,15 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
             <div className="tableColumn tableColumn2">
             {this.state.improvementsAway.length > 0 ?
                     this.state.improvementsAway.map((improvement: GameEvent, index) => {
-                        return <div key={index} style={this.getBackgroundFor(improvementSlotAway)} className="improvementSlotContainer">
+                        return <div key={index} style={this.getBackgroundFor(improvementSlotAway)} className="improvementSlotContainer"
+                        onTouchStart={this.getRowPressHandlerFor(improvement)} 
+                        onTouchEnd={this.getRowReleaseHandlerFor(improvement)} 
+                        onMouseDown={this.getRowPressHandlerFor(improvement)} 
+                        onMouseUp={this.getRowReleaseHandlerFor(improvement)} 
+                        onMouseLeave={this.getRowReleaseHandlerFor(improvement)}>
                             <div className="improvementSlot improvementSlot2">
                                 <form onSubmit={this.editImprovementHandler(improvement, this.props.appState.awayTeam)}>
-                                    <input className="reportImprovementField reportImprovementPlayerField reportImprovementPlayerField2" 
+                                    <input className="invisible-scrollbar reportImprovementField reportImprovementPlayerField reportImprovementPlayerField2" 
                                         type="text" 
                                         value={improvement.player} 
                                         onFocus={this.improOnFocusHandler} 
@@ -278,13 +321,18 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                                         onFocus={this.improOnFocusHandler} 
                                         onBlur={this.improOnBlurHandler} 
                                         onChange={this.changeImprovementThrowHandle(1, improvement, this.props.appState.awayTeam)} />
-                                    <input className="reportTableInputField reportImprovementThrowField reportImprovementThrowField2" 
+                                    <input className="reportImprovementField reportImprovementThrowField reportImprovementThrowField2" 
                                         type="text" 
                                         value={improvement.improvementThrow2} 
                                         onFocus={this.improOnFocusHandler} 
                                         onBlur={this.improOnBlurHandler} 
                                         onChange={this.changeImprovementThrowHandle(2, improvement, this.props.appState.awayTeam)} />
                                 </form>
+                                {this.state.selectedEvent === improvement ?
+                                    <button className={"deleteButton"} style={this.getBackgroundFor(deleteRowAway, "left top")} onClick={this.getImprovementDeletionHandler(this.props.appState.awayTeam)}/>
+                                :
+                                    null
+                                }
                             </div>
                         </div>
                     })
@@ -293,6 +341,74 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
             </div>
         </div>
     }
+
+    private getSelectRowHandlerFor = (gameEvent: GameEvent) => {
+        return (event:any) => {
+            this.setState({selectedEvent: gameEvent});
+        }
+    }
+    private getRowReleaseHandlerFor = (gameEvent: GameEvent) => {
+        return (event:any) => {
+            if (this.rowPressTimer) {
+                clearTimeout(this.rowPressTimer);
+            }
+        }
+    }
+    private getRowPressHandlerFor = (gameEvent: GameEvent) => {
+        return (event: any) => {
+            if (this.state.selectedEvent && this.state.selectedEvent !== gameEvent) {
+                this.clearSelectedRow(event);
+            }
+            this.rowPressTimer = setTimeout(() => {
+                if (document.activeElement) {
+                    // how to lose focus from currently active input form ?
+                    // document.activeElement.blur();
+                }
+                this.setState({selectedEvent: gameEvent});
+            }, 1500);
+        }
+    }
+    private clearSelectedRow = (event: any) => {
+        if (this.state.selectedEvent) {
+            this.setState({selectedEvent: undefined});
+        }
+    }
+    private getInjuryDeletionHandler = (side: Team) => {
+        return (event: any) => {
+            if (this.state.selectedEvent) {
+                console.log("deleteSelectedInjury ", this.state.selectedEvent);
+                let newInjuries: GameEvent[] = [...side.injuries];
+                const currentIndex : number = newInjuries.indexOf(this.state.selectedEvent);
+                if (currentIndex !== -1) {
+                    newInjuries.splice(currentIndex, 1);
+                    side.injuries = newInjuries;
+                }
+            }
+        }
+    }
+
+    private getImprovementDeletionHandler = (side: Team) => {
+        return (event: any) => {
+            if (this.state.selectedEvent) {
+                console.log("deleteSelectedImprovement ", this.state.selectedEvent);
+                let newImprovements: GameEvent[] = [...side.improvements];
+                const currentIndex: number = newImprovements.indexOf(this.state.selectedEvent);
+
+                if (currentIndex !== -1) {
+                    newImprovements.splice(currentIndex, 1);
+                    if (side === this.props.appState.homeTeam) { 
+                        this.setState({improvementsHome: newImprovements});
+                        this.props.appState.homeTeam.improvements = newImprovements;
+                    } else {
+                        this.setState({improvementsAway: newImprovements});
+                        this.props.appState.awayTeam.improvements = newImprovements;
+                    }
+                }
+            }
+        }
+    }
+
+
     private addImprovementLine = (side: string) => {
         return (event: any) => {
             console.log("addImprovementLine for ", side);
@@ -356,6 +472,7 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
             this.props.appState.awayTeam.improvements = newImproList;
         }
     }
+
 
 
     private changeWinningsHandler = (side: Team) => {
