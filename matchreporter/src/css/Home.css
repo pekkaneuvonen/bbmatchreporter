@@ -1,6 +1,33 @@
+body {
+    overflow: hidden;
+}
 .home {
     /*width: 320px;*/
     background-color: gray;
+}
+.homeHeader {
+    position: absolute;
+    z-index: 50;
+    width: 100vw;
+}
+.topTitle {
+    background-color: black;
+}
+.topTitleImg {
+    display: block;
+    height: 48px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.topTitleButton {
+    top: -23px;
+    position: absolute;
+    width: 154px;
+    left: calc(50% + 53px);
+}
+.backgroundField {
+    position: absolute;
+    height: 100vh;
     overflow: hidden;
 }
 .content {
@@ -14,14 +41,22 @@
     height: 100vh;
     overflow: auto;
 }
+.titleElements {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 16px;
+    z-index: 2;
+    width: 100vw;
+    position: relative;
+}
 /*
 decolines width 1016px, offset 80px
 */
 .decorativeLines {
     position: absolute;
-    z-index: 0;
-    top: 24px;
-    width: 100%;
+    top: 8px;
+    width: 100vw;
     overflow:hidden;
     margin:0;
 }
@@ -42,18 +77,14 @@ decolines width 1016px, offset 80px
 /*
 newReport_button width 205px, offset 16px
 */
-div.newRepcontainer {
+.newReportButton {
     position: absolute;
-    z-index: 2;
-    top: 126px;
+    top: 110px;
     overflow:hidden;
-    left: calc(50% + 16px);
+    left: calc(50% + 24px);
     width: calc(100% - (50% + 16px))
 }
-button.newReport_button {
-    background: rgba(0, 0, 0, 0);
-    border: 0px;
-}
+
 
 .alertBlock {
     height: 100%;

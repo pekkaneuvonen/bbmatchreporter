@@ -1,14 +1,14 @@
 import { observer } from "mobx-react";
 import * as React from 'react';
 import { IAppProps } from "../App";
-import NewReportButton from '../components/buttons/NewReportButton';
 
 import ReportsList from "../components/ReportsList";
-import Screentitle from '../components/Screentitle';
 import {Screens} from "../model/AppState";
 import Report from '../model/Report';
 import { Team } from "../model/Team";
 import { Reports } from '../services/Reports';
+import { Tween } from 'react-gsap';
+import { TweenLite, Quad } from "gsap";
 
 import '../css/Home.css';
 
@@ -16,41 +16,74 @@ import bgHome from '../img/backgrounds/GRASS_9AM.jpg';
 import decolines from '../img/load/decolines1.png';
 import newButton from '../img/load/newrepButton.png';
 import title from '../img/load/title1.png';
+import topTitle from '../img/load/title2.png';
 import history from "./history";
-
-
-const bgStyle = {
-  backgroundImage: `url(${bgHome})`
-};
 
 @observer
 class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTitleHeader: boolean}> {
-    // private scrollContainer: React.RefObject<HTMLDivElement>;
+    private bgContainer: React.RefObject<HTMLDivElement>;
+    private contentContainer: React.RefObject<HTMLDivElement>;
+    private toptitleContainer: React.RefObject<HTMLDivElement>;
+    private contenttitleContainer: React.RefObject<HTMLDivElement>;
+    private toptitleTween: ReturnType<typeof TweenLite.to> | null;
+    private contenttitleTween: ReturnType<typeof TweenLite.to> | null;
+
     private topScrollTreshold: number = 145;
+
     constructor(props: any) {
         super(props);
         this.state = {
             showDeleteAlert: false,
             showTitleHeader: false,
         }
-        // this.scrollContainer = React.createRef();
+        this.bgContainer = React.createRef();
+        this.contentContainer = React.createRef();
+        this.toptitleContainer = React.createRef();
+        this.contenttitleContainer = React.createRef();
+        // reference to the animation
         this.buildReportList();
+        this.toptitleTween = null;
+        this.contenttitleTween = null;
     }
     public componentWillMount() {
         this.props.appState.screen = Screens.Home;
         this.resetReport();
     }
+    public componentDidMount() {
+        this.toptitleTween = TweenLite.to(this.toptitleContainer.current, 0.2, {y: -116, ease: "Quad.easeOut"});
+    }
+    public componentDidUpdate(prevProps: IAppProps, prevState: {showDeleteAlert: boolean, showTitleHeader: boolean}) {
 
+        if (!prevState.showTitleHeader && this.state.showTitleHeader) {
+            this.toptitleTween = TweenLite.to(this.toptitleContainer.current, 0.2, {y: 0, ease: "Quad.easeOut"});
+            
+            this.contenttitleTween = TweenLite.to(this.contenttitleContainer.current, 0.25, {y: -100, ease: "Quad.easeOut"});
+
+        } else if (prevState.showTitleHeader && !this.state.showTitleHeader) {
+            this.toptitleTween = TweenLite.to(this.toptitleContainer.current, 0.2, {y: -116, ease: "Quad.easeOut"});
+
+            this.contenttitleTween = TweenLite.to(this.contenttitleContainer.current, 0.25, {y: 0, ease: "Quad.easeOut"});
+        }
+    }
     public render() {
-        return <div className="home" style={bgStyle}>
-            <div className="content" onScroll={this.scrollContainerHandler}>
-                <Screentitle src={title}/>
-                <div className="decorativeLines">
-                    <img className="linesImage" src={decolines}/>
-                </div>
-                <div className="version">version 0.40</div>
-                <div className="newRepcontainer">
-                    <NewReportButton source={newButton} onClickHandler={this.createNewReport}/>
+        return <div className="home" onScroll={this.scrollHandler}>
+            <div ref={this.bgContainer} className="backgroundField">
+                <img src={bgHome}/>
+            </div>
+            <div ref={this.toptitleContainer} className="homeHeader">
+                <div className="topTitle"><img className="topTitleImg" src={topTitle}/></div>
+                <img className="topTitleButton" src={newButton}/>
+            </div>
+            <div ref={this.contentContainer} className="content">
+                <div ref={this.contenttitleContainer} className="titleElements">
+                    <img src={title}/>
+                    <div className="decorativeLines">
+                        <img className="linesImage" src={decolines}/>
+                    </div>
+                    <div className="version">version 0.41</div>
+                    <div className="newReportButton" onClick={this.createNewReport}>
+                        <img src={newButton}/>
+                    </div>
                 </div>
 
                 <ReportsList appState={this.props.appState} active={!this.state.showDeleteAlert} openReport={this.openReport} deleteReport={this.deleteReport}/>
@@ -76,23 +109,18 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
             }
         </div>;
     };
-    private scrollContainerHandler = (event: any) => {
-        /*
-        console.log("scrollContainerHandler");
-        console.log("event ", event);
-        console.log("event.target ", event.target);
-        console.log("scrollTop ", event.target.scrollTop);
-        */
 
-        if (event.target.scrollTop >= this.topScrollTreshold && this.state.showTitleHeader === false) {
-            console.log("topScrollTreshold reached!");
-            this.setState({showTitleHeader: true});
-        } else if (event.target.scrollTop < this.topScrollTreshold &&this.state.showTitleHeader === true) {
-            this.setState({showTitleHeader: false});
-            console.log("topScrollTreshold unreached!");
+    private scrollHandler = (event:any) => {
+        if (this.contentContainer.current && this.bgContainer.current) {
+            this.bgContainer.current.scrollTop = this.contentContainer.current.scrollTop / 9;
+
+            if (this.contentContainer.current.scrollTop >= this.topScrollTreshold && this.state.showTitleHeader === false) {
+                this.setState({showTitleHeader: true});
+            } else if (this.contentContainer.current.scrollTop < this.topScrollTreshold &&this.state.showTitleHeader === true) {
+                this.setState({showTitleHeader: false});
+            }
         }
     }
-
     private formattedDate = (date: Date | undefined) => {
         return date ? date.toDateString() : "unknown date";
     }
