@@ -11,7 +11,6 @@ import {Screens} from "../model/AppState";
 import { Reports } from '../services/Reports';
 
 import bgHome from '../img/backgrounds/GRASS_9AM_grid.jpg';
-import doneButton from '../img/prematch/doneButton.png';
 import WeatherChooserRow from "../components/WeatherChooserRow";
 import '../css/Prematch.css';
 import { Team } from "../model/Team";
@@ -19,31 +18,18 @@ import { WeatherType } from "../model/Weather";
 import { Kvalue } from '../types/Kvalue';
 import StringFormatter from "../utils/StringFormatter";
 
-const bgStyle = {
-  backgroundImage: `url(${bgHome})`,
-};
-
-interface IscreenState {
-    // inducementsValue: Kvalue;
-    // induced: any;
-    // homeInducementContent: string;
-    // awayInducementContent: string;
-    newReport: boolean,
-    weather: number;
-}
-
 @observer
-class Prematch extends React.Component<IAppProps, IscreenState> {
+class Prematch extends React.Component<IAppProps, {}> {
+    private bgContainer: React.RefObject<HTMLDivElement>;
+    private bgStyle = {
+        backgroundImage: `url(${bgHome})`,
+        height: "2048px" // will be updated in componentDidUpdate to fit reportList height 
+    };
+
     constructor(props: any) {
         super(props);
-        this.state = {
-            /*awayInducementContent: "away teams inducements",
-            homeInducementContent: "home teams inducements",
-            induced: this.inducedSide,
-            inducementsValue: this.inducementValue,*/
-            newReport: this.props.appState.brandNewReport,
-            weather: 0
-        }
+        this.bgContainer = React.createRef();
+
     };
 
     public componentWillMount() {
@@ -66,68 +52,61 @@ class Prematch extends React.Component<IAppProps, IscreenState> {
             inducementString = "+" + this.inducementValue.asString;
         }
 
-
-        /*
-        let inducementStyles:string = "inducementValue";
-        if (induced === this.props.appState.homeTeam) {
-            inducementStyles = inducementStyles.concat(" homeinduced");
-        } else if (induced === this.props.appState.awayTeam) {
-            inducementStyles = inducementStyles.concat(" awayinduced");
-        } else {
-            inducementString = "even";
-        }
-        
-        let fameString:string = "+" + Math.abs(this.fame);
-        if (this.fame < 0) {
-            fameStyles = fameStyles.concat(" homefame");
-        } else if (this.fame > 0) {
-            fameStyles = fameStyles.concat(" awayfame");
-        } else {
-            fameString = "no F.A.M.E.";
-        }
-        */
        
-        return <div className="Prematch" style={bgStyle}>
+        return <div className="Prematch" onScroll={this.scrollHandler}>
+            <div ref={this.bgContainer} className="prematchBackgroundField" >
+                <div style={this.bgStyle}/>
+            </div>
             <Navigator appState={this.props.appState}/>
-            <div className="teamtitles">
-                <TeamTitleInput 
-                    activityOverride={this.state.newReport}
-                    titleChangeHandler={this.handleTeamNameChange} 
-                    title1Default={this.props.appState.homeTeam.name} 
-                    title2Default={this.props.appState.awayTeam.name}/>
-            </div>
-            <div className="teamTVs">
-                <TeamValueInput
-                    activityOverride={this.state.newReport}
-                    valueChangeHandler={this.handleTeamValueChange} 
-                    value1={this.props.appState.homeTeam.tvString} 
-                    value2={this.props.appState.awayTeam.tvString}/>
-            </div>
-            <div className="inducementsContainer">
-                <InducementsInput
-                    activityOverride={this.state.newReport}
-                    inducementsValue={inducementString} 
-                    side={induced} 
-                    inducementsDescriptions={this.inducedSide ? this.inducedSide.inducements : "-"} 
-                    descriptionsChangeHandler={this.inducementDescriptionChange()} />
-            </div>
-            <div className="gateContainer">
-                <GatesInput
-                    activityOverride={this.state.newReport}
-                    gateValue1={this.props.appState.homeTeam.gateValue} 
-                    gateValue2={this.props.appState.awayTeam.gateValue} 
-                    gatesChangeHandler={this.handleTeamGateChange} />
-            </div>
-            <div className="weatherChooserContainer">
-                {this.createWeatherTable()};
-            </div>
-            {this.state.newReport ? 
-                <div onClick={this.doneButtonHandler}>
-                    <img className={"bottomButton"} src={doneButton}/>
+            <div className="prematchTablecontent">
+                {this.props.appState.brandNewReport ?
+                    <div className="newReportMessage">NEW REPORT</div>
+                : null }
+                <div className="teamtitles">
+                    <TeamTitleInput 
+                        activityOverride={this.props.appState.brandNewReport}
+                        titleChangeHandler={this.handleTeamNameChange} 
+                        title1Default={this.props.appState.homeTeam.name} 
+                        title2Default={this.props.appState.awayTeam.name}/>
                 </div>
+                <div className="teamTVs">
+                    <TeamValueInput
+                        activityOverride={this.props.appState.brandNewReport}
+                        valueChangeHandler={this.handleTeamValueChange} 
+                        value1={this.props.appState.homeTeam.tvString} 
+                        value2={this.props.appState.awayTeam.tvString}/>
+                </div>
+                <div className="inducementsContainer">
+                    <InducementsInput
+                        activityOverride={this.props.appState.brandNewReport}
+                        inducementsValue={inducementString} 
+                        side={induced} 
+                        inducementsDescriptions={this.inducedSide ? this.inducedSide.inducements : "-"} 
+                        descriptionsChangeHandler={this.inducementDescriptionChange()} />
+                </div>
+                <div className="gateContainer">
+                    <GatesInput
+                        activityOverride={this.props.appState.brandNewReport}
+                        gateValue1={this.props.appState.homeTeam.gateValue} 
+                        gateValue2={this.props.appState.awayTeam.gateValue} 
+                        gatesChangeHandler={this.handleTeamGateChange} />
+                </div>
+                <div className="weatherChooserContainer">
+                    {this.createWeatherTable()};
+                </div>
+            </div>
+            {this.props.appState.brandNewReport ? 
+                <div onClick={this.doneButtonHandler} className="bottomButton"><div className="bottomButtonText">DONE</div></div>
             : null}
         </div>;
     };
+    private scrollHandler = (event:any) => {
+        if (this.bgContainer.current) {
+            
+            console.log("scrollTop ", document.body.scrollTop);
+            // this.bgContainer.current.scrollTop = this.contentContainer.current.scrollTop / 9;
+        }
+    }
     private doneButtonHandler = (event: any) => {
         this.props.appState.brandNewReport = false;
         this.setState({newReport: false});

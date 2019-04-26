@@ -16,6 +16,12 @@ div.navigatorContainer {
   width: "100%";
 }
 div.navigator {
+  position: relative;
+  height: 80px;
+  width: 100vw;
+  z-index: 50;
+}
+div.navigatorTabs {
   height: 40px;
   background: #242424;
   display: flex;

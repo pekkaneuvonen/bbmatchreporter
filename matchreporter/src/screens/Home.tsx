@@ -7,18 +7,18 @@ import {Screens} from "../model/AppState";
 import Report from '../model/Report';
 import { Team } from "../model/Team";
 import { Reports } from '../services/Reports';
-import { Tween } from 'react-gsap';
 import { TweenLite, Quad } from "gsap";
 
 import '../css/Home.css';
 
 import bgHome from '../img/backgrounds/GRASS_9AM.jpg';
-import decolines from '../img/load/decolines1.png';
 import newButton from '../img/load/newrepButton.png';
 import title from '../img/load/title1.png';
 import topTitle from '../img/load/title2.png';
 import history from "./history";
 
+
+  
 @observer
 class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTitleHeader: boolean}> {
     private bgContainer: React.RefObject<HTMLDivElement>;
@@ -29,7 +29,10 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
     private contenttitleTween: ReturnType<typeof TweenLite.to> | null;
 
     private topScrollTreshold: number = 145;
-
+    private bgStyle = {
+        backgroundImage: `url(${bgHome})`,
+        height: "2048px" // will be updated in componentDidUpdate to fit reportList height 
+    };
     constructor(props: any) {
         super(props);
         this.state = {
@@ -57,29 +60,26 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
         if (!prevState.showTitleHeader && this.state.showTitleHeader) {
             this.toptitleTween = TweenLite.to(this.toptitleContainer.current, 0.2, {y: 0, ease: "Quad.easeOut"});
             
-            this.contenttitleTween = TweenLite.to(this.contenttitleContainer.current, 0.25, {y: -100, ease: "Quad.easeOut"});
+            this.contenttitleTween = TweenLite.to(this.contenttitleContainer.current, 0.25, {alpha: 0, ease: "Quad.easeOut"});
 
         } else if (prevState.showTitleHeader && !this.state.showTitleHeader) {
             this.toptitleTween = TweenLite.to(this.toptitleContainer.current, 0.2, {y: -116, ease: "Quad.easeOut"});
 
-            this.contenttitleTween = TweenLite.to(this.contenttitleContainer.current, 0.25, {y: 0, ease: "Quad.easeOut"});
+            this.contenttitleTween = TweenLite.to(this.contenttitleContainer.current, 0.25, {alpha: 1, ease: "Quad.easeOut"});
         }
     }
     public render() {
-        return <div className="home" onScroll={this.scrollHandler}>
-            <div ref={this.bgContainer} className="backgroundField">
-                <img src={bgHome}/>
+        return <div className="home">
+            <div ref={this.bgContainer} className="backgroundField" >
+                <div style={this.bgStyle}/>
             </div>
             <div ref={this.toptitleContainer} className="homeHeader">
                 <div className="topTitle"><img className="topTitleImg" src={topTitle}/></div>
-                <img className="topTitleButton" src={newButton}/>
+                <img className="topTitleButton" src={newButton} onClick={this.createNewReport}/>
             </div>
-            <div ref={this.contentContainer} className="content">
+            <div ref={this.contentContainer} className="content" onScroll={this.scrollHandler}>
                 <div ref={this.contenttitleContainer} className="titleElements">
                     <img src={title}/>
-                    <div className="decorativeLines">
-                        <img className="linesImage" src={decolines}/>
-                    </div>
                     <div className="version">version 0.41</div>
                     <div className="newReportButton" onClick={this.createNewReport}>
                         <img src={newButton}/>
@@ -137,6 +137,7 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
         const homeTeam: Team = new Team({name: defaultTitle1});
         const awayTeam: Team = new Team({name: defaultTitle2});
         const reportTemplate: Report = new Report({id:reportTempId, title:reportTempId, home:homeTeam, away:awayTeam});
+        
         
         Reports
         .createReport(reportTemplate)
@@ -200,7 +201,13 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
             this.props.appState.reportsList = reportsData.map(data => {
                 return new Report(data);
             })
-            console.log("parsed reportList ", this.props.appState.reportsList)
+            console.log("parsed reportList (", this.props.appState.reportsList.length, ") ", this.props.appState.reportsList)
+            console.log("contentContainer height: ", this.contentContainer.current ? this.contentContainer.current.scrollHeight : "null");
+            
+            this.bgStyle = {
+                backgroundImage: `url(${bgHome})`,
+                height: `${this.contentContainer.current ? this.contentContainer.current.scrollHeight : 2048}px`,
+            };
         })
         .catch(error => {
             console.log(error);

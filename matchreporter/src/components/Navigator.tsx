@@ -24,12 +24,6 @@ import { Screens } from '../model/AppState';
 
 
 class Navigator extends React.Component<IAppProps, {}> {
-    private navbarStyle = {
-        height: "80px",
-        width: "100%",
-        zIndex: 50,
-    };
-
     public componentDidMount() {
         console.log(" Navigator location : screen = ", this.props.appState.screen);
     }
@@ -37,13 +31,13 @@ class Navigator extends React.Component<IAppProps, {}> {
     public render() {
 
         return (
-        <div style={ this.navbarStyle }>
+        <div className="navigator">
             <Link to='/' className="navigatorHomebutton">
                     <img className="img_centered" src={homeLabel}/>
                     <img style={{right: "0px"}} src={homeX}/>
             </Link>
             <div className="navigatorContainer">
-                <div className="navigator">
+                <div className="navigatorTabs">
                     <Link to={Screens.Prematch} className={ this.props.appState.screen === Screens.Prematch ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
                         <img className="img_centered" src={prematchButton}/>
                     </Link>
