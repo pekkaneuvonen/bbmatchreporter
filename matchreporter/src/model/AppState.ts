@@ -1,24 +1,24 @@
 import { observable } from "mobx";
 import { Kvalue } from "../types/Kvalue";
-import { Injury } from "./Injury";
 import { GameEvent } from "./GameEvent";
 import { Report } from "./Report";
 import { Team } from "./Team";
 
 import { Reports } from '../services/Reports';
-import { WeatherType, WeatherDescription } from "./Weather";
 
 /**
  * Application state / root state manager.
  */
 export class AppState {
   @observable public screen: string;
+  @observable public prevscreen: string;
+  
   @observable public prevTab?: string;
   @observable public showTabNavigator: boolean;
   @observable public showTab: boolean;
   @observable public reportType?: string;
   @observable public reportsList: Report[] = [];
-  public brandNewReport: boolean = false;
+  public brandNewReport: Report | null = null;
   public createdReportsCount: number = 0;
   @observable public currentWeather: string = "";
   
@@ -42,9 +42,15 @@ export class AppState {
     this.showTabNavigator = false;
     this.showTab = false;
   }
-
+  public openReport = (report: Report) => {
+    console.log("opening report ", report);
+    this.report = report;
+    this.homeTeam = report.home;
+    this.awayTeam = report.away;
+    this.currentWeather = report.weather ? report.weather[0] : "null";
+  }
   public createdReport = (newReport: Report) => {
-    this.brandNewReport = true;
+    this.brandNewReport = newReport;
     this.reportsList.push(newReport);
     return newReport;
   }

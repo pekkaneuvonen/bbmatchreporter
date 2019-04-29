@@ -70,6 +70,7 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
             
             selectedEvent: undefined,
         };
+        this.props.appState.screen = Screens.Postmatch;
     }
 
     /*
@@ -92,8 +93,8 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
         return initialImprovements;
     }
     */
-    public componentWillMount() {
-        this.props.appState.screen = Screens.Postmatch;
+    public componentWillUnmount() {
+        this.props.appState.prevscreen = Screens.Postmatch;
     }
     public render() {
         if (!this.props.appState.homeTeam || !this.props.appState.awayTeam

@@ -124,6 +124,7 @@ newReport_button width 205px, offset 16px
     text-align: center;
 }
 .alertButton {
+    cursor: pointer;
     flex-grow: 1;
     width: 100px;
     margin: 2px;

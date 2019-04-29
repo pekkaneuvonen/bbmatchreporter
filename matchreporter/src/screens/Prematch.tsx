@@ -8,7 +8,6 @@ import InducementsInput from '../components/InducementsInput';
 import GatesInput from '../components/GatesInput';
 
 import {Screens} from "../model/AppState";
-import { Reports } from '../services/Reports';
 
 import bgHome from '../img/backgrounds/GRASS_9AM_grid.jpg';
 import WeatherChooserRow from "../components/WeatherChooserRow";
@@ -21,6 +20,10 @@ import StringFormatter from "../utils/StringFormatter";
 @observer
 class Prematch extends React.Component<IAppProps, {}> {
     private bgContainer: React.RefObject<HTMLDivElement>;
+    private tableContainer: React.RefObject<HTMLDivElement>;
+    private tableStyle = {
+        height: "calc(100vh - 80px)", // will be updated in componentWillMount 
+    };
     private bgStyle = {
         backgroundImage: `url(${bgHome})`,
         height: "2048px" // will be updated in componentDidUpdate to fit reportList height 
@@ -29,11 +32,21 @@ class Prematch extends React.Component<IAppProps, {}> {
     constructor(props: any) {
         super(props);
         this.bgContainer = React.createRef();
-
+        this.tableContainer = React.createRef();
+        
+        this.props.appState.screen = Screens.Prematch;
+        this.tableStyle = this.props.appState.brandNewReport !== null ?
+            {height: 'calc(100vh - 80px - 54px)',}
+            :
+            {height: 'calc(100vh - 80px)',};
+        this.bgStyle = {
+            backgroundImage: `url(${bgHome})`,
+            height: `${this.tableContainer.current ? this.tableContainer.current.scrollHeight + 80: 2048}px`,
+        };
     };
 
-    public componentWillMount() {
-        this.props.appState.screen = Screens.Prematch;
+    public componentWillUnmount() {
+        this.props.appState.prevscreen = Screens.Prematch;
     }
     public render() {
         if (!this.props.appState.homeTeam || !this.props.appState.awayTeam
@@ -52,33 +65,34 @@ class Prematch extends React.Component<IAppProps, {}> {
             inducementString = "+" + this.inducementValue.asString;
         }
 
+
        
         return <div className="Prematch" onScroll={this.scrollHandler}>
             <div ref={this.bgContainer} className="prematchBackgroundField" >
                 <div style={this.bgStyle}/>
             </div>
             <Navigator appState={this.props.appState}/>
-            <div className="prematchTablecontent">
+            <div ref={this.tableContainer} className="prematchTablecontent" style={this.tableStyle}>
                 {this.props.appState.brandNewReport ?
                     <div className="newReportMessage">NEW REPORT</div>
                 : null }
                 <div className="teamtitles">
                     <TeamTitleInput 
-                        activityOverride={this.props.appState.brandNewReport}
+                        activityOverride={this.props.appState.brandNewReport !== null}
                         titleChangeHandler={this.handleTeamNameChange} 
                         title1Default={this.props.appState.homeTeam.name} 
                         title2Default={this.props.appState.awayTeam.name}/>
                 </div>
                 <div className="teamTVs">
                     <TeamValueInput
-                        activityOverride={this.props.appState.brandNewReport}
+                        activityOverride={this.props.appState.brandNewReport !== null}
                         valueChangeHandler={this.handleTeamValueChange} 
                         value1={this.props.appState.homeTeam.tvString} 
                         value2={this.props.appState.awayTeam.tvString}/>
                 </div>
                 <div className="inducementsContainer">
                     <InducementsInput
-                        activityOverride={this.props.appState.brandNewReport}
+                        activityOverride={this.props.appState.brandNewReport !== null}
                         inducementsValue={inducementString} 
                         side={induced} 
                         inducementsDescriptions={this.inducedSide ? this.inducedSide.inducements : "-"} 
@@ -86,7 +100,7 @@ class Prematch extends React.Component<IAppProps, {}> {
                 </div>
                 <div className="gateContainer">
                     <GatesInput
-                        activityOverride={this.props.appState.brandNewReport}
+                        activityOverride={this.props.appState.brandNewReport !== null}
                         gateValue1={this.props.appState.homeTeam.gateValue} 
                         gateValue2={this.props.appState.awayTeam.gateValue} 
                         gatesChangeHandler={this.handleTeamGateChange} />
@@ -101,15 +115,12 @@ class Prematch extends React.Component<IAppProps, {}> {
         </div>;
     };
     private scrollHandler = (event:any) => {
-        if (this.bgContainer.current) {
-            
-            console.log("scrollTop ", document.body.scrollTop);
-            // this.bgContainer.current.scrollTop = this.contentContainer.current.scrollTop / 9;
+        if (this.bgContainer.current && this.tableContainer.current) {
+            this.bgContainer.current.scrollTop = this.tableContainer.current.scrollTop / 9;
         }
     }
     private doneButtonHandler = (event: any) => {
-        this.props.appState.brandNewReport = false;
-        this.setState({newReport: false});
+        this.props.appState.brandNewReport = null;
     }
     private createWeatherTable = () => {
         const table = [];

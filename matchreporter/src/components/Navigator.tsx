@@ -6,28 +6,57 @@ import { IAppProps } from "../App";
 import homeLabel from '../img/navigator/homeButtonLabel.png';
 import homeX from '../img/navigator/homeButtonX.png';
 import matchButton from '../img/navigator/MatchButton.png';
-import buttonChosenBG from '../img/navigator/naviButtonLight.png';
 import matchButtonDiv from '../img/navigator/MatchButtonDiv.png';
 import postmatchButton from '../img/navigator/PostMatchButton.png';
 import prematchButton from '../img/navigator/PreMatchButton.png';
-// import homebutton from '../img/navigator/tab_home_visited.png';
-/*
-import matchTabButton from '../img/navigator/tab_match.png';
-import postTabButton from '../img/navigator/tab_post.png';
-import preTabButton from '../img/navigator/tab_pre.png';
+import BrowserLinkButton from './buttons/BrowserLinkButton';
 
-import matchTabVisButton from '../img/navigator/tab_match_visited.png';
-import postTabVisButton from '../img/navigator/tab_post_visited.png';
-import preTabVisButton from '../img/navigator/tab_pre_visited.png';
-*/
 import { Screens } from '../model/AppState';
+import { TweenLite } from "gsap";
 
 
 class Navigator extends React.Component<IAppProps, {}> {
-    public componentDidMount() {
-        console.log(" Navigator location : screen = ", this.props.appState.screen);
-    }
+    
+    private linkTween: ReturnType<typeof TweenLite.to> | null;
+    private preButton: React.RefObject<any>;
+    private matchButton: React.RefObject<any>;
+    private postButton: React.RefObject<any>;
+    private naviButtonSlot: React.RefObject<HTMLDivElement>;
 
+    constructor(props: any) {
+        super(props);
+        this.linkTween = null;
+        this.preButton = React.createRef();
+        this.matchButton = React.createRef();
+        this.postButton = React.createRef();
+        this.naviButtonSlot = React.createRef();
+    }
+    public componentDidMount() {
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.windowResizeHandler);
+    }
+    public componentWillUnmount() {
+        window.removeEventListener('resize', this.windowResizeHandler);
+    }
+    private windowResizeHandler = () => {
+        this.props.appState.prevscreen = this.props.appState.screen;
+        this.updateWindowDimensions();
+    }
+    private updateWindowDimensions = () => {
+        const currentButtonRef: any = this.props.appState.screen === Screens.Prematch ? this.preButton : this.props.appState.screen === Screens.Match ? this.matchButton : this.postButton;
+        const prevButtonRef: any = this.props.appState.prevscreen === Screens.Prematch ? this.preButton : this.props.appState.prevscreen === Screens.Match ? this.matchButton : this.postButton;
+        // console.log("currentButtonRef ", currentButtonRef);
+
+        const targetX: number = currentButtonRef.current.offsetLeft - 8; // 8 is the padding on navigatorContainer
+        let fromX: number = prevButtonRef.current.offsetLeft - 8;
+        if (this.props.appState.prevscreen === this.props.appState.screen
+        || this.props.appState.prevscreen === Screens.Home) {
+            fromX = targetX;
+        }
+        const buttonWidth: number = currentButtonRef.current.offsetWidth; //this.props.appState.screen === Screens.Prematch ? this.preButton.current
+
+        this.linkTween = TweenLite.fromTo(this.naviButtonSlot.current, 0.2, {x: fromX, ease: "Quad.easeOut"}, {width: buttonWidth, x: targetX, ease: "Quad.easeOut"});
+    };
     public render() {
 
         return (
@@ -37,36 +66,18 @@ class Navigator extends React.Component<IAppProps, {}> {
                     <img style={{right: "0px"}} src={homeX}/>
             </Link>
             <div className="navigatorContainer">
+                <div ref={this.naviButtonSlot} className="chosenButtonStyles"></div>
                 <div className="navigatorTabs">
-                    <Link to={Screens.Prematch} className={ this.props.appState.screen === Screens.Prematch ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
-                        <img className="img_centered" src={prematchButton}/>
-                    </Link>
-                    <img src={matchButtonDiv}/>
-                    <Link to={Screens.Match} className={ this.props.appState.screen === Screens.Match ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
-                        <img className="img_centered" src={matchButton}/>
-                    </Link>
-                    <img src={matchButtonDiv}/>
-                    <Link to={Screens.Postmatch} className={ this.props.appState.screen === Screens.Postmatch ? "buttonStyles buttonChosenStyles" : "buttonStyles" }>
-                        <img className="img_centered" src={postmatchButton}/>
-                    </Link>
+                    <BrowserLinkButton elementRef={this.preButton} to={Screens.Prematch} imageSource={prematchButton}/>
+                    <img className="navigatorDivs" src={matchButtonDiv}/>
+                    <BrowserLinkButton elementRef={this.matchButton} to={Screens.Match} imageSource={matchButton}/>
+                    <img className="navigatorDivs" src={matchButtonDiv}/>
+                    <BrowserLinkButton elementRef={this.postButton} to={Screens.Postmatch} imageSource={postmatchButton}/>
                 </div>
             </div>
         </div>
         )
     }
-/*
-    private getButtonFor = (screen: string) => {
-        const screens: string[] = [Screens.Home, Screens.Prematch, Screens.Match, Screens.Postmatch];
-        const visited: boolean = screens.indexOf(screen) <= screens.indexOf(this.props.appState.screen);
 
-        if (screen === Screens.Prematch) {
-            return visited ? preTabVisButton : preTabButton;
-        } else if (screen === Screens.Match) {
-            return visited ? matchTabVisButton : matchTabButton;
-        } else if (screen === Screens.Postmatch) {
-            return visited ? postTabVisButton : postTabButton;
-        }
-    }
-*/
 }
 export default Navigator;

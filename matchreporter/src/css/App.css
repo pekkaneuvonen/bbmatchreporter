@@ -37,16 +37,25 @@ div.navigatorTabs {
   width: 100%;
 }
 .buttonStyles {
+  z-index: 3;
   flex: 1;
-  background: #242424;
 }
 .img_centered{
   display: block;
   margin-left: auto;
   margin-right: auto 
 }
-.buttonChosenStyles {
+.navigatorDivs{
+  z-index: 2;
+}
+.chosenButtonStyles {
+  height: 40px;
+  margin: 0px;
+  padding: 0px;
+  width: calc((100vw - 18px) / 3);
+  position: absolute;
   background: #DCDAD6;
+  z-index: 1;
 }
 
 

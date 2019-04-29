@@ -29,7 +29,7 @@ class ReportsList extends React.Component<{
         super(props);
     }
     
-    public componentWillMount() {
+    public componentDidMount() {
         /*
         Reports
             .getReport("0")

@@ -14,7 +14,6 @@ import injuryButton from '../img/buttons/INJURY_active.png';
 import interceptButton from '../img/buttons/INTERCEPT_active.png';
 */
 import eventButtons from '../img/match/eventButtons.png';
-import eventButtons_disabled from '../img/match/eventButtons_disabled.png';
 import eventConfirmButton from '../img/event/confirmButton.png';
 
 import eventTitleDiv from '../img/event/titleDiv.png';
@@ -58,6 +57,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
             eventInputActive: false,
             passivePlayer: "-",
         }
+        this.props.appState.screen = Screens.Match;
     }
     private eventbuttonsBGstyle = {
         backgroundImage: `url(${eventButtons})`,
@@ -69,8 +69,8 @@ class Match extends React.Component<IAppProps, IMatchState> {
         backgroundPosition: 'center',
         backgroundRepeat  : 'no-repeat',
     };
-    public componentWillMount() {
-        this.props.appState.screen = Screens.Match;
+    public componentWillUnmount() {
+        this.props.appState.prevscreen = Screens.Match;
     }
     public render() {
         if (!this.props.appState.homeTeam || !this.props.appState.awayTeam

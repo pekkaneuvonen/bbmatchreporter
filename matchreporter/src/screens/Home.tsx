@@ -47,10 +47,13 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
         this.buildReportList();
         this.toptitleTween = null;
         this.contenttitleTween = null;
-    }
-    public componentWillMount() {
+        
         this.props.appState.screen = Screens.Home;
         this.resetReport();
+    }
+
+    public componentWillUnmount() {
+        this.props.appState.prevscreen = Screens.Home;
     }
     public componentDidMount() {
         this.toptitleTween = TweenLite.to(this.toptitleContainer.current, 0.2, {y: -116, ease: "Quad.easeOut"});
@@ -93,14 +96,10 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
             {this.state.showDeleteAlert && this.props.appState.selectedReport ? 
             <div className="alertBlock">
                 <div className="deleteAlert">
-                    <div className="alertTitle">Delete report!</div>
-                    <div className="alertMessage">
-                        Are you sure you want to delete the match report
-                        <div className="alertTeam">{`${this.props.appState.selectedReport.home.name} vs. ${this.props.appState.selectedReport.away.name}`}</div>
-                        {` on ${this.formattedDate(this.props.appState.selectedReport.date)}?`}
-                    </div>
+                    <div className="alertTitle">{this.props.appState.brandNewReport ? "Discard report?" : "Delete report!"}</div>
+                    {this.alertMessage}
                     <div className="alertButtons">
-                        <div className="alertButton alertOkButton" onClick={this.confirmDelete(this.props.appState.selectedReport)}>OK</div>
+                        <div className="alertButton alertOkButton" onClick={this.confirmDelete(this.props.appState.selectedReport)}>{this.props.appState.brandNewReport ? "DISCARD" : "OK"}</div>
                         <div className="alertButton alertCancelButton" onClick={this.cancelDelete}>CANCEL</div>
                     </div>
                 </div>
@@ -110,6 +109,21 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
         </div>;
     };
 
+    private get alertMessage(): any {
+        if (!this.props.appState.selectedReport) return null;
+        if (this.props.appState.brandNewReport) {
+            return <div className="alertMessage">Are you sure you want to discard the brand new report?
+                <div className="alertTeam">{`${this.props.appState.selectedReport.home.name} vs. ${this.props.appState.selectedReport.away.name}`}
+                </div>
+            </div>
+        } else {
+            return <div className="alertMessage">Are you sure you want to delete the match report?
+                <div className="alertTeam">{`${this.props.appState.selectedReport.home.name} vs. ${this.props.appState.selectedReport.away.name}`}
+                </div>
+                {` on ${this.formattedDate(this.props.appState.selectedReport.date)}?`}
+            </div>
+        }
+    }
     private scrollHandler = (event:any) => {
         if (this.contentContainer.current && this.bgContainer.current) {
             this.bgContainer.current.scrollTop = this.contentContainer.current.scrollTop / 9;
@@ -150,10 +164,7 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
 
     private openReport = (report: Report) => {
         console.log("opening report ", report);
-        this.props.appState.report = report;
-        this.props.appState.homeTeam = report.home;
-        this.props.appState.awayTeam = report.away;
-        this.props.appState.currentWeather = report.weather ? report.weather[0] : "null";
+        this.props.appState.openReport(report);
         history.push(Screens.Prematch);
     }
     private deleteReport = (deleted: Report) => {
@@ -165,11 +176,19 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
     }
     private cancelDelete = () => {
         console.log("canceling delete ");
+        if (this.props.appState.brandNewReport) {
+            this.props.appState.brandNewReport = null;
+            this.resetReport();
+        }
         this.setState({showDeleteAlert: false});
     }
     private confirmDelete = (deleted: Report) => {
         return (event: any) => {
             console.log("deleting report ", deleted.id);
+
+            this.props.appState.brandNewReport = null;
+            this.resetReport();
+
             Reports
             .deleteReport(deleted.id)
             .then((response: any) => {
@@ -181,13 +200,17 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
 
     private resetReport = () => {
         console.log("reset report?");
-        this.props.appState.brandNewReport = false;
-        const emptyReport: Report = this.getEmptyReport();
-        this.props.appState.report = emptyReport;
-        this.props.appState.homeTeam = emptyReport.home;
-        this.props.appState.awayTeam = emptyReport.away;
-        this.props.appState.currentWeather = "null";
-        this.props.appState.currentTimerProgress = 0;
+        if (this.props.appState.brandNewReport && this.props.appState.report === this.props.appState.brandNewReport) {
+            this.deleteReport(this.props.appState.brandNewReport);
+        } else {
+            this.props.appState.brandNewReport = null;
+            const emptyReport: Report = this.getEmptyReport();
+            this.props.appState.report = emptyReport;
+            this.props.appState.homeTeam = emptyReport.home;
+            this.props.appState.awayTeam = emptyReport.away;
+            this.props.appState.currentWeather = "null";
+            this.props.appState.currentTimerProgress = 0;
+        }
     }
     private getEmptyReport = () => {
         return new Report({title:"", id:"empty", home:new Team(""), away:new Team("")})
