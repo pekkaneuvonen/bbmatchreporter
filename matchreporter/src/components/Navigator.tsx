@@ -45,7 +45,6 @@ class Navigator extends React.Component<IAppProps, {}> {
     private updateWindowDimensions = () => {
         const currentButtonRef: any = this.props.appState.screen === Screens.Prematch ? this.preButton : this.props.appState.screen === Screens.Match ? this.matchButton : this.postButton;
         const prevButtonRef: any = this.props.appState.prevscreen === Screens.Prematch ? this.preButton : this.props.appState.prevscreen === Screens.Match ? this.matchButton : this.postButton;
-        // console.log("currentButtonRef ", currentButtonRef);
 
         const targetX: number = currentButtonRef.current.offsetLeft - 8; // 8 is the padding on navigatorContainer
         let fromX: number = prevButtonRef.current.offsetLeft - 8;
@@ -53,12 +52,11 @@ class Navigator extends React.Component<IAppProps, {}> {
         || this.props.appState.prevscreen === Screens.Home) {
             fromX = targetX;
         }
-        const buttonWidth: number = currentButtonRef.current.offsetWidth; //this.props.appState.screen === Screens.Prematch ? this.preButton.current
+        const buttonWidth: number = currentButtonRef.current.offsetWidth;
 
         this.linkTween = TweenLite.fromTo(this.naviButtonSlot.current, 0.2, {x: fromX, ease: "Quad.easeOut"}, {width: buttonWidth, x: targetX, ease: "Quad.easeOut"});
     };
     public render() {
-
         return (
         <div className="navigator">
             <Link to='/' className="navigatorHomebutton">

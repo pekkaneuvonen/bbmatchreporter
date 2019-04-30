@@ -48,15 +48,13 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
         this.toptitleTween = null;
         this.contenttitleTween = null;
         
+        this.props.appState.prevscreen = undefined;
         this.props.appState.screen = Screens.Home;
-        this.resetReport();
     }
 
-    public componentWillUnmount() {
-        this.props.appState.prevscreen = Screens.Home;
-    }
     public componentDidMount() {
         this.toptitleTween = TweenLite.to(this.toptitleContainer.current, 0.2, {y: -116, ease: "Quad.easeOut"});
+        this.resetReport();
     }
     public componentDidUpdate(prevProps: IAppProps, prevState: {showDeleteAlert: boolean, showTitleHeader: boolean}) {
 
@@ -82,7 +80,7 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
             </div>
             <div ref={this.contentContainer} className="content" onScroll={this.scrollHandler}>
                 <div ref={this.contenttitleContainer} className="titleElements">
-                    <img src={title}/>
+                    <img className="titleImage" src={title}/>
                     <div className="version">version 0.41</div>
                     <div className="newReportButton" onClick={this.createNewReport}>
                         <img src={newButton}/>
@@ -163,7 +161,6 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
     }
 
     private openReport = (report: Report) => {
-        console.log("opening report ", report);
         this.props.appState.openReport(report);
         history.push(Screens.Prematch);
     }
@@ -199,7 +196,6 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
     }
 
     private resetReport = () => {
-        console.log("reset report?");
         if (this.props.appState.brandNewReport && this.props.appState.report === this.props.appState.brandNewReport) {
             this.deleteReport(this.props.appState.brandNewReport);
         } else {
@@ -224,8 +220,6 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
             this.props.appState.reportsList = reportsData.map(data => {
                 return new Report(data);
             })
-            console.log("parsed reportList (", this.props.appState.reportsList.length, ") ", this.props.appState.reportsList)
-            console.log("contentContainer height: ", this.contentContainer.current ? this.contentContainer.current.scrollHeight : "null");
             
             this.bgStyle = {
                 backgroundImage: `url(${bgHome})`,

@@ -44,7 +44,6 @@ class GatesInput extends React.Component<IGatesInput, IGatesState> {
 
         const rawFame: number = this.fame;
         let fame: string = rawFame === 0 ? "-" : "+" + Math.abs(rawFame).toString();
-        console.log("fame : " + fame);
         if (rawFame < 0) {
             fameBGStyles = this.getBackgroundFor(fameBG1);
             fameContentStyles = "fameHome";

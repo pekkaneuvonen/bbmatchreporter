@@ -57,11 +57,6 @@ class InducementsInput extends React.Component<IInducementsInput, IInducementsSt
             bgStyles = this.getBackgroundFor(inputActive ? inducementBG2_input : inducementBG2);
         }
         
-        
-        console.log("inducementsValue : " + this.props.inducementsValue);
-        console.log("inducementsDescriptions : " + this.props.inducementsDescriptions);
-        console.log("side : " + this.props.side);
-
         return <div>
             <div style={valueBGStyles} className="inducementsValueContainer">
                 <div className={valueContentStyles}>{this.props.inducementsValue}</div>

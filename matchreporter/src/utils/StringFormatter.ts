@@ -9,7 +9,6 @@ export default class StringFormatter {
         return dateString;
     }
     public static formatAsKvalue(unformattedkvalue: string | number): string {
-        console.log("formatting : " + unformattedkvalue);
         let numeric;
         if (typeof unformattedkvalue === "string") {
             numeric = StringFormatter.convertKvalueStringToNumeric(unformattedkvalue);

@@ -5,6 +5,12 @@ import {Screens} from "../model/AppState";
 import { Team } from '../model/Team';
 import { Injury, InjuryEffect, InjuryCode } from '../model/Injury';
 
+import { Transition } from 'react-transition-group';
+import { TweenLite } from "gsap";
+
+import SwipeItem, { SwipeDirection } from '../components/SwipeItem';
+import history from "./history";
+
 import '../css/Postmatch.css';
 import bgPostmatch from '../img/backgrounds/GRASS_9PM.jpg';
 
@@ -31,11 +37,6 @@ import deleteRowAway from '../img/postmatch/deleteRowAway.png';
 import { GameEvent } from '../model/GameEvent';
 
 
-const bgStyle = {
-  backgroundImage: `url(${bgPostmatch})`,
-  paddingBottom: "32px",
-};
-
 interface IPostmatchState {
     winningsHome: string,
     winningsAway: string,
@@ -51,9 +52,19 @@ interface IPostmatchState {
 
 class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     rowPressTimer: NodeJS.Timeout;
+    private bgContainer: React.RefObject<HTMLDivElement>;
+    private tableContainer: React.RefObject<HTMLDivElement>;
+
+    private bgStyle = {
+        backgroundImage: `url(${bgPostmatch})`,
+        paddingBottom: "32px",
+        height: "2048px" // will be updated in componentDidUpdate to fit reportList height 
+    };
 
     constructor(props: any) {
         super(props);
+        this.bgContainer = React.createRef();
+        this.tableContainer = React.createRef();
 
         this.state = {
             winningsHome: this.props.appState.homeTeam ? this.props.appState.homeTeam.winnings : "-",
@@ -70,7 +81,14 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
             
             selectedEvent: undefined,
         };
+        this.props.appState.prevscreen = this.props.appState.screen;
         this.props.appState.screen = Screens.Postmatch;
+
+        this.bgStyle = {
+            backgroundImage: `url(${bgPostmatch})`,
+            paddingBottom: "32px",
+            height: `${this.tableContainer.current ? this.tableContainer.current.scrollHeight + 80: 2048}px`,
+        };
     }
 
     /*
@@ -93,104 +111,147 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
         return initialImprovements;
     }
     */
-    public componentWillUnmount() {
-        this.props.appState.prevscreen = Screens.Postmatch;
-    }
+
     public render() {
         if (!this.props.appState.homeTeam || !this.props.appState.awayTeam
         || this.props.appState.report.id === "empty") {
             window.location.href = "/";
         }
 
-        return <div className="Postmatch" style={bgStyle}>
+        const show: boolean = this.props.appState.screen === Screens.Postmatch;
+        let fromX: number = show ? window.innerWidth : 0;
+        let toX: number = show ? 0 : window.innerWidth;
+        console.log("fromX ", fromX);
+
+        const startState = { autoAlpha: 0, x: fromX};
+
+        return <div className="Postmatch">
             <Navigator appState={this.props.appState}/>
-            <div style={this.getBackgroundFor(teamsContainerBG)} className="teams">
-                <div className="reportTeam reportTeam1">{this.props.appState.homeTeam.name}</div>
-                <div className="reportTeam reportTeam2">{this.props.appState.awayTeam.name}</div>
-            </div>
-            <div style={this.getBackgroundFor(generalTableBG)} className="generalTable"
-            onClick={this.clearSelectedRow}>
-                <div className="reportTableField gate">{this.props.appState.report.totalGate.asString}</div>
-                <div className="tableRow">
-                    <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.scorers.length}</div>
-                    <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.scorers.length}</div>
+
+            <Transition
+                in={show}
+                mountOnEnter
+                timeout={1000}
+                onEnter={node => TweenLite.set(node, startState)}
+                onExit={node => TweenLite.set(node, startState)}
+                addEndListener={ (node, done) => {
+                    TweenLite.fromTo(node, 0.25, {
+                        autoAlpha: !show ? 1 : 0, ease:"Quad.easeIn",
+                        x: fromX,
+                    }, {
+                    autoAlpha: show ? 1 : 0,
+                    x: toX, ease:"Quad.easeOut",
+                    onComplete: done
+                    });
+                }}
+            >  
+            <SwipeItem threshold={0.5} offsetWidth={320} swipeDirs={[SwipeDirection.Right]} onSwipe={this.onSwipe}>
+
+                <div ref={this.bgContainer} className="postmatchBackgroundField" >
+                    <div style={this.bgStyle}/>
                 </div>
-                <div className="tableRow">
-                    <div className="reportTableInputSlot">
-                        <form onSubmit={this.addWinningsHandler(this.props.appState.homeTeam)}>
-                            <input className="reportTableInputField " type="text" value={this.state.winningsHome} onChange={this.changeWinningsHandler(this.props.appState.homeTeam)} />
-                        </form>
+                <div ref={this.tableContainer} onScroll={this.scrollHandler} className="postmatchTablecontent">
+
+                    <div style={this.getBackgroundFor(teamsContainerBG)} className="teams">
+                        <div className="reportTeam reportTeam1">{this.props.appState.homeTeam.name}</div>
+                        <div className="reportTeam reportTeam2">{this.props.appState.awayTeam.name}</div>
                     </div>
-                    <div className="reportTableInputSlot">
-                        <form onSubmit={this.addWinningsHandler(this.props.appState.awayTeam)}>
-                            <input className="reportTableInputField " type="text" value={this.state.winningsAway} onChange={this.changeWinningsHandler(this.props.appState.awayTeam)} />
-                        </form>
+                    <div style={this.getBackgroundFor(generalTableBG)} className="generalTable"
+                    onClick={this.clearSelectedRow}>
+                        <div className="reportTableField gate">{this.props.appState.report.totalGate.asString}</div>
+                        <div className="tableRow">
+                            <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.scorers.length}</div>
+                            <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.scorers.length}</div>
+                        </div>
+                        <div className="tableRow">
+                            <div className="reportTableInputSlot">
+                                <form onSubmit={this.addWinningsHandler(this.props.appState.homeTeam)}>
+                                    <input className="reportTableInputField " type="text" value={this.state.winningsHome} onChange={this.changeWinningsHandler(this.props.appState.homeTeam)} />
+                                </form>
+                            </div>
+                            <div className="reportTableInputSlot">
+                                <form onSubmit={this.addWinningsHandler(this.props.appState.awayTeam)}>
+                                    <input className="reportTableInputField " type="text" value={this.state.winningsAway} onChange={this.changeWinningsHandler(this.props.appState.awayTeam)} />
+                                </form>
+                            </div>
+                        </div>
+                        <div className="tableRow">
+                            <div className="reportTableInputSlot">
+                                <form onSubmit={this.addFFchangeHandler(this.props.appState.homeTeam)}>
+                                    <input className="reportTableInputField " type="text" value={this.state.ffChangeHome} onChange={this.changeFFchangeHandler(this.props.appState.homeTeam)} />
+                                </form>
+                            </div>
+                            <div className="reportTableInputSlot">
+                                <form onSubmit={this.addFFchangeHandler(this.props.appState.awayTeam)}>
+                                    <input className="reportTableInputField " type="text" value={this.state.ffChangeAway} onChange={this.changeFFchangeHandler(this.props.appState.awayTeam)} />
+                                </form>
+                            </div>
+                        </div>
+                        <div className="tableRow">
+                            <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.casualties.length}</div>
+                            <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.casualties.length}</div>
+                        </div>
+                        <div className="tableRow">
+                            <div className="reportTableField reportTableField1">{this.props.appState.report.fame > 0 ? "-" : "+" + Math.abs(this.props.appState.report.fame)}</div>
+                            <div className="reportTableField reportTableField2">{this.props.appState.report.fame < 0 ? "-" : "+" + Math.abs(this.props.appState.report.fame)}</div>
+                        </div>
+                        <div className="tableRow">
+                            <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.tvString}</div>
+                            <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.tvString}</div>
+                        </div>
                     </div>
-                </div>
-                <div className="tableRow">
-                    <div className="reportTableInputSlot">
-                        <form onSubmit={this.addFFchangeHandler(this.props.appState.homeTeam)}>
-                            <input className="reportTableInputField " type="text" value={this.state.ffChangeHome} onChange={this.changeFFchangeHandler(this.props.appState.homeTeam)} />
-                        </form>
+                    <div style={this.getBackgroundFor(achievementTableBG, "top")} className="achievementTable"
+                    onClick={this.clearSelectedRow}>
+                        <div id="mvp" className="achievementRow">
+                            <form onSubmit={this.addMVPHandler(this.props.appState.homeTeam)} className="achievementInputSlot">
+                                <input className="invisible-scrollbar reportTableInputField reportAchievementField1 reportAchievementInputField" type="text" value={this.state.mvpHome} onChange={this.changeMVPHandle(this.props.appState.homeTeam)} />
+                            </form>
+                            <form onSubmit={this.addMVPHandler(this.props.appState.awayTeam)} className="achievementInputSlot">
+                                <input className="invisible-scrollbar reportTableInputField reportAchievementField2 reportAchievementInputField" type="text" value={this.state.mvpAway} onChange={this.changeMVPHandle(this.props.appState.awayTeam)} />
+                            </form>
+                        </div>
+                        <div id="cp" className="achievementRow">
+                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.completionsString}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.completionsString}</div>
+                        </div>
+                        <div id="td" className="achievementRow">
+                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.scorersString}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.scorersString}</div>
+                        </div>
+                        <div id="int" className="achievementRow">
+                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.interceptsString}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.interceptsString}</div>
+                        </div>
+                        <div id="bh" className="achievementRow">
+                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.badlyHurtsString}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.badlyHurtsString}</div>
+                        </div>
+                        <div id="si" className="achievementRow">
+                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.seriousInjuriesString}</div>
+                            <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.seriousInjuriesString}</div>
+                        </div>
+                        <div id="kill" className="achievementRow">
+                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.killsString}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.killsString}</div>
+                        </div>
                     </div>
-                    <div className="reportTableInputSlot">
-                        <form onSubmit={this.addFFchangeHandler(this.props.appState.awayTeam)}>
-                            <input className="reportTableInputField " type="text" value={this.state.ffChangeAway} onChange={this.changeFFchangeHandler(this.props.appState.awayTeam)} />
-                        </form>
-                    </div>
+                    {this.injuryTable()}
+                    {this.improvementTable()}
                 </div>
-                <div className="tableRow">
-                    <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.casualties.length}</div>
-                    <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.casualties.length}</div>
-                </div>
-                <div className="tableRow">
-                    <div className="reportTableField reportTableField1">{this.props.appState.report.fame > 0 ? "-" : "+" + Math.abs(this.props.appState.report.fame)}</div>
-                    <div className="reportTableField reportTableField2">{this.props.appState.report.fame < 0 ? "-" : "+" + Math.abs(this.props.appState.report.fame)}</div>
-                </div>
-                <div className="tableRow">
-                    <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.tvString}</div>
-                    <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.tvString}</div>
-                </div>
-            </div>
-            <div style={this.getBackgroundFor(achievementTableBG, "top")} className="achievementTable"
-            onClick={this.clearSelectedRow}>
-                <div id="mvp" className="achievementRow">
-                    <form onSubmit={this.addMVPHandler(this.props.appState.homeTeam)} className="achievementInputSlot">
-                        <input className="invisible-scrollbar reportTableInputField reportAchievementField1 reportAchievementInputField" type="text" value={this.state.mvpHome} onChange={this.changeMVPHandle(this.props.appState.homeTeam)} />
-                    </form>
-                    <form onSubmit={this.addMVPHandler(this.props.appState.awayTeam)} className="achievementInputSlot">
-                        <input className="invisible-scrollbar reportTableInputField reportAchievementField2 reportAchievementInputField" type="text" value={this.state.mvpAway} onChange={this.changeMVPHandle(this.props.appState.awayTeam)} />
-                    </form>
-                </div>
-                <div id="cp" className="achievementRow">
-                    <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.completionsString}</div>
-                    <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.completionsString}</div>
-                </div>
-                <div id="td" className="achievementRow">
-                    <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.scorersString}</div>
-                    <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.scorersString}</div>
-                </div>
-                <div id="int" className="achievementRow">
-                    <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.interceptsString}</div>
-                    <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.interceptsString}</div>
-                </div>
-                <div id="bh" className="achievementRow">
-                    <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.badlyHurtsString}</div>
-                    <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.badlyHurtsString}</div>
-                </div>
-                <div id="si" className="achievementRow">
-                    <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.seriousInjuriesString}</div>
-                    <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.seriousInjuriesString}</div>
-                </div>
-                <div id="kill" className="achievementRow">
-                    <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.killsString}</div>
-                    <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.killsString}</div>
-                </div>
-            </div>
-            {this.injuryTable()}
-            {this.improvementTable()}
+            </SwipeItem>
+            </Transition>
         </div>;
     };
+    private onSwipe = (dir: string) => {
+        if (dir === "right") {
+            history.push(Screens.Match);
+        }
+    }
+    private scrollHandler = (event:any) => {
+        if (this.bgContainer.current && this.tableContainer.current) {
+            this.bgContainer.current.scrollTop = this.tableContainer.current.scrollTop / 9;
+        }
+    }
     private injuryTable = () => {
         return <div style={this.getBackgroundFor(injuriesTableTitle, "top")} className="reportInjuryTable" >
             <div className="reportTableColumn">

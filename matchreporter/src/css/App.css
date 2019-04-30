@@ -17,6 +17,7 @@ div.navigatorContainer {
 }
 div.navigator {
   position: relative;
+  top: 0px;
   height: 80px;
   width: 100vw;
   z-index: 50;
@@ -61,4 +62,22 @@ div.navigatorTabs {
 
 *:focus {
   outline:none;
+}
+
+.swipeBG {
+  position: absolute;
+  width: 100vw;
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background: black;
+  user-select: none;
+  font-family: 'Teko', sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  color: #F2F0EE;
+  text-align: center;
+  z-index: 0;
 }

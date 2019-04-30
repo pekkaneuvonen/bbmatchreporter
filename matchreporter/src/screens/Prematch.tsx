@@ -8,6 +8,8 @@ import InducementsInput from '../components/InducementsInput';
 import GatesInput from '../components/GatesInput';
 
 import {Screens} from "../model/AppState";
+import { Transition } from 'react-transition-group';
+import { TweenLite } from "gsap";
 
 import bgHome from '../img/backgrounds/GRASS_9AM_grid.jpg';
 import WeatherChooserRow from "../components/WeatherChooserRow";
@@ -16,6 +18,9 @@ import { Team } from "../model/Team";
 import { WeatherType } from "../model/Weather";
 import { Kvalue } from '../types/Kvalue';
 import StringFormatter from "../utils/StringFormatter";
+import SwipeItem, { SwipeDirection } from '../components/SwipeItem';
+
+import history from "./history";
 
 @observer
 class Prematch extends React.Component<IAppProps, {}> {
@@ -33,8 +38,9 @@ class Prematch extends React.Component<IAppProps, {}> {
         super(props);
         this.bgContainer = React.createRef();
         this.tableContainer = React.createRef();
-        
+        this.props.appState.prevscreen = this.props.appState.screen;
         this.props.appState.screen = Screens.Prematch;
+        
         this.tableStyle = this.props.appState.brandNewReport !== null ?
             {height: 'calc(100vh - 80px - 54px)',}
             :
@@ -45,10 +51,9 @@ class Prematch extends React.Component<IAppProps, {}> {
         };
     };
 
-    public componentWillUnmount() {
-        this.props.appState.prevscreen = Screens.Prematch;
-    }
     public render() {
+        console.log("Navigation ", this.props.appState.prevscreen, " --> ", this.props.appState.screen);
+
         if (!this.props.appState.homeTeam || !this.props.appState.awayTeam
         || this.props.appState.report.id === "empty") {
             window.location.href = "/";
@@ -65,55 +70,85 @@ class Prematch extends React.Component<IAppProps, {}> {
             inducementString = "+" + this.inducementValue.asString;
         }
 
+        const show: boolean = this.props.appState.screen === Screens.Prematch;
+        let fromX: number = !show ? 0 : this.props.appState.prevscreen === Screens.Home ? 0 : -window.innerWidth;
+        let toX: number = show ? 0 : this.props.appState.screen === Screens.Home ? 0 : -window.innerWidth;
 
-       
-        return <div className="Prematch" onScroll={this.scrollHandler}>
-            <div ref={this.bgContainer} className="prematchBackgroundField" >
-                <div style={this.bgStyle}/>
-            </div>
+        const startState = { autoAlpha: 0, x: fromX};
+        return <div className="Prematch">
             <Navigator appState={this.props.appState}/>
-            <div ref={this.tableContainer} className="prematchTablecontent" style={this.tableStyle}>
-                {this.props.appState.brandNewReport ?
-                    <div className="newReportMessage">NEW REPORT</div>
-                : null }
-                <div className="teamtitles">
-                    <TeamTitleInput 
-                        activityOverride={this.props.appState.brandNewReport !== null}
-                        titleChangeHandler={this.handleTeamNameChange} 
-                        title1Default={this.props.appState.homeTeam.name} 
-                        title2Default={this.props.appState.awayTeam.name}/>
+
+            <Transition
+                in={show}
+                mountOnEnter
+                timeout={1000}
+                onEnter={node => TweenLite.set(node, startState)}
+                onExit={node => TweenLite.set(node, startState)}
+                addEndListener={ (node, done) => {
+                    TweenLite.fromTo(node, 0.25, {
+                        autoAlpha: !show ? 1 : 0, ease:"Quad.easeIn",
+                        x: fromX,
+                    }, {
+                    autoAlpha: show ? 1 : 0,
+                    x: toX, ease:"Quad.easeOut",
+                    onComplete: done
+                    });
+                }}
+            >  
+            <SwipeItem threshold={0.5} offsetWidth={320} swipeDirs={[SwipeDirection.Left]} onSwipe={this.onSwipe}>
+                <div ref={this.bgContainer} className="prematchBackgroundField" >
+                    <div style={this.bgStyle}/>
                 </div>
-                <div className="teamTVs">
-                    <TeamValueInput
-                        activityOverride={this.props.appState.brandNewReport !== null}
-                        valueChangeHandler={this.handleTeamValueChange} 
-                        value1={this.props.appState.homeTeam.tvString} 
-                        value2={this.props.appState.awayTeam.tvString}/>
+                <div ref={this.tableContainer} onScroll={this.scrollHandler} className="prematchTablecontent" style={this.tableStyle}>
+                    {this.props.appState.brandNewReport ?
+                        <div className="newReportMessage">NEW REPORT</div>
+                    : null }
+                    <div className="teamtitles">
+                        <TeamTitleInput 
+                            activityOverride={this.props.appState.brandNewReport !== null}
+                            titleChangeHandler={this.handleTeamNameChange} 
+                            title1Default={this.props.appState.homeTeam.name} 
+                            title2Default={this.props.appState.awayTeam.name}/>
+                    </div>
+                    <div className="teamTVs">
+                        <TeamValueInput
+                            activityOverride={this.props.appState.brandNewReport !== null}
+                            valueChangeHandler={this.handleTeamValueChange} 
+                            value1={this.props.appState.homeTeam.tvString} 
+                            value2={this.props.appState.awayTeam.tvString}/>
+                    </div>
+                    <div className="inducementsContainer">
+                        <InducementsInput
+                            activityOverride={this.props.appState.brandNewReport !== null}
+                            inducementsValue={inducementString} 
+                            side={induced} 
+                            inducementsDescriptions={this.inducedSide ? this.inducedSide.inducements : "-"} 
+                            descriptionsChangeHandler={this.inducementDescriptionChange()} />
+                    </div>
+                    <div className="gateContainer">
+                        <GatesInput
+                            activityOverride={this.props.appState.brandNewReport !== null}
+                            gateValue1={this.props.appState.homeTeam.gateValue} 
+                            gateValue2={this.props.appState.awayTeam.gateValue} 
+                            gatesChangeHandler={this.handleTeamGateChange} />
+                    </div>
+                    <div className="weatherChooserContainer">
+                        {this.createWeatherTable()};
+                    </div>
                 </div>
-                <div className="inducementsContainer">
-                    <InducementsInput
-                        activityOverride={this.props.appState.brandNewReport !== null}
-                        inducementsValue={inducementString} 
-                        side={induced} 
-                        inducementsDescriptions={this.inducedSide ? this.inducedSide.inducements : "-"} 
-                        descriptionsChangeHandler={this.inducementDescriptionChange()} />
-                </div>
-                <div className="gateContainer">
-                    <GatesInput
-                        activityOverride={this.props.appState.brandNewReport !== null}
-                        gateValue1={this.props.appState.homeTeam.gateValue} 
-                        gateValue2={this.props.appState.awayTeam.gateValue} 
-                        gatesChangeHandler={this.handleTeamGateChange} />
-                </div>
-                <div className="weatherChooserContainer">
-                    {this.createWeatherTable()};
-                </div>
-            </div>
+            </SwipeItem>
+            </Transition>
+
             {this.props.appState.brandNewReport ? 
                 <div onClick={this.doneButtonHandler} className="bottomButton"><div className="bottomButtonText">DONE</div></div>
             : null}
         </div>;
     };
+    private onSwipe = (dir: string) => {
+        if (dir === "left") {
+            history.push(Screens.Match);
+        }
+    }
     private scrollHandler = (event:any) => {
         if (this.bgContainer.current && this.tableContainer.current) {
             this.bgContainer.current.scrollTop = this.tableContainer.current.scrollTop / 9;

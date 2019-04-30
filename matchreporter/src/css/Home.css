@@ -47,10 +47,16 @@
   
 }
 .titleElements {
+    margin: auto;
     margin-top: 16px;
     z-index: 2;
     width: 100vw;
     position: relative;
+}
+.titleImage {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 .version {
     font-family: 'Teko', sans-serif;
@@ -73,23 +79,26 @@ newReport_button width 205px, offset 16px
 
 
 .alertBlock {
-    height: 100%;
-    width: 100%;
     position: absolute;
+    height: 100vh;
+    width: 100vw;
     top: 0px;
     background: rgba(0, 0, 0, 0.5);
     z-index: 32;
 }
 .deleteAlert {
+    position: relative;
     width: 256px;
+    min-height: 256px;
     margin: auto;
-    margin-top: 50%;
+    margin-top: calc(50vh - 128px);
     border: 8px solid;
     border-color: #242424;
     background: #F2F0EE;
 }
   
 .alertTitle {
+    position: relative;
     font-family: 'Teko', sans-serif;
     font-weight: 500;
     font-size: 48px;
@@ -98,6 +107,7 @@ newReport_button width 205px, offset 16px
     margin-top: 8px;
 }
 .alertMessage {
+    position: relative;
     font-family: 'Teko', sans-serif;
     font-weight: 300;
     font-size: 24px;
@@ -135,3 +145,4 @@ newReport_button width 205px, offset 16px
 .alertOkButton {
     margin-right: 0px;
 }
+

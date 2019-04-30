@@ -11,7 +11,7 @@ import { Reports } from '../services/Reports';
  */
 export class AppState {
   @observable public screen: string;
-  @observable public prevscreen: string;
+  public prevscreen: string | undefined;
   
   @observable public prevTab?: string;
   @observable public showTabNavigator: boolean;

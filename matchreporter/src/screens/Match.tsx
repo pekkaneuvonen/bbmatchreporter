@@ -5,6 +5,9 @@ import TimePiece from '../components/TimePiece';
 import {Screens} from "../model/AppState";
 import { EventDescription, EventType } from '../model/MatchEvent';
 
+import { Transition } from 'react-transition-group';
+import { TweenLite } from "gsap";
+
 import bgMatch from '../img/backgrounds/GRASS_1PM.jpg';
 /*
 import casualtyButton from '../img/buttons/CASUALTY_active.png';
@@ -30,14 +33,13 @@ import player2Chosen from '../img/event/playerline_chosen2.png';
 import player1ChosenNarrow from '../img/event/playerline_chosenNarrow1.png';
 import player2ChosenNarrow from '../img/event/playerline_chosenNarrow2.png';
 
+import SwipeItem, { SwipeDirection } from '../components/SwipeItem';
+import history from "./history";
+
 import { Team } from '../model/Team';
 import { Injury } from '../model/Injury';
 import '../css/Match.css';
-import { number } from 'prop-types';
 
-const bgStyle = {
-  backgroundImage: `url(${bgMatch})`
-};
 interface IMatchState {
     activePlayer: string,
     passivePlayer: string,
@@ -46,10 +48,20 @@ interface IMatchState {
     currentEventType: EventType,
     currentSelectedTeam?: Team,
 }
+
 class Match extends React.Component<IAppProps, IMatchState> {
+    private bgContainer: React.RefObject<HTMLDivElement>;
+    private tableContainer: React.RefObject<HTMLDivElement>;
+
+    private bgStyle = {
+        backgroundImage: `url(${bgMatch})`,
+        height: "2048px" // will be updated in componentDidUpdate to fit reportList height 
+    };
 
     public constructor (props: any) {
         super(props);
+        this.bgContainer = React.createRef();
+        this.tableContainer = React.createRef();
         this.state = {
             activePlayer: "-",
             currentEventType: 0,
@@ -57,7 +69,13 @@ class Match extends React.Component<IAppProps, IMatchState> {
             eventInputActive: false,
             passivePlayer: "-",
         }
+        this.props.appState.prevscreen = this.props.appState.screen;
         this.props.appState.screen = Screens.Match;
+
+        this.bgStyle = {
+            backgroundImage: `url(${bgMatch})`,
+            height: `${this.tableContainer.current ? this.tableContainer.current.scrollHeight + 80: 2048}px`,
+        };
     }
     private eventbuttonsBGstyle = {
         backgroundImage: `url(${eventButtons})`,
@@ -69,58 +87,100 @@ class Match extends React.Component<IAppProps, IMatchState> {
         backgroundPosition: 'center',
         backgroundRepeat  : 'no-repeat',
     };
-    public componentWillUnmount() {
-        this.props.appState.prevscreen = Screens.Match;
-    }
+
     public render() {
         if (!this.props.appState.homeTeam || !this.props.appState.awayTeam
         || this.props.appState.report.id === "empty") {
             window.location.href = "/";
         }
-        return <div className="Match" style={bgStyle}>
+
+        const show: boolean = this.props.appState.screen === Screens.Match;
+        let fromX: number = !show ? 0 : this.props.appState.prevscreen === Screens.Prematch ? window.innerWidth : -window.innerWidth;
+        let toX: number = show ? 0 : this.props.appState.screen === Screens.Prematch ? window.innerWidth : -window.innerWidth;
+
+        const startState = { autoAlpha: 0, x: fromX};
+
+        return <div className="Match">
             <Navigator appState={this.props.appState}/>
-            {this.state.eventInputActive ? 
-                <div className="eventContainer">
-                    <div className="eventContainerBG"/>
-                    <div className="eventTitle">
-                        {EventDescription[this.state.currentEventType]}
-                    </div>
-
-                    <img className="eventTitlediv" src={eventTitleDiv}/>
-                    {this.teamSelector()}
-                    <img className="eventTitlediv" src={eventTitleDiv}/>
-                    {this.playerSelector()}
-                    {this.state.currentEventType === EventType.Casualty || this.state.currentEventType === EventType.Injury ?
-                        <div>
-                            <img className="eventTitlediv" src={eventTitleDiv}/>
-                            {this.additionalSelector()}
+            <Transition
+                in={show}
+                mountOnEnter
+                timeout={1000}
+                onEnter={node => TweenLite.set(node, startState)}
+                onExit={node => TweenLite.set(node, startState)}
+                addEndListener={ (node, done) => {
+                    TweenLite.fromTo(node, 0.25, {
+                        autoAlpha: !show ? 1 : 0, ease:"Quad.easeIn",
+                        x: fromX,
+                    }, {
+                    autoAlpha: show ? 1 : 0,
+                    x: toX, ease:"Quad.easeOut",
+                    onComplete: done
+                    });
+                }}
+            >  
+            <SwipeItem threshold={0.5} offsetWidth={320} swipeDirs={[SwipeDirection.Left, SwipeDirection.Right]} onSwipe={this.onSwipe}>
+                <div ref={this.bgContainer} className="matchBackgroundField" >
+                    <div style={this.bgStyle}/>
+                </div>
+                {this.state.eventInputActive ? 
+                    <div className="eventContainer">
+                        <div className="eventContainerBG"/>
+                        <div className="eventTitle">
+                            {EventDescription[this.state.currentEventType]}
                         </div>
-                        :
-                        null
-                    }
 
-                    <div className="confirmButtonContainer">
-                        <button style={this.confirmbuttonBGstyle} className="confirmButton" onClick={this.eventCancelHandler}>
-                            CANCEL
-                        </button>
-                        <button style={this.confirmbuttonBGstyle} className="confirmButton" onClick={this.eventDoneHandler}>
-                            DONE
-                        </button>
+                        <img className="eventTitlediv" src={eventTitleDiv}/>
+                        {this.teamSelector()}
+                        <img className="eventTitlediv" src={eventTitleDiv}/>
+                        {this.playerSelector()}
+                        {this.state.currentEventType === EventType.Casualty || this.state.currentEventType === EventType.Injury ?
+                            <div>
+                                <img className="eventTitlediv" src={eventTitleDiv}/>
+                                {this.additionalSelector()}
+                            </div>
+                            :
+                            null
+                        }
+
+                        <div className="confirmButtonContainer">
+                            <button style={this.confirmbuttonBGstyle} className="confirmButton" onClick={this.eventCancelHandler}>
+                                CANCEL
+                            </button>
+                            <button style={this.confirmbuttonBGstyle} className="confirmButton" onClick={this.eventDoneHandler}>
+                                DONE
+                            </button>
+                        </div>
+                    </div>
+                : null}
+                <div ref={this.tableContainer} className="matchTablecontent" onScroll={this.scrollHandler}>
+                    <div className="timerContainer">
+                        <TimePiece appState={this.props.appState} pauseOverride={this.state.eventInputActive} defautlTimerValue={this.props.appState.defaultTimerValue}/>
+                    </div>
+                    <div style={this.eventbuttonsBGstyle} className="eventbuttonContainer">
+                        <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Completion)}/>
+                        <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Goal)}/>
+                        <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Casualty)}/>
+                        <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Intercept)}/>
+                        <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Injury)}/>
                     </div>
                 </div>
-                : null}
-            <div className="timerContainer">
-                <TimePiece appState={this.props.appState} pauseOverride={this.state.eventInputActive} defautlTimerValue={this.props.appState.defaultTimerValue}/>
-            </div>
-            <div style={this.eventbuttonsBGstyle} className="eventbuttonContainer">
-                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Completion)}/>
-                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Goal)}/>
-                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Casualty)}/>
-                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Intercept)}/>
-                <button className={"eventbutton"} onClick={this.eventButtonHandlerFactory(EventType.Injury)}/>
-            </div>
+            </SwipeItem>
+            </Transition>
         </div>;
     };
+    private onSwipe = (dir: string) => {
+        if (dir === "left") {
+            history.push(Screens.Postmatch);
+        } else if (dir === "right") {
+            history.push(Screens.Prematch);
+        }
+    }
+    private scrollHandler = (event:any) => {
+        if (this.bgContainer.current && this.tableContainer.current) {
+            this.bgContainer.current.scrollTop = this.tableContainer.current.scrollTop / 9;
+        }
+    }
     private teamSelector = () => {
         const selectorBG = {
             backgroundImage: `url(${teamselectorBG})`,
