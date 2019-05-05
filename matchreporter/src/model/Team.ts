@@ -1,44 +1,56 @@
 import { observable } from "mobx";
 import { Kvalue } from "../types/Kvalue";
 import { GameEvent } from "./GameEvent";
-import { Injury, CasualtyType } from "./Injury";
 
 export class Team {
     // prematch
     public name: string = "-";
+
+    @observable public teamValue: number;
     public rerolls: number;
     public notes: string;
     @observable public inducements: string;
     public fanFactor: number;
-
-    @observable public teamValue: number;
     @observable public gateValue: number;
-    
+    /*
+        teamValue: Number,
+        rerolls: Number,
+        notes: String,
+        inducements: String,
+        fanFactor: Number,
+        gateValue: Number,
+        goals: Number,
+        winnings: String,
+        fanFactorModifier: String,
+        casualtiesinflicted: Number,
+        mvp: String,
+        completions: String,
+        scorers: String,
+        intercepts: String,
+        badlyhurts: String,
+        seriousinjuries: String,
+        kills: String,
+        sufferedinjuries: [GameEvent],
+        improvements: [GameEvent], 
+    */
     // postmatch
-    public scorers: string[] = [];
-    public casualties: GameEvent[] = [];
-    public injuries: GameEvent[] = [];
-    public completions: string[] = [];
-    public intercepts: string[] = [];
+    public goals: number;
     public winnings: string;
     public fanFactorModifier: string;
+    public casualtiesinflicted: number;
     public mvp: string;
+    public completions: string;
+    public scorers: string;
+    public intercepts: string;
+    public badlyhurts: string;
+    public seriousinjuries: string;
+    public kills: string;
+    public sufferedinjuries: GameEvent[] = [];
     public improvements: GameEvent[] = [];
 
 
     constructor (props: any) {
-        /*
-        console.log('new team name: ', props.name);
-        console.log('props.winnings: ', props.winnings);
-        console.log('props.fanFactorModifier: ', props.fanFactorModifier);
-        console.log('props.mvp: ', props.mvp);
-        */
-        this.scorers = props.scorers ? props.scorers : [];
-        this.casualties = props.casualties ? props.casualties : [];
-        this.injuries = props.injuries ? props.injuries : [];
-        this.completions = props.completions ? props.completions : [];
-        this.intercepts = props.intercepts ? props.intercepts : [];
-        this.improvements = props.improvements ? props.improvements : [];
+        
         this.name = props.name;
         this.teamValue = props.teamValue ? props.teamValue : 0;
         this.rerolls = props.rerolls ? props.rerolls : 0;
@@ -46,9 +58,22 @@ export class Team {
         this.inducements = props.inducements ? props.inducements : "-";
         this.fanFactor = props.fanFactor ? props.fanFactor : 0;
         this.gateValue = props.gateValue ? props.gateValue : 0;
+
+        this.goals = props.goals ? props.goals : 0;
         this.winnings = props.winnings ? props.winnings : "-";
         this.fanFactorModifier = props.fanFactorModifier ? props.fanFactorModifier : "-";
+        this.casualtiesinflicted = props.casualtiesinflicted ? props.casualtiesinflicted : 0;
         this.mvp = props.mvp ? props.mvp : "-";
+        this.completions = props.completions ? props.completions : "";
+        this.scorers = props.scorers ? props.scorers : "";
+        this.intercepts = props.intercepts ? props.intercepts : "";
+        this.badlyhurts = props.badlyhurts ? props.badlyhurts : "";
+        this.seriousinjuries = props.seriousinjuries ? props.seriousinjuries : "";
+        this.kills = props.kills ? props.kills : "";
+        
+        this.sufferedinjuries = props.sufferedinjuries ? props.sufferedinjuries : [];
+        this.improvements = props.improvements ? props.improvements : [];
+
     }
     public get gateString(): string {
         return new Kvalue(this.gateValue).asString;
@@ -87,6 +112,7 @@ export class Team {
         }
         return vString;
     }
+    /*
     public get interceptsString(): string {
         let vString: string = "";
         for (let i = 0; i < this.intercepts.length; i++) {
@@ -138,22 +164,6 @@ export class Team {
             }
         }
         return vString;
-    }
-    /*
-    public get sppResults(): Player[] {
-        const sppList: Player[] = [];
-        if (this.scorers && this.scorers.length > 0) {
-            for (const scorer of this.scorers) {
-                let player: Player | undefined = sppList.find((pl: Player) => {
-                    return pl.name === scorer;
-                });
-                if (!player) {
-                    player = new Player({name: scorer})
-                }
-                player.goals++;
-            }
-        }
-        return sppList;
     }
     */
 }
