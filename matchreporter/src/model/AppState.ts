@@ -5,6 +5,7 @@ import { Report } from "./Report";
 import { Team } from "./Team";
 
 import { Reports } from '../services/Reports';
+import { Injury, CasualtyType } from "./Injury";
 
 /**
  * Application state / root state manager.
@@ -60,65 +61,95 @@ export class AppState {
   }
   public addScorer(team: Team, player: string): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
-      if (!team.scorers) {
-        team.scorers = [];
+      if (team.scorers === "") {
+        team.scorers = team.scorers.concat(player);
+      } else {
+        team.scorers = team.scorers.concat(", "+player);
       }
+      team.goals++;
       // let player: Player  = new Player({name: playerNum});
-      team.scorers.push(player);
       this.updateReport();
     }
   }
 
   public addThrower(team: Team, player: string): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
-      if (!team.completions) {
-        team.completions = [];
+      if (team.completions === "") {
+        team.completions = team.completions.concat(player);
+      } else {
+        team.completions = team.completions.concat(", "+player);
       }
-      // let player: Player = new Player({name: playerNum});
-      team.completions.push(player);
+      // team.completions.push(player);
       this.updateReport();
     }
   }
 
   public addInjury(team: Team, player: string, injuryNum: number): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
-      if (!team.injuries) {
-        team.injuries = [];
+      if (!team.sufferedinjuries) {
+        team.sufferedinjuries = [];
       }
       let injuryEvent: GameEvent = new GameEvent({player: player});
       injuryEvent.injury = injuryNum;
-      team.injuries.push(injuryEvent);
+      team.sufferedinjuries.push(injuryEvent);
+
+      // casualtiesinflicted is in fact total team casualties every injury is added to the total
+      const opposingTeam: Team = team === this.homeTeam ? this.awayTeam : this.homeTeam;
+      opposingTeam.casualtiesinflicted++;
+
       this.updateReport();
     }
   }
 
   public addIntercept(team: Team, player: string): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
-      if (!team.intercepts) {
-        team.intercepts = [];
+      if (team.intercepts === "") {
+        team.intercepts = team.intercepts.concat(player);
+      } else {
+        team.intercepts = team.intercepts.concat(", "+player);
       }
-      // let player: Player = new Player({name: playerNum});
-      team.intercepts.push(player);
+      // team.intercepts.push(player);
       this.updateReport();
     }
   }
 
   public addCasualty(team: Team, inflicter: string, injured: string, injuryNum: number): void {
     if (this.report && (team === this.homeTeam || team === this.awayTeam)) {
-      if (!team.casualties) {
-        team.casualties = [];
-      }
       let casualtyEvent: GameEvent = new GameEvent({player: inflicter});
       casualtyEvent.casualty = injuryNum;
-      team.casualties.push(casualtyEvent);
-
+      team.casualtiesinflicted++;
+      const casCategory: CasualtyType = Injury.getCasualtyType(injuryNum);
+      switch (casCategory) {
+        case CasualtyType.BadlyHurt:
+          if (team.badlyhurts === "") {
+            team.badlyhurts = team.badlyhurts.concat(inflicter);
+          } else {
+            team.badlyhurts = team.badlyhurts.concat(", "+inflicter);
+          }
+          break;
+        case CasualtyType.SeriousInjury:
+          if (team.seriousinjuries === "") {
+            team.seriousinjuries = team.seriousinjuries.concat(inflicter);
+          } else {
+            team.seriousinjuries = team.seriousinjuries.concat(", "+inflicter);
+          }
+          break;
+        case CasualtyType.Kill:
+          if (team.kills === "") {
+            team.kills = team.kills.concat(inflicter);
+          } else {
+            team.kills = team.kills.concat(", "+inflicter);
+          }
+          break;
+      }
+    
       const opposingTeam: Team = team === this.homeTeam ? this.awayTeam : this.homeTeam;
-      if (!opposingTeam.injuries) {
-        opposingTeam.injuries = [];
+      if (!opposingTeam.sufferedinjuries) {
+        opposingTeam.sufferedinjuries = [];
       }
       let injuryEvent: GameEvent = new GameEvent({player: injured});
       injuryEvent.injury = injuryNum;
-      opposingTeam.injuries.push(injuryEvent);
+      opposingTeam.sufferedinjuries.push(injuryEvent);
       this.updateReport();
     }
   }

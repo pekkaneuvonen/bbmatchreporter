@@ -196,8 +196,8 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                             </div>
                         </div>
                         <div id="casualties" className="tableRow">
-                            <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.casualties.length}</div>
-                            <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.casualties.length}</div>
+                            <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.casualtiesinflicted}</div>
+                            <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.casualtiesinflicted}</div>
                         </div>
                         <div id="fame" className="tableRow">
                             <div className="reportTableField reportTableField1">{this.props.appState.report.fame > 0 ? "-" : "+" + Math.abs(this.props.appState.report.fame)}</div>
@@ -227,20 +227,20 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                             <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.scorersString}</div>
                         </div>
                         <div id="int" className="achievementRow">
-                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.interceptsString}</div>
-                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.interceptsString}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.intercepts}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.intercepts}</div>
                         </div>
                         <div id="bh" className="achievementRow">
-                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.badlyHurtsString}</div>
-                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.badlyHurtsString}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.badlyhurts}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.badlyhurts}</div>
                         </div>
                         <div id="si" className="achievementRow">
-                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.seriousInjuriesString}</div>
-                            <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.seriousInjuriesString}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.seriousinjuries}</div>
+                            <div className="reportTableField reportAchievementField2">{this.props.appState.awayTeam.seriousinjuries}</div>
                         </div>
                         <div id="kill" className="achievementRow">
-                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.killsString}</div>
-                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.killsString}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.kills}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.kills}</div>
                         </div>
                     </div>
                     {this.injuryTable()}
@@ -263,8 +263,8 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
     private injuryTable = () => {
         return <div style={this.getBackgroundFor(injuriesTableTitle, "top")} className="reportInjuryTable" >
             <div className="reportTableColumn">
-                {this.props.appState.homeTeam.injuries.length > 0 ?
-                    this.props.appState.homeTeam.injuries.map((injury: GameEvent, index) => {
+                {this.props.appState.homeTeam.sufferedinjuries.length > 0 ?
+                    this.props.appState.homeTeam.sufferedinjuries.map((injury: GameEvent, index) => {
                         const effect: InjuryEffect = Injury.getEffect(injury.injury);
                         const type: InjuryCode = Injury.getInjuryCode(injury.injury);
                         const playerStyles: string = effect === InjuryEffect.BH ? "invisible-scrollbar reportTableField reportTableInjuredPlayer reportTableInjuredNoEffect" : "invisible-scrollbar reportTableField reportTableInjuredPlayer"
@@ -291,8 +291,8 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                 : null}
             </div>
             <div className="reportTableColumn2">
-                {this.props.appState.awayTeam.injuries.length > 0 ?
-                    this.props.appState.awayTeam.injuries.map((injury: GameEvent, index) => {
+                {this.props.appState.awayTeam.sufferedinjuries.length > 0 ?
+                    this.props.appState.awayTeam.sufferedinjuries.map((injury: GameEvent, index) => {
                         const effect: InjuryEffect = Injury.getEffect(injury.injury);
                         const type: InjuryCode = Injury.getInjuryCode(injury.injury);
                         const playerStyles: string = effect === InjuryEffect.BH ? "invisible-scrollbar reportTableField reportTableInjuredPlayer reportTableInjuredPlayer2 reportTableInjuredNoEffect" : "invisible-scrollbar reportTableField reportTableInjuredPlayer reportTableInjuredPlayer2"
@@ -447,11 +447,11 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
         return (event: any) => {
             if (this.state.selectedEvent) {
                 console.log("deleteSelectedInjury ", this.state.selectedEvent);
-                let newInjuries: GameEvent[] = [...side.injuries];
+                let newInjuries: GameEvent[] = [...side.sufferedinjuries];
                 const currentIndex : number = newInjuries.indexOf(this.state.selectedEvent);
                 if (currentIndex !== -1) {
                     newInjuries.splice(currentIndex, 1);
-                    side.injuries = newInjuries;
+                    side.sufferedinjuries = newInjuries;
                 }
             }
         }
