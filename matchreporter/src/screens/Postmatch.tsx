@@ -219,12 +219,12 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                             </form>
                         </div>
                         <div id="cp" className="achievementRow">
-                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.completionsString}</div>
-                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.completionsString}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.completions}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.completions}</div>
                         </div>
                         <div id="td" className="achievementRow">
-                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.scorersString}</div>
-                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.scorersString}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.scorers}</div>
+                            <div className="invisible-scrollbar reportTableField reportAchievementField2">{this.props.appState.awayTeam.scorers}</div>
                         </div>
                         <div id="int" className="achievementRow">
                             <div className="invisible-scrollbar reportTableField reportAchievementField1">{this.props.appState.homeTeam.intercepts}</div>

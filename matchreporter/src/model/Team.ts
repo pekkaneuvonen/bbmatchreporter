@@ -92,6 +92,7 @@ export class Team {
         return 0;
     }
     */
+   /*
     public get completionsString(): string {
         let vString: string = "";
         for (let i = 0; i < this.completions.length; i++) {
@@ -112,6 +113,7 @@ export class Team {
         }
         return vString;
     }
+    */
     /*
     public get interceptsString(): string {
         let vString: string = "";

@@ -99,10 +99,10 @@ class ReportsList extends React.Component<{
                                 <div className="reportScore"
                                     onClick={this.reportClicked(report.id)}>
                                     <div className="reportRow scoreRow">
-                                        {report.home.scorers.length}
+                                        {report.home.goals}
                                     </div>
                                     <div className="reportRow scoreRow">
-                                        {report.away.scorers.length}
+                                        {report.away.goals}
                                     </div>
                                 </div>
                             </div>
