@@ -15,6 +15,9 @@ import Prematch from './screens/Prematch';
 export interface IAppProps {
   appState: AppState;
 }
+export interface IScreenState {
+  swipeEnabled: boolean,
+}
 
 const appState = new AppState();
 

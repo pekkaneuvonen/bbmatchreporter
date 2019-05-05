@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IAppProps } from "../App";
+import { IAppProps, IScreenState } from "../App";
 import Navigator from '../components/Navigator';
 import {Screens} from "../model/AppState";
 import { Team } from '../model/Team';
@@ -37,7 +37,7 @@ import deleteRowAway from '../img/postmatch/deleteRowAway.png';
 import { GameEvent } from '../model/GameEvent';
 
 
-interface IPostmatchState {
+interface IPostmatchState extends IScreenState {
     winningsHome: string,
     winningsAway: string,
     ffChangeHome: string,
@@ -67,6 +67,7 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
         this.tableContainer = React.createRef();
 
         this.state = {
+            swipeEnabled: true,
             winningsHome: this.props.appState.homeTeam ? this.props.appState.homeTeam.winnings : "-",
             winningsAway: this.props.appState.awayTeam ? this.props.appState.awayTeam.winnings : "-",
             
@@ -145,7 +146,14 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                     });
                 }}
             >  
-            <SwipeItem threshold={0.5} offsetWidth={320} swipeDirs={[SwipeDirection.Right]} onSwipe={this.onSwipe}>
+            <SwipeItem 
+                enabled={this.state.swipeEnabled} 
+                actionThreshold={0.5} 
+                offsetWidth={320} 
+                swipeDirs={[SwipeDirection.Right]} 
+                onSwipe={this.onSwipe}
+                onScrollHandler={this.scrollHandler}
+            >
 
                 <div ref={this.bgContainer} className="postmatchBackgroundField" >
                     <div style={this.bgStyle}/>
@@ -163,39 +171,39 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                             <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.scorers.length}</div>
                             <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.scorers.length}</div>
                         </div>
-                        <div className="tableRow">
+                        <div id="winnings" className="tableRow">
                             <div className="reportTableInputSlot">
                                 <form onSubmit={this.addWinningsHandler(this.props.appState.homeTeam)}>
-                                    <input className="reportTableInputField " type="text" value={this.state.winningsHome} onChange={this.changeWinningsHandler(this.props.appState.homeTeam)} />
+                                    <input className="reportTableInputField " type="text" value={this.state.winningsHome} onChange={this.changeWinningsHandler(this.props.appState.homeTeam)} onFocus={this.selectorOnFocus} onBlur={this.selectorOutFocus}/>
                                 </form>
                             </div>
                             <div className="reportTableInputSlot">
                                 <form onSubmit={this.addWinningsHandler(this.props.appState.awayTeam)}>
-                                    <input className="reportTableInputField " type="text" value={this.state.winningsAway} onChange={this.changeWinningsHandler(this.props.appState.awayTeam)} />
+                                    <input className="reportTableInputField " type="text" value={this.state.winningsAway} onChange={this.changeWinningsHandler(this.props.appState.awayTeam)} onFocus={this.selectorOnFocus} onBlur={this.selectorOutFocus}/>
                                 </form>
                             </div>
                         </div>
-                        <div className="tableRow">
+                        <div id="fanfactorChange" className="tableRow">
                             <div className="reportTableInputSlot">
                                 <form onSubmit={this.addFFchangeHandler(this.props.appState.homeTeam)}>
-                                    <input className="reportTableInputField " type="text" value={this.state.ffChangeHome} onChange={this.changeFFchangeHandler(this.props.appState.homeTeam)} />
+                                    <input className="reportTableInputField " type="text" value={this.state.ffChangeHome} onChange={this.changeFFchangeHandler(this.props.appState.homeTeam)} onFocus={this.selectorOnFocus} onBlur={this.selectorOutFocus}/>
                                 </form>
                             </div>
                             <div className="reportTableInputSlot">
                                 <form onSubmit={this.addFFchangeHandler(this.props.appState.awayTeam)}>
-                                    <input className="reportTableInputField " type="text" value={this.state.ffChangeAway} onChange={this.changeFFchangeHandler(this.props.appState.awayTeam)} />
+                                    <input className="reportTableInputField " type="text" value={this.state.ffChangeAway} onChange={this.changeFFchangeHandler(this.props.appState.awayTeam)} onFocus={this.selectorOnFocus} onBlur={this.selectorOutFocus}/>
                                 </form>
                             </div>
                         </div>
-                        <div className="tableRow">
+                        <div id="casualties" className="tableRow">
                             <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.casualties.length}</div>
                             <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.casualties.length}</div>
                         </div>
-                        <div className="tableRow">
+                        <div id="fame" className="tableRow">
                             <div className="reportTableField reportTableField1">{this.props.appState.report.fame > 0 ? "-" : "+" + Math.abs(this.props.appState.report.fame)}</div>
                             <div className="reportTableField reportTableField2">{this.props.appState.report.fame < 0 ? "-" : "+" + Math.abs(this.props.appState.report.fame)}</div>
                         </div>
-                        <div className="tableRow">
+                        <div id="tv" className="tableRow">
                             <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.tvString}</div>
                             <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.tvString}</div>
                         </div>
@@ -204,10 +212,10 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                     onClick={this.clearSelectedRow}>
                         <div id="mvp" className="achievementRow">
                             <form onSubmit={this.addMVPHandler(this.props.appState.homeTeam)} className="achievementInputSlot">
-                                <input className="invisible-scrollbar reportTableInputField reportAchievementField1 reportAchievementInputField" type="text" value={this.state.mvpHome} onChange={this.changeMVPHandle(this.props.appState.homeTeam)} />
+                                <input className="invisible-scrollbar reportTableInputField reportAchievementField1 reportAchievementInputField" type="text" value={this.state.mvpHome} onChange={this.changeMVPHandle(this.props.appState.homeTeam)} onFocus={this.selectorOnFocus} onBlur={this.selectorOutFocus}/>
                             </form>
                             <form onSubmit={this.addMVPHandler(this.props.appState.awayTeam)} className="achievementInputSlot">
-                                <input className="invisible-scrollbar reportTableInputField reportAchievementField2 reportAchievementInputField" type="text" value={this.state.mvpAway} onChange={this.changeMVPHandle(this.props.appState.awayTeam)} />
+                                <input className="invisible-scrollbar reportTableInputField reportAchievementField2 reportAchievementInputField" type="text" value={this.state.mvpAway} onChange={this.changeMVPHandle(this.props.appState.awayTeam)} onFocus={this.selectorOnFocus} onBlur={this.selectorOutFocus}/>
                             </form>
                         </div>
                         <div id="cp" className="achievementRow">
@@ -329,7 +337,7 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                                     <input className="invisible-scrollbar reportImprovementField reportImprovementPlayerField" 
                                         type="text" 
                                         value={improvement.player} 
-                                        onFocus={this.improOnFocusHandler} 
+                                        onFocus={this.selectorOnFocus} 
                                         onBlur={this.improOnBlurHandler} 
                                         onChange={this.changeImprovementPlayerHandle(improvement, this.props.appState.homeTeam)} />
                                 </form>
@@ -337,13 +345,13 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                                     <input className="reportImprovementField reportImprovementThrowField" 
                                         type="text" 
                                         value={improvement.improvementThrow1} 
-                                        onFocus={this.improOnFocusHandler} 
+                                        onFocus={this.selectorOnFocus} 
                                         onBlur={this.improOnBlurHandler} 
                                         onChange={this.changeImprovementThrowHandle(1, improvement, this.props.appState.homeTeam)} />
                                     <input className="reportImprovementField reportImprovementThrowField" 
                                         type="text" 
                                         value={improvement.improvementThrow2} 
-                                        onFocus={this.improOnFocusHandler} 
+                                        onFocus={this.selectorOnFocus} 
                                         onBlur={this.improOnBlurHandler} 
                                         onChange={this.changeImprovementThrowHandle(2, improvement, this.props.appState.homeTeam)} />
                                 </form>
@@ -372,7 +380,7 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                                     <input className="invisible-scrollbar reportImprovementField reportImprovementPlayerField reportImprovementPlayerField2" 
                                         type="text" 
                                         value={improvement.player} 
-                                        onFocus={this.improOnFocusHandler} 
+                                        onFocus={this.selectorOnFocus} 
                                         onBlur={this.improOnBlurHandler} 
                                         onChange={this.changeImprovementPlayerHandle(improvement, this.props.appState.awayTeam)} />
                                 </form>
@@ -380,13 +388,13 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                                     <input className="reportImprovementField reportImprovementThrowField reportImprovementThrowField2" 
                                         type="text" 
                                         value={improvement.improvementThrow1} 
-                                        onFocus={this.improOnFocusHandler} 
+                                        onFocus={this.selectorOnFocus} 
                                         onBlur={this.improOnBlurHandler} 
                                         onChange={this.changeImprovementThrowHandle(1, improvement, this.props.appState.awayTeam)} />
                                     <input className="reportImprovementField reportImprovementThrowField reportImprovementThrowField2" 
                                         type="text" 
                                         value={improvement.improvementThrow2} 
-                                        onFocus={this.improOnFocusHandler} 
+                                        onFocus={this.selectorOnFocus} 
                                         onBlur={this.improOnBlurHandler} 
                                         onChange={this.changeImprovementThrowHandle(2, improvement, this.props.appState.awayTeam)} />
                                 </form>
@@ -491,12 +499,18 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
             this.props.appState.updateReport();
         }
     }
-    private improOnFocusHandler = (event: any) => {
-        console.log("improOnFocusHandler ");
+    private selectorOnFocus = (event: any) => {
+        console.log("selectorOnFocus ");
+        this.setState({swipeEnabled: false})
+    }
+    private selectorOutFocus = (event: any) => {
+        console.log("selectorOutFocus ");
+        this.setState({swipeEnabled: true})
     }
     private improOnBlurHandler = (event: any) => {
         console.log("improOnBlurHandler ");
         this.props.appState.updateReport();
+        this.setState({swipeEnabled: true})
     }
     private changeImprovementPlayerHandle = (improvementEvent: GameEvent, team: Team) => {
         return (event: any) => {

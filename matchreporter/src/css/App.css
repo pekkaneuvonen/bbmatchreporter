@@ -71,7 +71,7 @@ div.navigatorTabs {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   background: black;
   user-select: none;
   font-family: 'Teko', sans-serif;
@@ -80,4 +80,10 @@ div.navigatorTabs {
   color: #F2F0EE;
   text-align: center;
   z-index: 0;
+}
+.swipeItemDevDisplay {
+  position: absolute;
+  z-index: 50;
+  top: 0px;
+  background: gray;
 }

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import * as React from 'react';
-import { IAppProps } from "../App";
+import { IAppProps, IScreenState } from "../App";
 import Navigator from '../components/Navigator';
 import TeamTitleInput from '../components/TeamTitleInput';
 import TeamValueInput from '../components/TeamValueInput';
@@ -23,7 +23,7 @@ import SwipeItem, { SwipeDirection } from '../components/SwipeItem';
 import history from "./history";
 
 @observer
-class Prematch extends React.Component<IAppProps, {}> {
+class Prematch extends React.Component<IAppProps, IScreenState> {
     private bgContainer: React.RefObject<HTMLDivElement>;
     private tableContainer: React.RefObject<HTMLDivElement>;
     private tableStyle = {
@@ -40,7 +40,9 @@ class Prematch extends React.Component<IAppProps, {}> {
         this.tableContainer = React.createRef();
         this.props.appState.prevscreen = this.props.appState.screen;
         this.props.appState.screen = Screens.Prematch;
-        
+        this.state = {
+            swipeEnabled: true,
+        }
         this.tableStyle = this.props.appState.brandNewReport !== null ?
             {height: 'calc(100vh - 80px - 54px)',}
             :
@@ -95,11 +97,18 @@ class Prematch extends React.Component<IAppProps, {}> {
                     });
                 }}
             >  
-            <SwipeItem threshold={0.5} offsetWidth={320} swipeDirs={[SwipeDirection.Left]} onSwipe={this.onSwipe}>
+            <SwipeItem 
+                enabled={this.state.swipeEnabled} 
+                actionThreshold={0.5} 
+                offsetWidth={320} 
+                swipeDirs={[SwipeDirection.Left]} 
+                onSwipe={this.onSwipe}
+                onScrollHandler={this.scrollHandler}
+            >
                 <div ref={this.bgContainer} className="prematchBackgroundField" >
                     <div style={this.bgStyle}/>
                 </div>
-                <div ref={this.tableContainer} onScroll={this.scrollHandler} className="prematchTablecontent" style={this.tableStyle}>
+                <div ref={this.tableContainer} className="prematchTablecontent" style={this.tableStyle}>
                     {this.props.appState.brandNewReport ?
                         <div className="newReportMessage">NEW REPORT</div>
                     : null }
@@ -108,14 +117,18 @@ class Prematch extends React.Component<IAppProps, {}> {
                             activityOverride={this.props.appState.brandNewReport !== null}
                             titleChangeHandler={this.handleTeamNameChange} 
                             title1Default={this.props.appState.homeTeam.name} 
-                            title2Default={this.props.appState.awayTeam.name}/>
+                            title2Default={this.props.appState.awayTeam.name}
+                            onFocusIn={this.inputActived}
+                            onFocusOut={this.inputDeactivated}/>
                     </div>
                     <div className="teamTVs">
                         <TeamValueInput
                             activityOverride={this.props.appState.brandNewReport !== null}
                             valueChangeHandler={this.handleTeamValueChange} 
                             value1={this.props.appState.homeTeam.tvString} 
-                            value2={this.props.appState.awayTeam.tvString}/>
+                            value2={this.props.appState.awayTeam.tvString}
+                            onFocusIn={this.inputActived}
+                            onFocusOut={this.inputDeactivated}/>
                     </div>
                     <div className="inducementsContainer">
                         <InducementsInput
@@ -123,14 +136,18 @@ class Prematch extends React.Component<IAppProps, {}> {
                             inducementsValue={inducementString} 
                             side={induced} 
                             inducementsDescriptions={this.inducedSide ? this.inducedSide.inducements : "-"} 
-                            descriptionsChangeHandler={this.inducementDescriptionChange()} />
+                            descriptionsChangeHandler={this.inducementDescriptionChange()}
+                            onFocusIn={this.inputActived}
+                            onFocusOut={this.inputDeactivated}/>
                     </div>
                     <div className="gateContainer">
                         <GatesInput
                             activityOverride={this.props.appState.brandNewReport !== null}
                             gateValue1={this.props.appState.homeTeam.gateValue} 
                             gateValue2={this.props.appState.awayTeam.gateValue} 
-                            gatesChangeHandler={this.handleTeamGateChange} />
+                            gatesChangeHandler={this.handleTeamGateChange}
+                            onFocusIn={this.inputActived}
+                            onFocusOut={this.inputDeactivated}/>
                     </div>
                     <div className="weatherChooserContainer">
                         {this.createWeatherTable()};
@@ -144,6 +161,12 @@ class Prematch extends React.Component<IAppProps, {}> {
             : null}
         </div>;
     };
+    private inputActived = (event: any) => {
+        this.setState({swipeEnabled: false});
+    }
+    private inputDeactivated = (event: any) => {
+        this.setState({swipeEnabled: true});
+    }
     private onSwipe = (dir: string) => {
         if (dir === "left") {
             history.push(Screens.Match);

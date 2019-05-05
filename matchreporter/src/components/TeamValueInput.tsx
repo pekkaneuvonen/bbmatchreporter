@@ -9,6 +9,8 @@ interface ITeamValueInput {
     value2: string;
     activityOverride?: boolean;
     valueChangeHandler: ({}) => void;
+    onFocusIn?: (event: any) => void,
+    onFocusOut?: (event: any) => void,
 }
 interface ITVState {
     inputActive: boolean;
@@ -53,10 +55,16 @@ class TeamValueInput extends React.Component<ITeamValueInput, ITVState> {
             </div>
         </div>;
     };
-    private onFormFocusIn = () => {
+    private onFormFocusIn = (event: any) => {
+        if (this.props.onFocusIn) {
+            this.props.onFocusIn(event)
+        }
         this.setState({inputActive: true});
     }
-    private onFormFocusOut = () => {
+    private onFormFocusOut = (event: any) => {
+        if (this.props.onFocusOut) {
+            this.props.onFocusOut(event)
+        }
         this.setState({inputActive: false});
     }
     private addTeamValue = (event: any) => {

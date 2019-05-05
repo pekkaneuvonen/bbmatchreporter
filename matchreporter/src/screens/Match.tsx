@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IAppProps } from "../App";
+import { IAppProps, IScreenState } from "../App";
 import Navigator from '../components/Navigator';
 import TimePiece from '../components/TimePiece';
 import {Screens} from "../model/AppState";
@@ -40,7 +40,7 @@ import { Team } from '../model/Team';
 import { Injury } from '../model/Injury';
 import '../css/Match.css';
 
-interface IMatchState {
+interface IMatchState extends IScreenState{
     activePlayer: string,
     passivePlayer: string,
     currentInjuryThrow: string,
@@ -63,6 +63,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
         this.bgContainer = React.createRef();
         this.tableContainer = React.createRef();
         this.state = {
+            swipeEnabled: true,
             activePlayer: "-",
             currentEventType: 0,
             currentInjuryThrow: "-",
@@ -119,7 +120,14 @@ class Match extends React.Component<IAppProps, IMatchState> {
                     });
                 }}
             >  
-            <SwipeItem threshold={0.5} offsetWidth={320} swipeDirs={[SwipeDirection.Left, SwipeDirection.Right]} onSwipe={this.onSwipe}>
+            <SwipeItem 
+                enabled={this.state.swipeEnabled} 
+                actionThreshold={0.5} 
+                offsetWidth={320} 
+                swipeDirs={[SwipeDirection.Left, SwipeDirection.Right]} 
+                onSwipe={this.onSwipe}
+                onScrollHandler={this.scrollHandler}
+            >
                 <div ref={this.bgContainer} className="matchBackgroundField" >
                     <div style={this.bgStyle}/>
                 </div>
@@ -153,7 +161,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
                         </div>
                     </div>
                 : null}
-                <div ref={this.tableContainer} className="matchTablecontent" onScroll={this.scrollHandler}>
+                <div ref={this.tableContainer} className="matchTablecontent">
                     <div className="timerContainer">
                         <TimePiece appState={this.props.appState} pauseOverride={this.state.eventInputActive} defautlTimerValue={this.props.appState.defaultTimerValue}/>
                     </div>
@@ -248,7 +256,7 @@ class Match extends React.Component<IAppProps, IMatchState> {
         return <div style={selectorBG} className={bgStyles}>
             <div className={slotStyles} style={chosenPlayerStyle} >
                 <form onSubmit={this.addActivePlayerValue}>
-                    <input className="eventPlayerInput force-select" type="text" value={this.state.activePlayer} onChange={this.handleActivePlayerChange} />
+                    <input className="eventPlayerInput force-select" type="text" value={this.state.activePlayer} onChange={this.handleActivePlayerChange} onFocus={this.selectorOnFocus} onBlur={this.selectorOutFocus}/>
                 </form>
             </div>
         </div>;
@@ -318,9 +326,11 @@ class Match extends React.Component<IAppProps, IMatchState> {
 
     private selectorOnFocus = (event: any) => {
         console.log("selectorOnFocus");
+        this.setState({swipeEnabled: false});
     }
     private selectorOutFocus = (event: any) => {
         console.log("selectorOutFocus");
+        this.setState({swipeEnabled: true});
     }
     private teamSelectHandler = (team: Team | undefined) => {
         return (event: any) => {

@@ -18,6 +18,8 @@ interface IInducementsInput {
     activityOverride?: boolean;
     inducementsDescriptions: string;
     descriptionsChangeHandler: (description: string) => void;
+    onFocusIn?: (event: any) => void,
+    onFocusOut?: (event: any) => void,
 }
 interface IInducementsState {
     inputActive: boolean;
@@ -102,9 +104,15 @@ class InducementsInput extends React.Component<IInducementsInput, IInducementsSt
     </div>
     */
     private onFormFocusIn = () => {
+        if (this.props.onFocusIn) {
+            this.props.onFocusIn(event)
+        }
         this.setState({inputActive: true});
     }
     private onFormFocusOut = () => {
+        if (this.props.onFocusOut) {
+            this.props.onFocusOut(event)
+        }
         this.setState({inputActive: false});
     }
     /*

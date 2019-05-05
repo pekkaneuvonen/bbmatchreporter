@@ -14,6 +14,8 @@ interface IGatesInput {
     gateValue2: number;
     activityOverride?: boolean;
     gatesChangeHandler: ({}) => void;
+    onFocusIn?: (event: any) => void,
+    onFocusOut?: (event: any) => void,
 }
 interface IGatesState {
     inputActive: boolean;
@@ -93,9 +95,15 @@ class GatesInput extends React.Component<IGatesInput, IGatesState> {
         }
     }
     private onFormFocusIn = () => {
+        if (this.props.onFocusIn) {
+            this.props.onFocusIn(event)
+        }
         this.setState({inputActive: true});
     }
     private onFormFocusOut = () => {
+        if (this.props.onFocusOut) {
+            this.props.onFocusOut(event)
+        }
         this.setState({inputActive: false});
     }
     private addGateValue = (event: any) => {

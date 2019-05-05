@@ -9,6 +9,8 @@ interface ITeamTitleInput {
     title2Default: string;
     activityOverride?: boolean;
     titleChangeHandler: ({}) => void;
+    onFocusIn?: (event: any) => void,
+    onFocusOut?: (event: any) => void,
 }
 interface IReportListState {
     inputActive: boolean;
@@ -52,26 +54,20 @@ class TeamTitleInput extends React.Component<ITeamTitleInput, IReportListState> 
         </div>;
     };
     private onTitleFocusIn = (field: string) => {
-        if (field === "title1") {
-            return (event: any) => {
-                this.setState({inputActive: true});
-            };
-        } else {
-            return (event: any) => {
-                this.setState({inputActive: true});
-            };
-        }
+        return (event: any) => {
+            if (this.props.onFocusIn) {
+                this.props.onFocusIn(event);
+            }
+            this.setState({inputActive: true});
+        };
     }
     private onTitleFocusOut = (field: string) => {
-        if (field === "title1") {
-            return (event: any) => {
-                this.setState({inputActive: false});
-            };
-        } else {
-            return (event: any) => {
-                this.setState({inputActive: false});
-            };
-        }
+        return (event: any) => {
+            if (this.props.onFocusOut) {
+                this.props.onFocusOut(event);
+            }
+            this.setState({inputActive: false});
+        };
     }
     private addTeamName = (event: any) => {
         event.preventDefault();
