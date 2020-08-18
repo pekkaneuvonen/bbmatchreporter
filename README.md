@@ -3,6 +3,8 @@
 
 BBMatchreporter is a tool for storing the match data while playing tabletop Blood Bowl (a fantasy football game by Games Workshop). 
 
+Working example of the app is found on Heroku: https://bbmatchreporter.herokuapp.com
+
 ## The purpose
 Playing the game regularly produces insane amounts of shabby papers, printed out team roster and reports, that serve no purpose in the long run. 
 
@@ -12,6 +14,10 @@ When the structure was divided to the three stages of a game (pre-game -> game -
 ## Work to be done
 Next on the todo -list is implementing the user account and privileges functionality. All the report data is stored in a database but at the moment anyone can edit or delete the reports stored in the database.
 
+
+## Techniques
+A single-page app done with React and Typescript. Additional components: React Router, MobX, GSAP.
+The simple back-end is done with Node.js and Express.
 
 
 
