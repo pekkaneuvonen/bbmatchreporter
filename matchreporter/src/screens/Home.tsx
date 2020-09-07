@@ -81,7 +81,7 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
             <div ref={this.contentContainer} className="content" onScroll={this.scrollHandler}>
                 <div ref={this.contenttitleContainer} className="titleElements">
                     <img className="titleImage" src={title}/>
-                    <div className="version">version 0.45</div>
+                    <div className="version">version 0.45.1</div>
                     <div className="newReportButton">
                         <img className="newReportButtonImg" src={newButton} onClick={this.createNewReport}/>
                     </div>
