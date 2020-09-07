@@ -77,50 +77,21 @@ class InducementsInput extends React.Component<IInducementsInput, IInducementsSt
             backgroundPosition: 'left',
             backgroundRepeat  : 'no-repeat',
         }
-    }
-    /*
-
-    <div className="inducements">
-        <textarea 
-            name="homeinducements"
-            className="inducementsBox homeInducements"
-            onChange={this.handleInducementChange("home")}
-            value={this.props.appState.homeTeam.inducements}/>
-        <textarea 
-            name="awayinducements"
-            className="inducementsBox awayInducements"
-            onChange={this.handleInducementChange("away")}
-            value={this.props.appState.awayTeam.inducements}/>
-    </div>
-    */
-    /*
-    <div className="valueContainer">
-        <form onSubmit={this.addTeamValue}>
-            <input className={valueStyles} value={this.state.value1} onChange={this.handleTeamValue1Change} onFocus={this.onFormFocusIn} onBlur={this.onFormFocusOut}/>
-        </form>
-        <form onSubmit={this.addTeamValue}>
-            <input className={valueStyles} value={this.state.value2} onChange={this.handleTeamValue2Change} onFocus={this.onFormFocusIn} onBlur={this.onFormFocusOut}/>
-        </form>
-    </div>
-    */
-    private onFormFocusIn = () => {
+		}
+		
+    private onFormFocusIn = (event: any) => {
         if (this.props.onFocusIn) {
             this.props.onFocusIn(event)
         }
         this.setState({inputActive: true});
     }
-    private onFormFocusOut = () => {
+    private onFormFocusOut = (event: any) => {
         if (this.props.onFocusOut) {
             this.props.onFocusOut(event)
         }
         this.setState({inputActive: false});
     }
-    /*
-    private addDescriptionValue = (event: any) => {
-        event.preventDefault();
-        this.props.descriptionsChangeHandler(this.state.inducementsDescriptions);
-    }
-    */
+
     private handleInducementDescriptionChange = (event: any) => {
         this.props.descriptionsChangeHandler(event.target.value);
         this.setState({inducementsDescriptions: event.target.value});

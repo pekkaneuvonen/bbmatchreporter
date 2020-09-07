@@ -82,8 +82,8 @@ class Home extends React.Component<IAppProps, {showDeleteAlert: boolean, showTit
                 <div ref={this.contenttitleContainer} className="titleElements">
                     <img className="titleImage" src={title}/>
                     <div className="version">version 0.45</div>
-                    <div className="newReportButton" onClick={this.createNewReport}>
-                        <img src={newButton}/>
+                    <div className="newReportButton">
+                        <img className="newReportButtonImg" src={newButton} onClick={this.createNewReport}/>
                     </div>
                 </div>
 

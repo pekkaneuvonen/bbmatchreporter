@@ -61,7 +61,8 @@ class ReportsList extends React.Component<{
                         const teamBgStyle = {
                             backgroundImage: `url(${reportBox})`,
                             backgroundRepeat  : 'no-repeat',
-                            color: "#242424",
+														color: "#242424",
+														cursor: "pointer",
                         };
                         const dateStyles = ["reportDateSlot", "controlRow", "enabledControls"]
                         const openStyles = ["reportOpenSlot", "controlRow"]

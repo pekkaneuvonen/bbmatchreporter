@@ -9,7 +9,7 @@
     z-index: 50;
     width: 100vw;
     height: 116px;
-    overflow-x: hidden;
+		overflow-x: hidden;
 }
 .topTitle {
     background-color: black;
@@ -24,7 +24,8 @@
     top: -23px;
     position: absolute;
     width: 154px;
-    left: calc(50% + 53px);
+		left: calc(50% + 53px);
+		cursor: pointer;
 }
 .backgroundField {
     position: absolute;
@@ -71,12 +72,13 @@ newReport_button width 205px, offset 16px
 */
 .newReportButton {
     position: absolute;
-    width: 100vw;
     top: 110px;
     padding-left: calc(50% + 24px);
-    width: calc(100% - (50% + 16px))
+		width: calc(100% - (50% + 16px));
 }
-
+.newReportButtonImg {
+	cursor: pointer;
+}
 
 .alertBlock {
     position: absolute;

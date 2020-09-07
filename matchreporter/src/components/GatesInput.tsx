@@ -94,13 +94,13 @@ class GatesInput extends React.Component<IGatesInput, IGatesState> {
             backgroundRepeat  : 'no-repeat',
         }
     }
-    private onFormFocusIn = () => {
+    private onFormFocusIn = (event: any) => {
         if (this.props.onFocusIn) {
             this.props.onFocusIn(event)
         }
         this.setState({inputActive: true});
     }
-    private onFormFocusOut = () => {
+    private onFormFocusOut = (event: any) => {
         if (this.props.onFocusOut) {
             this.props.onFocusOut(event)
         }
