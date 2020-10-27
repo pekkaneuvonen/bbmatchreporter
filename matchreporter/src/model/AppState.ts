@@ -6,11 +6,13 @@ import { Team } from "./Team";
 
 import { Reports } from '../services/Reports';
 import { Injury, CasualtyType } from "./Injury";
+import { report_field_divider } from '../utils/StringFormatter';
 
 /**
  * Application state / root state manager.
  */
 export class AppState {
+
   @observable public screen: string;
   public prevscreen: string | undefined;
   
@@ -64,7 +66,7 @@ export class AppState {
       if (team.scorers === "") {
         team.scorers = team.scorers.concat(player);
       } else {
-        team.scorers = team.scorers.concat(", "+player);
+        team.scorers = team.scorers.concat(report_field_divider+player);
       }
       team.goals++;
       // let player: Player  = new Player({name: playerNum});
@@ -77,7 +79,7 @@ export class AppState {
       if (team.completions === "") {
         team.completions = team.completions.concat(player);
       } else {
-        team.completions = team.completions.concat(", "+player);
+        team.completions = team.completions.concat(report_field_divider+player);
       }
       // team.completions.push(player);
       this.updateReport();
@@ -106,7 +108,7 @@ export class AppState {
       if (team.intercepts === "") {
         team.intercepts = team.intercepts.concat(player);
       } else {
-        team.intercepts = team.intercepts.concat(", "+player);
+        team.intercepts = team.intercepts.concat(report_field_divider+player);
       }
       // team.intercepts.push(player);
       this.updateReport();
@@ -124,21 +126,21 @@ export class AppState {
           if (team.badlyhurts === "") {
             team.badlyhurts = team.badlyhurts.concat(inflicter);
           } else {
-            team.badlyhurts = team.badlyhurts.concat(", "+inflicter);
+            team.badlyhurts = team.badlyhurts.concat(report_field_divider+inflicter);
           }
           break;
         case CasualtyType.SeriousInjury:
           if (team.seriousinjuries === "") {
             team.seriousinjuries = team.seriousinjuries.concat(inflicter);
           } else {
-            team.seriousinjuries = team.seriousinjuries.concat(", "+inflicter);
+            team.seriousinjuries = team.seriousinjuries.concat(report_field_divider+inflicter);
           }
           break;
         case CasualtyType.Kill:
           if (team.kills === "") {
             team.kills = team.kills.concat(inflicter);
           } else {
-            team.kills = team.kills.concat(", "+inflicter);
+            team.kills = team.kills.concat(report_field_divider+inflicter);
           }
           break;
       }

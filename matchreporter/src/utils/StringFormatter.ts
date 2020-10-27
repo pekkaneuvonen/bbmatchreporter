@@ -1,7 +1,10 @@
 import { Kvalue } from "../types/Kvalue";
 import { number } from "prop-types";
 
+export const report_field_divider: string = ", ";
+
 export default class StringFormatter {
+
     public static formatDate(date: Date): string {
         let dateString: string = String(date.getDate());
         dateString = dateString.concat(". " + String(date.getMonth()))

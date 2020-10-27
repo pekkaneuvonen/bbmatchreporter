@@ -33,6 +33,7 @@ import addImprovementAway from '../img/postmatch/addLineAway.png';
 import deleteRowHome from '../img/postmatch/deleteRowHome.png';
 import deleteRowAway from '../img/postmatch/deleteRowAway.png';
 
+import { report_field_divider } from '../utils/StringFormatter';
 
 import { GameEvent } from '../model/GameEvent';
 
@@ -168,8 +169,8 @@ class Postmatch extends React.Component<IAppProps, IPostmatchState> {
                     onClick={this.clearSelectedRow}>
                         <div className="reportTableField gate">{this.props.appState.report.totalGate.asString}</div>
                         <div className="tableRow">
-                            <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.scorers.length}</div>
-                            <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.scorers.length}</div>
+                            <div className="reportTableField reportTableField1">{this.props.appState.homeTeam.scorers.split(report_field_divider).length}</div>
+                            <div className="reportTableField reportTableField2">{this.props.appState.awayTeam.scorers.split(report_field_divider).length}</div>
                         </div>
                         <div id="winnings" className="tableRow">
                             <div className="reportTableInputSlot">
